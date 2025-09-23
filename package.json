@@ -9,7 +9,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@opentelemetry/api": "1.9.0",
+    "@opentelemetry/api": "2.1.0",
     "@opentelemetry/context-async-hooks": "2.1.0",
     "@opentelemetry/core": "2.1.0",
     "@opentelemetry/sdk-trace-base": "2.1.0",
