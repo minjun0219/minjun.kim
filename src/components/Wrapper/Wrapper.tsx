@@ -1,7 +1,7 @@
-import React from 'react';
-import cx from 'classnames';
+import React from "react";
+import cx from "classnames";
 
-import styles from './Wrapper.module.scss';
+import styles from "./Wrapper.module.scss";
 
 export type Props = {
   children: React.ReactNode;
@@ -9,11 +9,7 @@ export type Props = {
 };
 
 export const Wrapper = ({ children, className }: Props) => {
-  return (
-    <div className={cx(styles.wrapper, className)}>
-      {children}
-    </div>
-  );
+  return <div className={cx(styles.wrapper, className)}>{children}</div>;
 };
 
 export default Wrapper;

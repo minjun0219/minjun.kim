@@ -1,9 +1,3 @@
 {
-  "regions": ["icn1"],
-  "rewrites": [
-    {
-      "source": "/blog/wp-content/(.*)",
-      "destination": "https://cms.minjun.dev/wp-content/$1"
-    }
-  ]
+  "regions": ["icn1"]
 }

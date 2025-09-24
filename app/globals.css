@@ -1,0 +1,60 @@
+:root {
+  --background-color: #21262e;
+  --primary-color: #21cfff;
+  --secondary-color: #413396;
+  --text-color: #f7fff7;
+  --text-secondary-color: #b0b6b6;
+  --code-title-color: #f7fff7;
+  --code-highlight-color: rgba(0, 0, 0, 0.3);
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-family-code: Menlo, Monaco, "Courier New", monospace;
+  --transituin-duration: 0;
+  --page-margin: 16px;
+  --page-max-width: 700px;
+  --logo-color: #b8b8b8;
+  --logo-text-color: #000;
+}
+
+html[data-theme="light"] {
+  --background-color: #fff;
+  --primary-color: #008aff;
+  --text-color: #333;
+  --text-secondary-color: #838383;
+  --code-highlight-color: rgba(0, 0, 0, 0.05);
+  --logo-color: #231f20;
+  --logo-text-color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: #fff;
+    --primary-color: #008aff;
+    --text-color: #333;
+    --text-secondary-color: #838383;
+    --code-highlight-color: rgba(0, 0, 0, 0.05);
+    --logo-color: #231f20;
+    --logo-text-color: #fff;
+  }
+}
+
+html[data-theme] {
+  --transituin-duration: 250ms;
+}
+
+html,
+body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  -webkit-text-size-adjust: none;
+  background: var(--background-color);
+  font-family: Nunito, var(--font-nunito), Monaco, monospace, serif;
+  font-size: 0.8em;
+  color: var(--text-color);
+  transition-property: color, background;
+  transition-duration: var(--transituin-duration);
+}
