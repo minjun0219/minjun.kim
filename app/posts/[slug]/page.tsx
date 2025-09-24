@@ -28,7 +28,6 @@ export function generateMetadata({ params }: Props): Metadata {
     title,
     openGraph: {
       title,
-      // images: [post.ogImage.url],
     },
   };
 }
