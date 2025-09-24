@@ -12,7 +12,10 @@ export const SocialLink = ({ className, ...props }: Props) => (
       <Link href="/posts">Posts</Link>
     </li>
     <li>
-      <a href="https://www.linkedin.com/in/minjunk">Linkedin</a>
+      <a href="https://github.com/minjun0219">Github</a>
+    </li>
+    <li>
+      <a href="https://www.linkedin.com/in/minjun0219">Linkedin</a>
     </li>
     <li>
       <a href="https://instagram.com/3600s">Instagram</a>

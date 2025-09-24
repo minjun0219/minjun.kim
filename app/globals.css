@@ -26,6 +26,18 @@ html[data-theme="light"] {
   --logo-text-color: #fff;
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: #fff;
+    --primary-color: #008aff;
+    --text-color: #333;
+    --text-secondary-color: #838383;
+    --code-highlight-color: rgba(0, 0, 0, 0.05);
+    --logo-color: #231f20;
+    --logo-text-color: #fff;
+  }
+}
+
 html[data-theme] {
   --transituin-duration: 250ms;
 }
