@@ -1,2 +1,2 @@
-export { default } from './GoogleTagManager';
-export * from './GoogleTagManager';
+export { default } from "./GoogleTagManager";
+export * from "./GoogleTagManager";

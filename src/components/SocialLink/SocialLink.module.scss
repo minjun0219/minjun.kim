@@ -5,7 +5,7 @@
   &::after {
     clear: both;
     display: block;
-    content: '';
+    content: "";
   }
 
   li {
@@ -13,7 +13,7 @@
     float: left;
 
     &::after {
-      content: '|';
+      content: "|";
       margin: 0 5px;
     }
 
@@ -33,11 +33,11 @@
     &:visited {
       color: var(--text-secondary-color);
       text-decoration: none;
-      transition: color .3s;
+      transition: color 0.3s;
     }
 
     &:hover,
-    &:focus{
+    &:focus {
       color: var(--text-color);
     }
 
@@ -49,12 +49,12 @@
       display: none;
 
       &:before {
-        content: ' ';
+        content: " ";
       }
     }
 
     &:hover > span,
-    &:focus > span{
+    &:focus > span {
       display: inline;
     }
   }

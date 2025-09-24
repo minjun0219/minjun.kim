@@ -1,42 +1,42 @@
-import React from 'react';
-import cx from 'classnames';
-import Highlight, { defaultProps, Language } from 'prism-react-renderer';
-import prismTheme from 'prism-react-renderer/themes/vsDark';
+"use client";
 
-import styles from './CodeBlock.module.scss';
+import React from "react";
+import cx from "classnames";
+import { Prism, Highlight, themes } from "prism-react-renderer";
 
-export type Props = {
-  lang?: Language;
-  children: string[];
+import styles from "./CodeBlock.module.scss";
+
+type Props = {
+  title?: string | null;
+  className?: string;
+  language: string;
+  code: string;
 };
 
-export const CodeBlock = ({ children, lang }: Props) => {
-  if (typeof lang === 'undefined') {
-    return <code>{children}</code>;
-  }
-
-  const code = children.join('\n');
+const CodeBlock = ({ title, code, language }: Props) => {
   return (
     <Highlight
-      {...defaultProps}
+      prism={Prism}
       code={code}
-      language={lang}
-      theme={prismTheme}
+      language={language}
+      theme={themes.vsDark}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre
-          data-language={lang}
-          className={cx(styles.container, className)}
-          style={style}
-        >
-          <div className={styles.code}>
-            {tokens.map((line, i) => (
-              <div key={i} {...getLineProps({ line, key: i })}>
-                {line.map((token, key) => (
-                  <span key={key} {...getTokenProps({ token, key })} />
-                ))}
-              </div>
-            ))}
+        <pre title={title || undefined} className={cx(styles.root, className)}>
+          <div
+            data-language={language}
+            className={styles.container}
+            style={style}
+          >
+            <div className={styles.code}>
+              {tokens.map((line, i) => (
+                <div {...getLineProps({ line, key: i })} key={i}>
+                  {line.map((token, key) => (
+                    <span {...getTokenProps({ token, key })} key={key} />
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </pre>
       )}
