@@ -1,11 +1,11 @@
-import { dateFormat } from 'lib/utils/date';
+import { dateFormat } from "@/lib/utils/date";
 
 export type GetBlogPathArgs = {
   date: string;
   slug: string;
 };
 
-export const defaultBlogPath = '/blog/[yyyy]/[mm]/[dd]/[slug]';
+export const defaultBlogPath = "/blog/[yyyy]/[mm]/[dd]/[slug]";
 
 export function getBlogPath({ date, slug }: GetBlogPathArgs) {
   const created = dateFormat(date);
