@@ -6,20 +6,20 @@
   border-radius: 0;
   transition-property: border-radius;
   transition-duration: var(--transituin-duration);
-
-  &[title]::before {
-    display: block;
-    padding-left: var(--page-margin);
-    padding-right: var(--page-margin);
-    font-family: var(--font-family-base);
-    font-size: 0.8em;
-    font-weight: bold;
-    color: var(--code-title-color);
-    content: attr(title);
-  }
 }
 
-@media screen and (min-width: var(--breakpoint-large)) {
+.root[title]::before {
+  display: block;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+  font-family: var(--font-family-base);
+  font-size: 0.8em;
+  font-weight: bold;
+  color: var(--code-title-color);
+  content: attr(title);
+}
+
+@media screen and (min-width: var(--breakpoint-tablet)) {
   .root {
     border-radius: 5px;
   }
@@ -31,22 +31,22 @@
   border-radius: 0;
   transition-property: border-radius;
   transition-duration: var(--transituin-duration);
-
-  &[data-language]::after {
-    content: attr(data-language);
-    position: absolute;
-    right: 0;
-    top: 0;
-    text-transform: uppercase;
-    padding: 0.5em;
-    line-height: 1;
-    font-size: 0.5em;
-    opacity: 0.4;
-    font-family: var(--font-family-code);
-  }
 }
 
-@media screen and (min-width: var(--breakpoint-large)) {
+.container[data-language]::after {
+  content: attr(data-language);
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-transform: uppercase;
+  padding: 0.5em;
+  line-height: 1;
+  font-size: 0.5em;
+  opacity: 0.4;
+  font-family: var(--font-family-code);
+}
+
+@media screen and (min-width: var(--breakpoint-tablet)) {
   .container {
     border-radius: 5px;
   }
