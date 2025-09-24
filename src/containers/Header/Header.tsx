@@ -8,7 +8,7 @@ import InstagramIcon from "@/components/icons/InstagramIcon";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import Wrapper from "@/components/Wrapper";
 
-import styles from "./Header.module.scss";
+import styles from "./Header.module.css";
 import Logo from "@/components/Logo";
 
 function handleSwitchTheme() {

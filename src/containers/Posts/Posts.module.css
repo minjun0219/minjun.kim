@@ -1,0 +1,57 @@
+.container {
+  color: var(--text-color);
+}
+
+.article {
+  font-family: var(--font-family-base);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+@media screen and (min-width: 800px) {
+  .article {
+    font-size: 1.1rem;
+  }
+}
+
+.article a:link,
+.article a:visited {
+  color: inherit;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+.article a:hover,
+.article a:focus {
+  color: var(--link-focus-color);
+}
+
+.article a:active {
+  text-decoration: underline;
+}
+
+.article a > span {
+  display: none;
+}
+
+.article a > span:before {
+  content: " ";
+}
+
+.article a:hover > span,
+.article a:focus > span {
+  display: inline;
+}
+
+.title {
+  font-size: 2em;
+  font-weight: 800;
+}
+
+@media screen and (min-width: 800px) {
+  .title {
+    margin: 2em 0 1.5em;
+    font-size: 2.5em;
+    text-align: center;
+  }
+}

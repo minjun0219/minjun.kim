@@ -1,5 +1,0 @@
-@mixin breakpoint-large {
-  @media screen and (min-width: (700px + (16px * 2))) {
-    @content;
-  }
-}

@@ -1,5 +1,3 @@
-@import "../../styles/mixins.scss";
-
 .content {
   :global(.wp-block-image) {
     margin-left: calc(-1 * var(--page-margin));

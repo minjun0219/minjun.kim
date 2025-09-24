@@ -12,6 +12,7 @@
   --transituin-duration: 0;
   --page-margin: 16px;
   --page-max-width: 700px;
+  --breakpoint-large: 732px;
   --logo-color: #b8b8b8;
   --logo-text-color: #000;
 }

@@ -10,11 +10,12 @@
   color: var(--text-secondary-color) !important;
   transition-duration: var(--transituin-duration);
   transition-property: color;
+}
 
-  @media (hover: hover) {
-    &:hover {
-      color: var(--text-color);
-    }
+@media (hover: hover) {
+  .logo:hover,
+  .mode:hover {
+    color: var(--text-color);
   }
 }
 

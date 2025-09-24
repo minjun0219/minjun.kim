@@ -1,0 +1,27 @@
+.header {
+  margin: 3em 0 2em;
+}
+
+.title > h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.3em;
+  word-break: keep-all;
+}
+
+.title > h1 > a:link,
+.title > h1 > a:visited {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.title > h1 > a:focus,
+.title > h1 > a:hover {
+  text-decoration: underline;
+}
+
+.info {
+  font-size: 0.8em;
+  color: var(--text-secondary-color);
+}

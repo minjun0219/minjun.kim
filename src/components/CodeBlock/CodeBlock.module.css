@@ -1,5 +1,3 @@
-@import "../../styles/mixins.scss";
-
 .root {
   position: relative;
   background: #1a1f28;
@@ -8,10 +6,6 @@
   border-radius: 0;
   transition-property: border-radius;
   transition-duration: var(--transituin-duration);
-
-  @include breakpoint-large {
-    border-radius: 5px;
-  }
 
   &[title]::before {
     display: block;
@@ -25,16 +19,18 @@
   }
 }
 
+@media screen and (min-width: var(--breakpoint-large)) {
+  .root {
+    border-radius: 5px;
+  }
+}
+
 .container {
   position: relative;
   margin: 0;
   border-radius: 0;
   transition-property: border-radius;
   transition-duration: var(--transituin-duration);
-
-  @include breakpoint-large {
-    border-radius: 5px;
-  }
 
   &[data-language]::after {
     content: attr(data-language);
@@ -47,6 +43,12 @@
     font-size: 0.5em;
     opacity: 0.4;
     font-family: var(--font-family-code);
+  }
+}
+
+@media screen and (min-width: var(--breakpoint-large)) {
+  .container {
+    border-radius: 5px;
   }
 }
 
