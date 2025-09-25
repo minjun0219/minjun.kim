@@ -1,4 +1,4 @@
-import Layout from "@/containers/Layout";
+import Layout from "@/components/Layout";
 
 type Props = {
   children: React.ReactNode;

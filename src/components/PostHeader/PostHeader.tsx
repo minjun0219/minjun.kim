@@ -24,7 +24,10 @@ type Props = {
 };
 
 const PostHeader = ({ title, date, url, source }: Props) => {
-  const created = useMemo(() => moment(date).format("YYYY/MM/DD"), [date]);
+  const created = useMemo(
+    () => new Intl.DateTimeFormat("ko-KR").format(new Date(date)),
+    [date],
+  );
   return (
     <div className={styles.header}>
       <div className={styles.title}>

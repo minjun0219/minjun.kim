@@ -5,7 +5,7 @@
   margin-right: calc(-1 * var(--page-margin));
   border-radius: 0;
   transition-property: border-radius;
-  transition-duration: var(--transituin-duration);
+  transition-duration: var(--transition-duration);
 }
 
 .root[title]::before {
@@ -30,7 +30,7 @@
   margin: 0;
   border-radius: 0;
   transition-property: border-radius;
-  transition-duration: var(--transituin-duration);
+  transition-duration: var(--transition-duration);
 }
 
 .container[data-language]::after {

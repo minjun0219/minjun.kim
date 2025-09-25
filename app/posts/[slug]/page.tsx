@@ -4,19 +4,21 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
-export default function ArticlePage({ params }: Props) {
-  const post = getPostBySlug(params.slug);
+export default async function ArticlePage({ params }: Props) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
 
   return <BlogPost {...post} />;
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const post = getPostBySlug(params.slug);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
 
   if (!post) {
     return notFound();
