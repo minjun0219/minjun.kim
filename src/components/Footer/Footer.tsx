@@ -11,7 +11,7 @@ export const Footer = ({ className }: Props) => {
   const date = new Date();
   return (
     <footer className={cx(styles.footer, className)}>
-      <p className={styles.copy}>&copy; {date.getFullYear()} by underfront</p>
+      <p className={styles.copy}>&copy; {date.getFullYear()} by minjun.kim</p>
     </footer>
   );
 };
