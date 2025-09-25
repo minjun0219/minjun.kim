@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export function getPreferredTheme() {
-  return cookies().get("theme");
+export async function getPreferredTheme() {
+  const cookieStore = await cookies();
+  return cookieStore.get("theme");
 }
