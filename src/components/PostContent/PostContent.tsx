@@ -5,7 +5,7 @@ import remarkGfm from "remark-gfm";
 
 import CodeBlock from "../CodeBlock";
 
-import styles from "./PostContent.module.scss";
+import styles from "./PostContent.module.css";
 
 const MarkdownCode: Components["code"] = ({ children, className, node }) => {
   // https://github.com/remarkjs/react-markdown/issues/820#issuecomment-2108253421

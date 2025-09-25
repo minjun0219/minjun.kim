@@ -3,7 +3,7 @@ import PostHeader from "../PostHeader";
 
 import PostContent from "../PostContent";
 
-import styles from "./PostArticle.module.scss";
+import styles from "./PostArticle.module.css";
 
 export type Props = {
   className?: string;

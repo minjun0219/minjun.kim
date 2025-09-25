@@ -1,0 +1,39 @@
+.article {
+  margin: 3em 0;
+  font-family: var(--font-family-base);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  transition-property: color;
+  transition-duration: var(--transituin-duration);
+}
+
+.article p > code,
+.article p > a > code {
+  font-family: var(--font-family-code);
+  padding: 0.3em;
+  font-size: 0.8em;
+  border-radius: 5px;
+  background: var(--code-highlight-color);
+}
+
+.article a {
+  word-break: break-all;
+}
+
+.article a:link,
+.article a:visited {
+  text-decoration: none;
+  color: var(--primary-color);
+  transition: color 0.3s;
+}
+
+.article a:hover,
+.article a:focus,
+.article a:active {
+  text-decoration: underline;
+}
+
+.content {
+  text-align: justify;
+}

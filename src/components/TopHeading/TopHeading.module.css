@@ -1,0 +1,14 @@
+.root {
+  color: var(--text-color);
+  font-size: 3em;
+  font-weight: normal;
+}
+
+.root span {
+  color: var(--primary-color);
+}
+
+.root a {
+  text-decoration: none;
+  color: inherit;
+}

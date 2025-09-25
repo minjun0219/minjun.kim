@@ -4,7 +4,7 @@ import type { Post as PostType } from "@/lib/blog/types";
 import Wrapper from "@/components/Wrapper";
 import PostArticle from "@/components/PostArticle";
 
-import styles from "./Post.module.scss";
+import styles from "./Post.module.css";
 
 type Props = PostType & {
   className?: string;
