@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import cx from "classnames";
 
-import styles from "./SocialLink.module.scss";
+import styles from "./SocialLink.module.css";
 
 export type Props<E = HTMLUListElement> = React.DetailsHTMLAttributes<E>;
 

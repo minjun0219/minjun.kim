@@ -1,7 +1,7 @@
 import React from "react";
 import cx from "classnames";
 
-import styles from "./Footer.module.scss";
+import styles from "./Footer.module.css";
 
 export type Props = {
   className?: string;

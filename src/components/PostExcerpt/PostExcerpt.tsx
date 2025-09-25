@@ -3,7 +3,7 @@ import cx from "classnames";
 
 import PostHeader from "../PostHeader";
 
-import styles from "./PostExcerpt.module.scss";
+import styles from "./PostExcerpt.module.css";
 
 type Props = {
   title: string;

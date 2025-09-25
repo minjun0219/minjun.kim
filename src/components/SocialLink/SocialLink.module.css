@@ -1,0 +1,59 @@
+.links {
+  margin: 0;
+  padding: 0;
+}
+
+.links::after {
+  clear: both;
+  display: block;
+  content: "";
+}
+
+.links li {
+  list-style: none;
+  float: left;
+}
+
+.links li::after {
+  content: "|";
+  margin: 0 5px;
+}
+
+.links li:last-child::after {
+  content: none;
+}
+
+.links span,
+.links li:after {
+  color: var(--text-secondary-color);
+  opacity: 0.5;
+}
+
+.links a:link,
+.links a:visited {
+  color: var(--text-secondary-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.links a:hover,
+.links a:focus {
+  color: var(--text-color);
+}
+
+.links a:active {
+  text-decoration: underline;
+}
+
+.links a > span {
+  display: none;
+}
+
+.links a > span:before {
+  content: " ";
+}
+
+.links a:hover > span,
+.links a:focus > span {
+  display: inline;
+}

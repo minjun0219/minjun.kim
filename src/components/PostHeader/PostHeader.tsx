@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import moment from "moment";
 import Link from "next/link";
 
-import styles from "./PostHeader.module.scss";
+import styles from "./PostHeader.module.css";
 
 const PostLink = ({
   href,
