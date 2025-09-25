@@ -8,7 +8,7 @@
 .logo,
 .mode {
   color: var(--text-secondary-color) !important;
-  transition-duration: var(--transituin-duration);
+  transition-duration: var(--transition-duration);
   transition-property: color;
 }
 

@@ -5,7 +5,7 @@
   line-height: 1.8;
   color: var(--text-color);
   transition-property: color;
-  transition-duration: var(--transituin-duration);
+  transition-duration: var(--transition-duration);
 }
 
 .article p > code,

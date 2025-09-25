@@ -4,7 +4,7 @@
   line-height: 1.8;
   color: var(--text-color);
   transition-property: color;
-  transition-duration: var(--transituin-duration);
+  transition-duration: var(--transition-duration);
 }
 
 @media screen and (min-width: var(--breakpoint-desktop)) {
