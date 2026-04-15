@@ -9,6 +9,9 @@ export type Props<E = HTMLUListElement> = React.DetailsHTMLAttributes<E>;
 export const SocialLink = ({ className, ...props }: Props) => (
   <ul className={cx(styles.links, className)} {...props}>
     <li>
+      <Link href="/resume">Resume</Link>
+    </li>
+    <li>
       <Link href="/posts">Posts</Link>
     </li>
     <li>

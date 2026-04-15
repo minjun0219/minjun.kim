@@ -60,3 +60,16 @@ body {
   transition-property: color, background;
   transition-duration: var(--transition-duration);
 }
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  header,
+  footer {
+    display: none !important;
+  }
+}
