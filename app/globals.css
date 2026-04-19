@@ -29,7 +29,7 @@ html[data-theme="light"] {
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme]) {
     --background-color: #fff;
     --primary-color: #008aff;
     --text-color: #333;
