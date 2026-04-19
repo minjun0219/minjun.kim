@@ -11,17 +11,24 @@ import Wrapper from "@/components/Wrapper";
 import styles from "./Header.module.css";
 import Logo from "@/components/Logo";
 
+const THEME_CYCLE = ["system", "light", "dark"] as const;
+
 function handleSwitchTheme() {
   if (typeof document === "undefined") {
     return;
   }
 
   const html = document.documentElement;
-  const theme = html.getAttribute("data-theme");
-  const setTheme = theme === "light" ? "" : "light";
+  const current = html.getAttribute("data-theme") as
+    | (typeof THEME_CYCLE)[number]
+    | null;
+  const index = current ? THEME_CYCLE.indexOf(current) : -1;
+  const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
 
-  // setAttribute
-  html.setAttribute("data-theme", setTheme);
+  html.setAttribute("data-theme", next);
+  try {
+    localStorage.setItem("theme", next);
+  } catch (err) {}
 }
 
 export const Header = () => {
