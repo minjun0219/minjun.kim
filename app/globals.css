@@ -67,9 +67,4 @@ body {
     background: #fff !important;
     color: #000 !important;
   }
-
-  header,
-  footer {
-    display: none !important;
-  }
 }
