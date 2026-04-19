@@ -9,11 +9,10 @@ import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import MoonIcon from "@/components/icons/MoonIcon";
 import SunIcon from "@/components/icons/SunIcon";
 import Wrapper from "@/components/Wrapper";
+import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 
 import styles from "./Header.module.css";
 import Logo from "@/components/Logo";
-
-const THEME_CYCLE = ["system", "light", "dark"] as const;
 
 function handleSwitchTheme() {
   if (typeof document === "undefined") {
@@ -21,22 +20,26 @@ function handleSwitchTheme() {
   }
 
   const html = document.documentElement;
-  const current = html.getAttribute("data-theme") as
-    | (typeof THEME_CYCLE)[number]
-    | null;
+  const current = html.getAttribute("data-theme") as Theme | null;
   const index = current ? THEME_CYCLE.indexOf(current) : -1;
   const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
 
   if (next === "system") {
     html.removeAttribute("data-theme");
     try {
-      localStorage.removeItem("theme");
-    } catch (err) {}
+      localStorage.removeItem(THEME_STORAGE_KEY);
+    } catch (err) {
+      // Ignore storage failures (private mode, disabled cookies);
+      // the document attribute has already been updated.
+    }
   } else {
     html.setAttribute("data-theme", next);
     try {
-      localStorage.setItem("theme", next);
-    } catch (err) {}
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch (err) {
+      // Ignore storage failures (private mode, disabled cookies);
+      // the document attribute has already been updated.
+    }
   }
 }
 
