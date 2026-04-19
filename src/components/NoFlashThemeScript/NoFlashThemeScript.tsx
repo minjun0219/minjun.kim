@@ -15,10 +15,8 @@ function getPreferredTheme() {
 }
 
 var preferredTheme = getPreferredTheme();
-if (preferredTheme === 'light' || preferredTheme === 'dark' || preferredTheme === 'system') {
+if (preferredTheme === 'light' || preferredTheme === 'dark') {
   setDataThemeAttribute(preferredTheme);
-} else {
-  setDataThemeAttribute('system');
 }
 })();`.replace(/(\s{2}|\n)/g, "");
 

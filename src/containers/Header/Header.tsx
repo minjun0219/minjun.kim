@@ -6,6 +6,8 @@ import AdjustIcon from "@/components/icons/AdjustIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
+import MoonIcon from "@/components/icons/MoonIcon";
+import SunIcon from "@/components/icons/SunIcon";
 import Wrapper from "@/components/Wrapper";
 
 import styles from "./Header.module.css";
@@ -25,10 +27,17 @@ function handleSwitchTheme() {
   const index = current ? THEME_CYCLE.indexOf(current) : -1;
   const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
 
-  html.setAttribute("data-theme", next);
-  try {
-    localStorage.setItem("theme", next);
-  } catch (err) {}
+  if (next === "system") {
+    html.removeAttribute("data-theme");
+    try {
+      localStorage.removeItem("theme");
+    } catch (err) {}
+  } else {
+    html.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch (err) {}
+  }
 }
 
 export const Header = () => {
@@ -41,8 +50,11 @@ export const Header = () => {
             type="button"
             className={styles.mode}
             onClick={handleSwitchTheme}
+            aria-label="toggle theme"
           >
-            <AdjustIcon className={styles.icon} />
+            <AdjustIcon className={`${styles.icon} ${styles.iconSystem}`} />
+            <SunIcon className={`${styles.icon} ${styles.iconLight}`} />
+            <MoonIcon className={`${styles.icon} ${styles.iconDark}`} />
           </button>
           <a
             href="https://www.linkedin.com/in/minjun0219"
