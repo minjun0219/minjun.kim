@@ -37,3 +37,24 @@
   height: 20px;
   fill: currentColor;
 }
+
+.iconLight,
+.iconDark {
+  display: none;
+}
+
+html[data-theme="light"] .iconSystem {
+  display: none;
+}
+
+html[data-theme="light"] .iconLight {
+  display: inline-block;
+}
+
+html[data-theme="dark"] .iconSystem {
+  display: none;
+}
+
+html[data-theme="dark"] .iconDark {
+  display: inline-block;
+}

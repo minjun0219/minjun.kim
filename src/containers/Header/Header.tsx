@@ -6,7 +6,10 @@ import AdjustIcon from "@/components/icons/AdjustIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
+import MoonIcon from "@/components/icons/MoonIcon";
+import SunIcon from "@/components/icons/SunIcon";
 import Wrapper from "@/components/Wrapper";
+import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 
 import styles from "./Header.module.css";
 import Logo from "@/components/Logo";
@@ -17,11 +20,27 @@ function handleSwitchTheme() {
   }
 
   const html = document.documentElement;
-  const theme = html.getAttribute("data-theme");
-  const setTheme = theme === "light" ? "" : "light";
+  const current = (html.getAttribute("data-theme") as Theme | null) ?? "system";
+  const index = THEME_CYCLE.indexOf(current);
+  const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
 
-  // setAttribute
-  html.setAttribute("data-theme", setTheme);
+  if (next === "system") {
+    html.removeAttribute("data-theme");
+    try {
+      localStorage.removeItem(THEME_STORAGE_KEY);
+    } catch (err) {
+      // Ignore storage failures (private mode, disabled cookies);
+      // the document attribute has already been updated.
+    }
+  } else {
+    html.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch (err) {
+      // Ignore storage failures (private mode, disabled cookies);
+      // the document attribute has already been updated.
+    }
+  }
 }
 
 export const Header = () => {
@@ -34,8 +53,11 @@ export const Header = () => {
             type="button"
             className={styles.mode}
             onClick={handleSwitchTheme}
+            aria-label="toggle theme"
           >
-            <AdjustIcon className={styles.icon} />
+            <AdjustIcon className={`${styles.icon} ${styles.iconSystem}`} />
+            <SunIcon className={`${styles.icon} ${styles.iconLight}`} />
+            <MoonIcon className={`${styles.icon} ${styles.iconDark}`} />
           </button>
           <a
             href="https://www.linkedin.com/in/minjun0219"

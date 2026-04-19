@@ -1,6 +1,7 @@
 import React from "react";
 
-const storageKey = "theme";
+import { THEME_STORAGE_KEY } from "@/lib/theme";
+
 const noFlash = `(function() {
 function setDataThemeAttribute(theme) {
   document.documentElement.setAttribute('data-theme', theme);
@@ -9,17 +10,16 @@ function setDataThemeAttribute(theme) {
 function getPreferredTheme() {
   var theme = null;
   try {
-    theme = localStorage.getItem('${storageKey}');
-  } catch (err) {}
+    theme = localStorage.getItem('${THEME_STORAGE_KEY}');
+  } catch (err) {
+    theme = null;
+  }
   return theme;
 }
 
-var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
 var preferredTheme = getPreferredTheme();
-if (preferredTheme !== null) {
+if (preferredTheme === 'light' || preferredTheme === 'dark') {
   setDataThemeAttribute(preferredTheme);
-} else if (lightQuery.matches) {
-  setDataThemeAttribute('light');
 }
 })();`.replace(/(\s{2}|\n)/g, "");
 
