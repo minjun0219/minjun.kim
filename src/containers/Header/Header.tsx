@@ -20,8 +20,8 @@ function handleSwitchTheme() {
   }
 
   const html = document.documentElement;
-  const current = html.getAttribute("data-theme") as Theme | null;
-  const index = current ? THEME_CYCLE.indexOf(current) : -1;
+  const current = (html.getAttribute("data-theme") as Theme | null) ?? "system";
+  const index = THEME_CYCLE.indexOf(current);
   const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
 
   if (next === "system") {
