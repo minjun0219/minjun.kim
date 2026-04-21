@@ -4,6 +4,7 @@
 }
 
 .article {
+  font-family: var(--font-family-base);
   line-height: 1.7;
 }
 

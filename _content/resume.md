@@ -49,7 +49,7 @@ updatedAt: "2026-04-19"
 - C-JeS Entertainment Website 리뉴얼
 - 대검찰청 모바일 웹사이트 구축
 
-## 오픈소스
+## 사이드 프로젝트
 
 ### [hotwatermat-ble](https://github.com/minjun0219/hotwatermat-ble)
 
