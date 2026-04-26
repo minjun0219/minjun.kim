@@ -54,7 +54,6 @@ updatedAt: "2026-04-26"
 ### [ogpeek](https://ogpeek.dev) [GitHub](https://github.com/minjun0219/ogpeek)
 
 - URL 입력만으로 Open Graph 메타데이터를 파싱하고 OGP 명세 위반 사항(제목 길이, 이미지 누락, URL 불일치 등 12가지 규칙)을 자동 검증해주는 도구
-- 순수 JavaScript 엔진 패키지(`packages/ogpeek`)와 Next.js 15 기반 웹사이트(`website`)를 모노레포로 구성, Cloudflare Workers(OpenNext)로 배포
 
 ### [hotwatermat-ble](https://github.com/minjun0219/hotwatermat-ble)
 
