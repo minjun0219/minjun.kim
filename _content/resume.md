@@ -1,6 +1,6 @@
 ---
 title: "이력서"
-updatedAt: "2026-04-19"
+updatedAt: "2026-04-26"
 ---
 
 # 김민준
@@ -50,6 +50,10 @@ updatedAt: "2026-04-19"
 - 대검찰청 모바일 웹사이트 구축
 
 ## 사이드 프로젝트
+
+### [ogpeek](https://ogpeek.dev) [GitHub](https://github.com/minjun0219/ogpeek)
+
+- URL 입력만으로 Open Graph 메타데이터를 파싱하고 OGP 명세 위반 사항(제목 길이, 이미지 누락, URL 불일치 등 12가지 규칙)을 자동 검증해주는 도구
 
 ### [hotwatermat-ble](https://github.com/minjun0219/hotwatermat-ble)
 

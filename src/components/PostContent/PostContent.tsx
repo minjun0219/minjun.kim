@@ -4,6 +4,7 @@ import Markdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import CodeBlock from "../CodeBlock";
+import GithubIcon from "../icons/GithubIcon";
 
 import styles from "./PostContent.module.css";
 
@@ -37,6 +38,33 @@ const MarkdownPre: Components["pre"] = ({ children, ...props }) => {
   return <pre {...props}>{children}</pre>;
 };
 
+const MarkdownAnchor: Components["a"] = ({ children, href, ...props }) => {
+  const isGithubIconLink =
+    typeof href === "string" &&
+    /^https:\/\/github\.com\//.test(href) &&
+    typeof children === "string" &&
+    children.trim().toLowerCase() === "github";
+
+  if (isGithubIconLink) {
+    return (
+      <a
+        {...props}
+        href={href}
+        className={cx(props.className, styles.iconLink)}
+        aria-label="GitHub repository"
+      >
+        <GithubIcon className={styles.icon} />
+      </a>
+    );
+  }
+
+  return (
+    <a {...props} href={href}>
+      {children}
+    </a>
+  );
+};
+
 type Props = {
   value: string;
   className?: string;
@@ -50,6 +78,7 @@ const PostContent = async ({ value, className }: Props) => {
         components={{
           code: MarkdownCode,
           pre: MarkdownPre,
+          a: MarkdownAnchor,
         }}
       >
         {value}

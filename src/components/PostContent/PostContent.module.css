@@ -12,3 +12,15 @@
   padding-left: 1em;
   border-left: 4px solid var(--text-secondary-color);
 }
+
+.iconLink {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  margin-left: 0.25em;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+}
