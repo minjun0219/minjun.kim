@@ -1,6 +1,9 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import cx from "classnames";
 
 import AdjustIcon from "@/components/icons/AdjustIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
@@ -13,6 +16,11 @@ import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 
 import styles from "./Header.module.css";
 import Logo from "@/components/Logo";
+
+const NAV_ITEMS = [
+  { href: "/resume", label: "Resume" },
+  { href: "/posts", label: "Posts" },
+] as const;
 
 function handleSwitchTheme() {
   if (typeof document === "undefined") {
@@ -44,10 +52,27 @@ function handleSwitchTheme() {
 }
 
 export const Header = () => {
+  const pathname = usePathname();
+
   return (
     <header>
       <Wrapper className={styles.container}>
         <Logo link className={styles.logo} />
+        <nav className={styles.nav}>
+          {NAV_ITEMS.map((item) => {
+            const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cx(styles.navLink, { [styles.navLinkActive]: isActive })}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
         <div className={styles.utils}>
           <button
             type="button"
