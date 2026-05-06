@@ -11,6 +11,8 @@ export const contentType = "image/png";
 
 export const alt = SITE_NAME;
 
+export const dynamicParams = false;
+
 type Props = {
   params: Promise<{ slug: string }>;
 };

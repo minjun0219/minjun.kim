@@ -32,7 +32,6 @@ export const metadata: Metadata = {
   creator: AUTHOR_NAME,
   publisher: AUTHOR_NAME,
   alternates: {
-    canonical: "/",
     types: {
       "application/rss+xml": [{ url: "/feed.xml", title: `${SITE_NAME} RSS` }],
     },

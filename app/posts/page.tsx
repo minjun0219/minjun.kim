@@ -1,6 +1,13 @@
 import React from "react";
-import type { NextPage } from "next";
+import type { Metadata, NextPage } from "next";
 import Posts from "@/containers/Posts";
+
+export const metadata: Metadata = {
+  title: "Posts",
+  alternates: {
+    canonical: "/posts",
+  },
+};
 
 const ArticlesPage: NextPage = () => {
   return <Posts />;

@@ -10,6 +10,9 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "이력서",
   description: "김민준 이력서",
+  alternates: {
+    canonical: "/resume",
+  },
   openGraph: {
     title: "이력서",
   },

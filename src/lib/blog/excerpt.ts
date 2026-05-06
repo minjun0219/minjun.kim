@@ -6,7 +6,7 @@ import strip from "strip-markdown";
 export async function markdownToHtml(markdown: string): Promise<string> {
   const file = await remark()
     .use(remarkGfm)
-    .use(remarkHtml, { sanitize: false })
+    .use(remarkHtml, { sanitize: true })
     .process(markdown);
   return String(file);
 }
