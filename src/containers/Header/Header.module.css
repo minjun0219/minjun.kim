@@ -10,11 +10,11 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   flex: 1;
-  margin-left: 8px;
-  font-family: var(--font-family-code);
-  font-size: 0.95em;
+  margin-left: 12px;
+  font-size: 1em;
+  font-weight: 500;
 }
 
 .navLink {
@@ -22,17 +22,16 @@
   text-decoration: none;
   padding: 4px 0;
   transition: color var(--transition-duration);
-  position: relative;
 }
 
 @media (hover: hover) {
   .navLink:hover {
-    color: var(--primary-color);
+    color: var(--text-color);
   }
 }
 
 .navLink:focus-visible {
-  color: var(--primary-color);
+  color: var(--text-color);
   outline: none;
 }
 
@@ -40,15 +39,17 @@
   color: var(--primary-color);
 }
 
-.navLinkActive::before {
-  content: "→ ";
+@media (hover: hover) {
+  .navLinkActive:hover {
+    color: var(--primary-color);
+  }
 }
 
 @media (max-width: 480px) {
   .nav {
-    gap: 12px;
-    margin-left: 4px;
-    font-size: 0.9em;
+    gap: 14px;
+    margin-left: 8px;
+    font-size: 0.95em;
   }
 }
 

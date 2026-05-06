@@ -10,13 +10,7 @@ const IndexPage: NextPage = () => {
   return (
     <main className={styles.container}>
       <div className={styles.hero}>
-        <span className={styles.prompt} aria-hidden="true">
-          $
-        </span>
         <Logo className={styles.logo} />
-        <span className={styles.cursor} aria-hidden="true">
-          _
-        </span>
       </div>
 
       <ul className={styles.primaryNav}>
