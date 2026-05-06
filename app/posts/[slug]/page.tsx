@@ -1,5 +1,5 @@
 import BlogPost from "@/containers/Post";
-import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getAllPosts, getExcerpt, getPostBySlug } from "@/lib/blog";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -24,12 +24,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return notFound();
   }
 
-  const title = `${post.title} | minjun.kim`;
+  const description = await getExcerpt(post.content);
+  const url = `/posts/${slug}`;
 
   return {
-    title,
+    title: post.title,
+    description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
-      title,
+      type: "article",
+      url,
+      title: post.title,
+      description,
+      publishedTime: post.date,
+      authors: [post.author?.name].filter(
+        (name): name is string => typeof name === "string",
+      ),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
     },
   };
 }

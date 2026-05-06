@@ -1,6 +1,7 @@
+import { SITE_URL } from "./siteConfig";
+
 export function getCanonical(path: string) {
-  console.log(path);
-  const url = new URL(path, process.env.HOMEPAGE);
+  const url = new URL(path, SITE_URL);
   return url.toString();
 }
 
