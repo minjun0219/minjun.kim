@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import cx from "classnames";
-import { Prism, Highlight, themes } from "prism-react-renderer";
+import { Highlight, Prism, themes } from "prism-react-renderer";
+import React from "react";
 
 import styles from "./CodeBlock.module.css";
 

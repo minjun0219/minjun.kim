@@ -1,7 +1,7 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import BlogPost from "@/containers/Post";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{

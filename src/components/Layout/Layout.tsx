@@ -1,8 +1,7 @@
-import React from "react";
 import cx from "classnames";
-
-import Header from "@/containers/Header";
+import type React from "react";
 import Footer from "@/components/Footer";
+import Header from "@/containers/Header";
 
 import styles from "./Layout.module.css";
 

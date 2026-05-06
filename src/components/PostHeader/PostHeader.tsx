@@ -1,6 +1,7 @@
-import React, { useMemo } from "react";
 import moment from "moment";
 import Link from "next/link";
+import type React from "react";
+import { useMemo } from "react";
 
 import styles from "./PostHeader.module.css";
 

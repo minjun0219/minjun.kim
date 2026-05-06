@@ -1,5 +1,5 @@
-import React from "react";
 import type { NextPage } from "next";
+import React from "react";
 
 import Logo from "@/components/Logo";
 import SocialLink from "@/components/SocialLink";

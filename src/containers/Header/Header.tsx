@@ -8,11 +8,10 @@ import InstagramIcon from "@/components/icons/InstagramIcon";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import MoonIcon from "@/components/icons/MoonIcon";
 import SunIcon from "@/components/icons/SunIcon";
+import Logo from "@/components/Logo";
 import Wrapper from "@/components/Wrapper";
 import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
-
 import styles from "./Header.module.css";
-import Logo from "@/components/Logo";
 
 function handleSwitchTheme() {
   if (typeof document === "undefined") {
