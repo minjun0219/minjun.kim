@@ -13,11 +13,6 @@ const Post = ({ title, content, date }: Props) => {
   return (
     <Wrapper className={styles.post}>
       <PostArticle title={title} content={content} date={date} />
-      {/* <PostAuthor
-        name={author.name}
-        description={author.description}
-        avatar={author.avatar.url}
-      /> */}
     </Wrapper>
   );
 };
