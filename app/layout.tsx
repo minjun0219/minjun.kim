@@ -3,6 +3,15 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import {
+  AUTHOR_NAME,
+  DEFAULT_OG_IMAGE,
+  LOCALE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/siteConfig";
+
 import "./globals.css";
 
 const nunito = Nunito({
@@ -12,7 +21,43 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "minjun.kim",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: AUTHOR_NAME, url: SITE_URL }],
+  creator: AUTHOR_NAME,
+  publisher: AUTHOR_NAME,
+  alternates: {
+    types: {
+      "application/rss+xml": [{ url: "/feed.xml", title: `${SITE_NAME} RSS` }],
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: LOCALE,
+    url: "/",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
   icons: {
     shortcut: "/favicon.ico",
     icon: [
