@@ -65,6 +65,9 @@
 }
 
 .feedLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   color: var(--text-color);
   opacity: 0.6;
   text-decoration: none;
@@ -75,4 +78,8 @@
 .feedLink:focus {
   opacity: 1;
   color: var(--primary-color);
+}
+
+.feedIcon {
+  flex-shrink: 0;
 }
