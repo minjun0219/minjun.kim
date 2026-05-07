@@ -32,53 +32,51 @@ export default async function OpengraphImage({ params }: Props) {
   });
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "80px",
+        background:
+          "linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%)",
+        color: "#ffffff",
+        fontFamily: "sans-serif",
+      }}
+    >
       <div
         style={{
-          width: "100%",
-          height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "80px",
-          background:
-            "linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%)",
-          color: "#ffffff",
-          fontFamily: "sans-serif",
+          fontSize: 32,
+          opacity: 0.85,
+          letterSpacing: "0.02em",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            fontSize: 32,
-            opacity: 0.85,
-            letterSpacing: "0.02em",
-          }}
-        >
-          {SITE_NAME}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 72,
-            fontWeight: 700,
-            lineHeight: 1.2,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {post.title}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 28,
-            opacity: 0.7,
-          }}
-        >
-          {formattedDate}
-        </div>
+        {SITE_NAME}
       </div>
-    ),
+      <div
+        style={{
+          display: "flex",
+          fontSize: 72,
+          fontWeight: 700,
+          lineHeight: 1.2,
+          letterSpacing: "-0.02em",
+        }}
+      >
+        {post.title}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          fontSize: 28,
+          opacity: 0.7,
+        }}
+      >
+        {formattedDate}
+      </div>
+    </div>,
     { ...size },
   );
 }

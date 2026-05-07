@@ -1,18 +1,15 @@
 "use client";
 
-import React from "react";
-
 import AdjustIcon from "@/components/icons/AdjustIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import MoonIcon from "@/components/icons/MoonIcon";
 import SunIcon from "@/components/icons/SunIcon";
+import Logo from "@/components/Logo";
 import Wrapper from "@/components/Wrapper";
 import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
-
 import styles from "./Header.module.css";
-import Logo from "@/components/Logo";
 
 function handleSwitchTheme() {
   if (typeof document === "undefined") {
@@ -28,7 +25,7 @@ function handleSwitchTheme() {
     html.removeAttribute("data-theme");
     try {
       localStorage.removeItem(THEME_STORAGE_KEY);
-    } catch (err) {
+    } catch (_err) {
       // Ignore storage failures (private mode, disabled cookies);
       // the document attribute has already been updated.
     }
@@ -36,7 +33,7 @@ function handleSwitchTheme() {
     html.setAttribute("data-theme", next);
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch (err) {
+    } catch (_err) {
       // Ignore storage failures (private mode, disabled cookies);
       // the document attribute has already been updated.
     }

@@ -18,5 +18,5 @@ export async function getExcerpt(
   const file = await remark().use(strip).process(markdown);
   const text = String(file).replace(/\s+/g, " ").trim();
   if (text.length <= length) return text;
-  return text.slice(0, length).trimEnd() + "…";
+  return `${text.slice(0, length).trimEnd()}…`;
 }

@@ -1,4 +1,3 @@
-import React from "react";
 import cx from "classnames";
 
 import PostHeader from "../PostHeader";
@@ -25,7 +24,10 @@ const PostExcerpt = ({
   return (
     <div className={cx(styles.excerpt, className)}>
       <PostHeader title={title} date={date} url={url} source={source} />
-      {excerpt ? <div dangerouslySetInnerHTML={{ __html: excerpt }} /> : null}
+      {excerpt ? (
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: 내부 마크다운 변환 결과물 렌더링용
+        <div dangerouslySetInnerHTML={{ __html: excerpt }} />
+      ) : null}
     </div>
   );
 };

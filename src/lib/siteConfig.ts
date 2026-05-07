@@ -1,6 +1,7 @@
-export const SITE_URL = (
-  process.env.HOMEPAGE ?? "https://minjun.kim"
-).replace(/\/$/, "");
+export const SITE_URL = (process.env.HOMEPAGE ?? "https://minjun.kim").replace(
+  /\/$/,
+  "",
+);
 
 export const SITE_NAME = "minjun.kim";
 

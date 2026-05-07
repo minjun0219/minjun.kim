@@ -1,5 +1,3 @@
-import React from "react";
-
 import PostExcerpt from "@/components/PostExcerpt";
 import Wrapper from "@/components/Wrapper";
 

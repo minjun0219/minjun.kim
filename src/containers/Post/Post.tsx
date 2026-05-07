@@ -1,8 +1,6 @@
-import React from "react";
-
-import type { Post as PostType } from "@/lib/blog/types";
-import Wrapper from "@/components/Wrapper";
 import PostArticle from "@/components/PostArticle";
+import Wrapper from "@/components/Wrapper";
+import type { Post as PostType } from "@/lib/blog/types";
 
 import styles from "./Post.module.css";
 

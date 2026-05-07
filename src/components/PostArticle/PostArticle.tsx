@@ -1,7 +1,5 @@
-import React from "react";
-import PostHeader from "../PostHeader";
-
 import PostContent from "../PostContent";
+import PostHeader from "../PostHeader";
 
 import styles from "./PostArticle.module.css";
 

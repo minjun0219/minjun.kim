@@ -1,5 +1,3 @@
-import React from "react";
-
 import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 const noFlash = `(function() {
@@ -26,6 +24,7 @@ if (preferredTheme === 'light' || preferredTheme === 'dark') {
 const NoFlashThemeScript = () => (
   <script
     id="no-flash-theme-script"
+    // biome-ignore lint/security/noDangerouslySetInnerHtml: 테마 깜빡임 방지 스크립트는 hydration 전에 인라인 실행돼야 함
     dangerouslySetInnerHTML={{
       __html: noFlash,
     }}

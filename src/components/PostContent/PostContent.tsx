@@ -1,6 +1,6 @@
-import React from "react";
 import cx from "classnames";
-import Markdown, { Components } from "react-markdown";
+import React from "react";
+import Markdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import CodeBlock from "../CodeBlock";

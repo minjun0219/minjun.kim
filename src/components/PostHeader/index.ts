@@ -1,2 +1,2 @@
-export { default } from "./PostHeader";
 export * from "./PostHeader";
+export { default } from "./PostHeader";

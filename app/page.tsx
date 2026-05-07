@@ -1,4 +1,3 @@
-import React from "react";
 import type { Metadata, NextPage } from "next";
 
 import Logo from "@/components/Logo";

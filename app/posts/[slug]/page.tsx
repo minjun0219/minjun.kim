@@ -1,6 +1,6 @@
+import type { Metadata } from "next";
 import BlogPost from "@/containers/Post";
 import { getAllPosts, getExcerpt, getPostBySlug } from "@/lib/blog";
-import { Metadata } from "next";
 
 type Props = {
   params: Promise<{

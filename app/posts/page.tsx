@@ -1,5 +1,5 @@
-import React from "react";
 import type { Metadata, NextPage } from "next";
+
 import Posts from "@/containers/Posts";
 
 export const metadata: Metadata = {
