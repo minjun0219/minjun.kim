@@ -1,5 +1,3 @@
-import React from "react";
-
 import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 const noFlash = `(function() {

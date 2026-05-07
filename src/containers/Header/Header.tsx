@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 import AdjustIcon from "@/components/icons/AdjustIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
@@ -27,7 +25,7 @@ function handleSwitchTheme() {
     html.removeAttribute("data-theme");
     try {
       localStorage.removeItem(THEME_STORAGE_KEY);
-    } catch (err) {
+    } catch (_err) {
       // Ignore storage failures (private mode, disabled cookies);
       // the document attribute has already been updated.
     }
@@ -35,7 +33,7 @@ function handleSwitchTheme() {
     html.setAttribute("data-theme", next);
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch (err) {
+    } catch (_err) {
       // Ignore storage failures (private mode, disabled cookies);
       // the document attribute has already been updated.
     }

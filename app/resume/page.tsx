@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import React from "react";
 
 import PostContent from "@/components/PostContent";
 import Wrapper from "@/components/Wrapper";

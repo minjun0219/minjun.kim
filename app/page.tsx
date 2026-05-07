@@ -1,5 +1,4 @@
 import type { Metadata, NextPage } from "next";
-import React from "react";
 
 import Logo from "@/components/Logo";
 import SocialLink from "@/components/SocialLink";

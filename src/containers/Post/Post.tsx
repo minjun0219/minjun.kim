@@ -1,4 +1,3 @@
-import React from "react";
 import PostArticle from "@/components/PostArticle";
 import Wrapper from "@/components/Wrapper";
 import type { Post as PostType } from "@/lib/blog/types";

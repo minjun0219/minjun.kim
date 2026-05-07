@@ -76,6 +76,9 @@
       "security": {
         "noDangerouslySetInnerHtml": "warn"
       },
+      "complexity": {
+        "noImportantStyles": "off"
+      },
       "a11y": {
         "recommended": true,
         "useHtmlLang": "warn",

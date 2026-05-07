@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import BlogPost from "@/containers/Post";
 import { getAllPosts, getExcerpt, getPostBySlug } from "@/lib/blog";
 
