@@ -64,8 +64,7 @@
         "useNodejsImportProtocol": "error"
       },
       "suspicious": {
-        "noExplicitAny": "warn",
-        "noArrayIndexKey": "warn"
+        "noExplicitAny": "warn"
       },
       "correctness": {
         "useExhaustiveDependencies": "warn",
@@ -73,16 +72,8 @@
         "noUnusedVariables": "warn",
         "noUnusedImports": "warn"
       },
-      "security": {
-        "noDangerouslySetInnerHtml": "warn"
-      },
       "complexity": {
         "noImportantStyles": "off"
-      },
-      "a11y": {
-        "recommended": true,
-        "useHtmlLang": "warn",
-        "useIframeTitle": "warn"
       }
     }
   },

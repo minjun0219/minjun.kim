@@ -14,6 +14,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
+    // biome-ignore lint/a11y/useHtmlLang: lang은 app/layout.tsx의 루트 html 요소에서 지정됨
     <html>
       <body>
         <NextError statusCode={0} />

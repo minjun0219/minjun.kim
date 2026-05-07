@@ -5,6 +5,7 @@ export type Props = {
 export const GoogleTagManager = ({ containerId }: Props) => {
   return (
     <script
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: GTM 부트스트랩 스크립트는 인라인 삽입이 공식 권장 방식
       dangerouslySetInnerHTML={{
         __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -22,6 +23,7 @@ export const GoogleTagManager = ({ containerId }: Props) => {
 export const GoogleTagManagerNoScript = ({ containerId }: Props) => {
   return (
     <noscript>
+      {/* biome-ignore lint/a11y/useIframeTitle: GTM noscript iframe은 화면에 보이지 않으므로 title 불필요 */}
       <iframe
         src={`https://www.googletagmanager.com/ns.html?id=${containerId}`}
         height="0"
