@@ -2,7 +2,9 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import { Suspense } from "react";
 
+import { PostHogPageView } from "@/components/PostHogPageView";
 import {
   AUTHOR_NAME,
   DEFAULT_OG_IMAGE,
@@ -98,6 +100,9 @@ export default function RootLayout({
     <html lang="ko" className={nunito.variable}>
       <body>
         {children}
+        <Suspense fallback={null}>
+          <PostHogPageView />
+        </Suspense>
         <SpeedInsights />
         <Analytics />
       </body>
