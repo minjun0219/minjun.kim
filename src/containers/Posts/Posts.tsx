@@ -55,7 +55,7 @@ const Posts = () => {
       />
       <footer className={styles.footer}>
         <a
-          href="/feed.xml"
+          href="/posts/feed.xml"
           className={styles.feedLink}
           aria-label="RSS 피드 구독"
         >

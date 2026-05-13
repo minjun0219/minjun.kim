@@ -33,7 +33,9 @@ export const metadata: Metadata = {
   publisher: AUTHOR_NAME,
   alternates: {
     types: {
-      "application/rss+xml": [{ url: "/feed.xml", title: `${SITE_NAME} RSS` }],
+      "application/rss+xml": [
+        { url: "/posts/feed.xml", title: `${SITE_NAME} RSS` },
+      ],
     },
   },
   openGraph: {
