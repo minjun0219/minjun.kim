@@ -64,7 +64,7 @@ export async function GET() {
     "<channel>",
     `<title>${escapeXml(SITE_NAME)}</title>`,
     `<link>${escapeXml(SITE_URL)}</link>`,
-    `<atom:link href="${escapeXml(`${SITE_URL}/feed.xml`)}" rel="self" type="application/rss+xml" />`,
+    `<atom:link href="${escapeXml(`${SITE_URL}/posts/feed.xml`)}" rel="self" type="application/rss+xml" />`,
     `<description>${escapeXml(SITE_DESCRIPTION)}</description>`,
     "<language>ko</language>",
     `<lastBuildDate>${lastBuildDate}</lastBuildDate>`,
