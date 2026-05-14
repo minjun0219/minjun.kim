@@ -11,6 +11,10 @@ export const onRequestError: typeof Sentry.captureRequestError = async (
   if (posthogServer && err instanceof Error) {
     try {
       posthogServer.captureException(err);
+      // posthog-node@4.18 의 captureException 은 내부적으로 비동기 스택 파싱 후
+      // 큐에 적재하지만 외부에는 void 로 노출돼 await 할 방법이 없다.
+      // flush 전에 한 틱 양보해 이벤트가 큐에 들어가도록 한다.
+      await new Promise((resolve) => setImmediate(resolve));
       await posthogServer.flush();
     } catch (posthogError) {
       console.error("PostHog captureException failed:", posthogError);
