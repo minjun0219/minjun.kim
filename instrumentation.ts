@@ -9,7 +9,12 @@ export const onRequestError: typeof Sentry.captureRequestError = async (
   context,
 ) => {
   if (posthogServer && err instanceof Error) {
-    posthogServer.captureException(err);
+    try {
+      posthogServer.captureException(err);
+      await posthogServer.flush();
+    } catch (posthogError) {
+      console.error("PostHog captureException failed:", posthogError);
+    }
   }
   return Sentry.captureRequestError(err, request, context);
 };
