@@ -16,6 +16,7 @@ if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
     defaults: "2025-05-24",
     capture_pageview: false,
     capture_pageleave: true,
+    capture_exceptions: true,
   });
 }
 
