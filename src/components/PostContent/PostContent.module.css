@@ -1,6 +1,9 @@
 .content img {
-  max-width: 100%;
+  display: block;
+  width: calc(100% + 2 * var(--page-margin));
   height: auto;
+  margin-left: calc(-1 * var(--page-margin));
+  margin-right: calc(-1 * var(--page-margin));
 }
 
 .content :global(.wp-block-image) {
@@ -10,6 +13,8 @@
 
 .content :global(.wp-block-image) img {
   width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .content blockquote {
