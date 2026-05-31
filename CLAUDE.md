@@ -28,7 +28,7 @@ Data access is centralized in `src/lib/blog/api.ts` (uses `fast-glob` to discove
 **Routing/layout** is the Next.js App Router under `app/`. Site-wide metadata (OpenGraph, Twitter, RSS alternate, icons) is defined in `app/layout.tsx`. SEO/feed routes are generated programmatically: `app/sitemap.ts`, `app/robots.ts`, `app/posts/feed.xml/route.ts`, and per-post OG images at `app/posts/[slug]/opengraph-image.tsx`.
 
 **UI structure** (path alias `@/*` → `src/*`):
-- `src/components/*` — presentational components, each in its own folder with a co-located CSS Module (`*.module.css`) and an `index.ts` re-export
+- `src/components/*` — presentational components, each typically in its own folder with an `index.ts(x)` re-export and (in most cases) a co-located CSS Module (`*.module.css`); some components have no stylesheet, and `icons/` is a flat folder of bare component files
 - `src/containers/*` — composed page sections (Header, Intro, Post, Posts)
 - `src/lib/*` — pure helpers and data access (`siteConfig.ts`, `theme.ts`, blog/resume APIs, URL helpers)
 
@@ -36,7 +36,7 @@ Data access is centralized in `src/lib/blog/api.ts` (uses `fast-glob` to discove
 
 **Theming.** Three-state cycle (`system`/`light`/`dark`) defined in `src/lib/theme.ts`. At runtime the `Header` (`src/containers/Header`) toggles the theme by cycling the value, writing it to `localStorage`, and setting the `data-theme` attribute on `<html>` (system = attribute removed). Note: a `NoFlashThemeScript` component (an inline, pre-paint `localStorage` reader) and a cookie-based `getPreferredTheme` Server Action (`app/actions.ts`) also exist but are **not currently wired into `app/layout.tsx`** — check before relying on them.
 
-**Observability.** Sentry + PostHog are wired through Next.js instrumentation: `instrumentation-client.ts` (browser init), `instrumentation.ts` (`register` + `onRequestError`, server/edge), and `sentry.{server,edge}.config.ts`. `next.config.mjs` wraps the config with `withSentryConfig`. Configuration is driven by `NEXT_PUBLIC_*` env vars — see `.env.local.example`. Deploys target Vercel (`vercel.json`, `@vercel/analytics`, `@vercel/speed-insights`).
+**Observability.** Sentry + PostHog are wired through Next.js instrumentation: `instrumentation-client.ts` (browser init), `instrumentation.ts` (`register` + `onRequestError`, server/edge), and `sentry.{server,edge}.config.ts`. `next.config.mjs` wraps the config with `withSentryConfig`. Runtime configuration is driven by `NEXT_PUBLIC_*` env vars; build-time Sentry sourcemap upload additionally needs the (non-public) `SENTRY_ORG` / `SENTRY_PROJECT` / `SENTRY_AUTH_TOKEN` vars — see `.env.local.example`. Deploys target Vercel (`vercel.json`, `@vercel/analytics`, `@vercel/speed-insights`).
 
 ## Conventions
 
