@@ -9,6 +9,11 @@ const nextConfig = {
         destination: "/posts/next-js-wp-graphql-static-blog",
         permanent: true,
       },
+      {
+        source: "/archives/31",
+        destination: "/posts/frontend-development-and-web-publishing",
+        permanent: true,
+      },
     ];
   },
 };
