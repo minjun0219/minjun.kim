@@ -18,7 +18,7 @@ PHP와 Javascript로 웹 애플리케이션을 만들고 있는데 PHP쪽에서 
 
 ![](/images/posts/hex_editor.png)
 
-아니나 다를까 Hex Editor에서 해당 부분을 삭제해 주니 오류가 말끔히 사라졌습니다. 역시 아는 게 힘이네요.
+아니나 다를까 Hex Editor에서 해당 부분을 삭제해 주니 오류가 말끔히 사라졌습니다.
 
 **참고 URL**
 
