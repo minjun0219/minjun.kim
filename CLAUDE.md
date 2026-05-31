@@ -34,7 +34,7 @@ Data access is centralized in `src/lib/blog/api.ts` (uses `fast-glob` to discove
 
 **Site constants** (URL, name, description, author, locale, default OG image) are all in `src/lib/siteConfig.ts` — change them there, not inline.
 
-**Theming.** Three-state theme (`system`/`light`/`dark`) defined in `src/lib/theme.ts`, persisted in a `theme` cookie. The cookie is read server-side via the Server Action in `app/actions.ts`, and `NoFlashThemeScript` runs inline before paint to prevent a flash of the wrong theme.
+**Theming.** Three-state cycle (`system`/`light`/`dark`) defined in `src/lib/theme.ts`. At runtime the `Header` (`src/containers/Header`) toggles the theme by cycling the value, writing it to `localStorage`, and setting the `data-theme` attribute on `<html>` (system = attribute removed). Note: a `NoFlashThemeScript` component (an inline, pre-paint `localStorage` reader) and a cookie-based `getPreferredTheme` Server Action (`app/actions.ts`) also exist but are **not currently wired into `app/layout.tsx`** — check before relying on them.
 
 **Observability.** Sentry + PostHog are wired through Next.js instrumentation: `instrumentation-client.ts` (browser init), `instrumentation.ts` (`register` + `onRequestError`, server/edge), and `sentry.{server,edge}.config.ts`. `next.config.mjs` wraps the config with `withSentryConfig`. Configuration is driven by `NEXT_PUBLIC_*` env vars — see `.env.local.example`. Deploys target Vercel (`vercel.json`, `@vercel/analytics`, `@vercel/speed-insights`).
 
