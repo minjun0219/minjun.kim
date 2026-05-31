@@ -10,6 +10,10 @@
   word-break: keep-all;
 }
 
+.title.compact > h1 {
+  font-size: 1.6rem;
+}
+
 .title > h1 > a:link,
 .title > h1 > a:visited {
   text-decoration: none;
@@ -24,4 +28,24 @@
 .info {
   font-size: 0.8em;
   color: var(--text-secondary-color);
+}
+
+.mediumLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-top: 0.6em;
+  font-size: 0.85em;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.mediumLink:hover,
+.mediumLink:focus {
+  text-decoration: underline;
+}
+
+.mediumLinkIcon {
+  flex-shrink: 0;
 }

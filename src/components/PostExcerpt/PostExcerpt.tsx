@@ -10,6 +10,7 @@ type Props = {
   excerpt?: string;
   url?: string;
   source?: string;
+  mediumUrl?: string;
   className?: string;
 };
 
@@ -19,11 +20,19 @@ const PostExcerpt = ({
   excerpt,
   url,
   source,
+  mediumUrl,
   className,
 }: Props) => {
   return (
     <div className={cx(styles.excerpt, className)}>
-      <PostHeader title={title} date={date} url={url} source={source} />
+      <PostHeader
+        title={title}
+        date={date}
+        url={url}
+        source={source}
+        mediumUrl={mediumUrl}
+        compact
+      />
       {excerpt ? (
         // biome-ignore lint/security/noDangerouslySetInnerHtml: 내부 마크다운 변환 결과물 렌더링용
         <div dangerouslySetInnerHTML={{ __html: excerpt }} />
