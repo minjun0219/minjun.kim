@@ -78,7 +78,7 @@ const Posts = () => {
         mediumUrl="https://medium.com/@minjun.kim/b3333eee0888"
       />
       <PostExcerpt
-        title="jQuery로 Flash인척 내비게이션 만들기"
+        title="jQuery로 Flash와 같이 내비게이션 만들기"
         date="2011-06-03"
         url="/posts/jquery-flash-like-navigation"
       />
