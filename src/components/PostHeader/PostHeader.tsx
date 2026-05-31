@@ -10,7 +10,11 @@ const PostLink = ({
   children,
 }: React.PropsWithChildren<{ href: string }>) => {
   if (/^https?:\/\//i.test(href)) {
-    return <a href={href}>{children}</a>;
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
   }
 
   return <Link href={href}>{children}</Link>;
@@ -55,7 +59,10 @@ const PostHeader = ({
   compact,
 }: Props) => {
   const created = useMemo(
-    () => new Intl.DateTimeFormat("ko-KR").format(new Date(date)),
+    () =>
+      new Intl.DateTimeFormat("ko-KR", { timeZone: "UTC" }).format(
+        new Date(date),
+      ),
     [date],
   );
   return (
