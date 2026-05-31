@@ -38,11 +38,13 @@ const Posts = () => {
         title="플라바 클리퍼 제작 후기"
         date="2013-07-17"
         url="/posts/flava-clipper-postmortem"
+        mediumUrl="https://medium.com/@minjun.kim/3da4285f1a9"
       />
       <PostExcerpt
         title="Retina Display에서 1px을 1px로 보이게 하는 법"
         date="2013-04-16"
         url="/posts/1px-on-retina-display"
+        mediumUrl="https://medium.com/@minjun.kim/220c6280f395"
       />
       <PostExcerpt
         title="IE10에서 Input Box, Clear 버튼 삭제하기"
@@ -73,6 +75,7 @@ const Posts = () => {
         title="프론트엔드 개발, 그리고 웹 퍼블리싱"
         date="2011-06-03"
         url="/posts/frontend-development-and-web-publishing"
+        mediumUrl="https://medium.com/@minjun.kim/b3333eee0888"
       />
       <PostExcerpt
         title="jQuery로 Flash인척 내비게이션 만들기"
@@ -83,6 +86,7 @@ const Posts = () => {
         title="Mac OS X Lion에서 VoiceOver 사용하기"
         date="2011-06-03"
         url="/posts/voiceover-on-mac-os-x-lion"
+        mediumUrl="https://medium.com/@minjun.kim/647c22f2cecd"
       />
       <footer className={styles.footer}>
         <a

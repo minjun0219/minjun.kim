@@ -1,6 +1,7 @@
 ---
 title: "Retina Display에서 1px을 1px로 보이게 하는 법"
 date: "2013-04-16"
+mediumUrl: "https://medium.com/@minjun.kim/220c6280f395"
 author:
   name: logan
   email: "hi@minjun.kim"

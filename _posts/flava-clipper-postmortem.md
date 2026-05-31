@@ -1,6 +1,7 @@
 ---
 title: "플라바 클리퍼 제작 후기"
 date: "2013-07-17"
+mediumUrl: "https://medium.com/@minjun.kim/3da4285f1a9"
 author:
   name: logan
   email: "hi@minjun.kim"

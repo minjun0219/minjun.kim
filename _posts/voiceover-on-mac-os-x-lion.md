@@ -1,6 +1,7 @@
 ---
 title: "Mac OS X Lion에서 VoiceOver 사용하기"
 date: "2011-06-03"
+mediumUrl: "https://medium.com/@minjun.kim/647c22f2cecd"
 author:
   name: logan
   email: "hi@minjun.kim"

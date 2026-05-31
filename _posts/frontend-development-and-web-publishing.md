@@ -1,6 +1,7 @@
 ---
 title: "프론트엔드 개발, 그리고 웹 퍼블리싱"
 date: "2011-06-03"
+mediumUrl: "https://medium.com/@minjun.kim/b3333eee0888"
 author:
   name: logan
   email: "hi@minjun.kim"
