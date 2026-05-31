@@ -3,7 +3,8 @@
   flex-direction: column;
   justify-content: center;
   min-height: calc(100vh - 14rem);
-  padding: 3em 0;
+  padding-top: 3em;
+  padding-bottom: 3em;
   font-family: var(--font-family-base);
   color: var(--text-color);
 }
