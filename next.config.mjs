@@ -19,6 +19,11 @@ const nextConfig = {
         destination: "/posts/voiceover-on-mac-os-x-lion",
         permanent: true,
       },
+      {
+        source: "/archives/706",
+        destination: "/posts/voiceover-on-mac-os-x-lion",
+        permanent: true,
+      },
     ];
   },
 };
