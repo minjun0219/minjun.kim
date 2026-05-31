@@ -8,11 +8,11 @@ author:
 
 최근 웹 작업을 하면서 Retina Display를 대응할 수 밖에 없는데요. 아이폰은 해상도가 960x640입니다. 때문에 디자인도 해당 해상도를 기준으로 작업이 되는데요. 웹 작업 하시는 분들은 이미 알고 계시겠지만 아이폰에 들어가는 모바일 사파리를 포함해 모바일 웹브라우저는 Retina Display와를 별개로 480x320으로 인식합니다.
 
-이 부분 때문에 기존의 Retina Display가 아닌 모바일 웹페이지를 볼때에는 문제가 없지만 1px를 표현할때에는 조금 애매한 문제가 생기게 됩니다. border라던가 특정 라인을 표시할때 1px를 자주 사용하게 되는데 Retina Display에서는 1px을 실제로는 2px로 표현하고 있다는 점 입니다. 어쩌면 이 부분이 별것 아닌 것 처럼 보이지만 디자이너 입장에서는 1px도 매우 소중합니다(...?!)
+이 부분 때문에 기존의 Retina Display가 아닌 모바일 웹페이지를 볼때에는 문제가 없지만 1px를 표현할때에는 조금 애매한 문제가 생기게 됩니다. border라던가 특정 라인을 표시할때 1px를 자주 사용하게 되는데 Retina Display에서는 1px을 실제로는 2px로 표현하고 있다는 점 입니다. 어쩌면 이 부분이 별것 아닌 것 처럼 보이지만 디자이너 입장에서는 1px도 매우 소중합니다.
 
-때문에 이 같은 이유로 열심히 구글링을 해 보았지만 별 소득은 없었습니다. 그 중에서도 [Swipe.js](http://swipejs.com)를 만든 [Brad Birdsall](http://bradbirdsall.com/) 아저씨가 만든 ["Modile Web in High Resolution"이란 문서](http://bradbirdsall.com/mobile-web-in-high-resolution)가 구글 최 상단에 뜨기는 하는데요. 이 문서가 안내하는 방법은 Retina Display일 경우, 즉 기기의 화면 비율(Device Pixel Ratio)이 1.5배 이상일 경우 [box-shadow](https://developer.mozilla.org/en-US/docs/CSS/box-shadow)를 살짝 주어서 1 pixel 처럼 보이도록 하는 일종의 눈 속임 입니다.
+때문에 이 같은 이유로 열심히 구글링을 해 보았지만 별 소득은 없었습니다. 그 중에서도 [Swipe.js](http://swipejs.com)를 만든 [Brad Birdsall](http://bradbirdsall.com/)이 작성한 ["Modile Web in High Resolution"이란 문서](http://bradbirdsall.com/mobile-web-in-high-resolution)가 구글 최 상단에 뜨기는 하는데요. 이 문서가 안내하는 방법은 Retina Display일 경우, 즉 기기의 화면 비율(Device Pixel Ratio)이 1.5배 이상일 경우 [box-shadow](https://developer.mozilla.org/en-US/docs/CSS/box-shadow)를 살짝 주어서 1 pixel 처럼 보이도록 하는 일종의 눈 속임 입니다.
 
-하지만, 이 방법을 쓰면 버튼 주변이 지저분 해 지는 단점이 생겨나게 됩니다. 또한, 버튼이 아니라 텍스트 입력 박스의 경우 background-color를 하얀색(#fff)이고 border만 색상을 주게 되는데 굉장히 지저분해 지는 문제가 생기더라구요. 그래서 오랜 고심끝에 정말 무식한 방법을 사용했습니다.
+하지만, 이 방법을 쓰면 버튼 주변이 지저분 해 지는 단점이 생겨나게 됩니다. 또한, 버튼이 아니라 텍스트 입력 박스의 경우 background-color를 하얀색(#fff)이고 border만 색상을 주게 되는데 굉장히 지저분해 지는 문제가 생기더라구요. 그래서 오랜 고심 끝에 다소 투박한 방법을 사용했습니다.
 
 일단, 먼저 1 pixel을 border를 가지고 있는 박스를 하나 만들어 주고요. 스타일을 입혀줍니다.
 
@@ -32,7 +32,7 @@ input[type="text"]{
 
 ![](/images/posts/input_text_1px.png)
 
-이제, border를 1 pixel로 만들 차례 인데요. 사용자의 Mobile Web browser가 [CSS3 Transform](https://developer.mozilla.org/en-US/docs/CSS/transform)을 지원한다는 가정하에 Transform를 이용해 2배 뻥튀기 시켜 줍니다..-_-;
+이제, border를 1 pixel로 만들 차례 인데요. 사용자의 Mobile Web browser가 [CSS3 Transform](https://developer.mozilla.org/en-US/docs/CSS/transform)을 지원한다는 가정하에 Transform을 이용해 2배로 키워 줍니다.
 
 ```css
 @media only (-webkit-min-device-pixel-ratio: 1.5){
@@ -49,7 +49,7 @@ input[type="text"]{
 }
 ```
 
-코드를 보시면 느끼시겠지만 정말 무식한 방법입니다. Retina Display에서 border만 50% 줄이기 위해 border-width를 제외한 모든 사이즈를 2배씩 늘이고 Transform을 이용해 50% 줄이면 보시는 대로 border-width가 전보다 더 가늘어 진 것을 느끼실 수 있습니다. 보기에도 훨씬 깔끔 해 보이구요.
+코드를 보시면 느끼시겠지만 다소 투박한 방법입니다. Retina Display에서 border만 50% 줄이기 위해 border-width를 제외한 모든 사이즈를 2배씩 늘이고 Transform을 이용해 50% 줄이면 보시는 대로 border-width가 전보다 더 가늘어 진 것을 느끼실 수 있습니다. 보기에도 훨씬 깔끔 해 보이구요.
 
 ![](/images/posts/input_text_real_1px.png)
 

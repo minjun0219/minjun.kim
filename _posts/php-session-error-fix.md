@@ -14,11 +14,11 @@ PHP와 Javascript로 웹 애플리케이션을 만들고 있는데 PHP쪽에서 
 
 ![](/images/posts/code.png)
 
-왜 그럴까 하고 고민하던 중에.. 예전에 "[UTF-8 + BOM](http://blog.wystan.net/2007/08/18/bom-byte-order-mark-problem)"타입의 인코딩 설정 때문에 고생했던 기억이 나서 인코딩 설정을 찾아봤지만 해당 타입의 문서는 아닌것 같았습니다. 그래도 혹시나 해서 Hex Editor로 해당 문서를 열어보니.. 이상한 문자가 섞여 있더군요..;;;
+왜 그럴까 하고 고민하던 중에.. 예전에 "[UTF-8 + BOM](http://blog.wystan.net/2007/08/18/bom-byte-order-mark-problem)"타입의 인코딩 설정 때문에 고생했던 기억이 나서 인코딩 설정을 찾아봤지만 해당 타입의 문서는 아닌것 같았습니다. 그래도 혹시나 해서 Hex Editor로 해당 문서를 열어보니 이상한 문자가 섞여 있더군요.
 
 ![](/images/posts/hex_editor.png)
 
-아니나 다를까.. Hex Editor상에서 "..."부분을 삭제해 주니 오류가 말끔히 사라졌습니다. 역시.. 아는게 힘! -_-
+아니나 다를까 Hex Editor에서 해당 부분을 삭제해 주니 오류가 말끔히 사라졌습니다. 역시 아는 게 힘이네요.
 
 **참고 URL**
 

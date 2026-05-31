@@ -6,7 +6,7 @@ author:
   email: "hi@minjun.kim"
 ---
 
-[Flava](http://www.takeflava.com/) 웹앱을 만들던 도중 Input 박스의 Clear 버튼을 Custom으로 구현해야 하는 일이 생겨 만들었는데, Internet Explorer 10에서는 Touch 환경을 고려한다며.. input[type=text]에도 Clear버튼을 달아놨습니다. (아래와 같이-_-)
+[Flava](http://www.takeflava.com/) 웹앱을 만들던 도중 Input 박스의 Clear 버튼을 Custom으로 구현해야 하는 일이 생겨 만들었는데, Internet Explorer 10에서는 Touch 환경을 고려한다며 input[type=text]에도 Clear 버튼을 달아놨습니다. (아래와 같이 말이죠.)
 
 ![](/images/posts/ie10_input_clear.png)
 

@@ -16,14 +16,12 @@ const Posts = () => {
         date="2019-08-05"
         url="https://medium.com/wadiz/8a14dde78442"
         source="와디즈 서비스 (Medium)"
-        mediumUrl="https://medium.com/wadiz/8a14dde78442"
       />
       <PostExcerpt
         title="드디어 메인 홈 개편! 다시 시작!"
         date="2019-07-17"
         url="https://medium.com/wadiz/a69a5c032f1e"
         source="와디즈 서비스 (Medium)"
-        mediumUrl="https://medium.com/wadiz/a69a5c032f1e"
       />
       <PostExcerpt
         title="레거시 시스템 탈출과 React 도입기"

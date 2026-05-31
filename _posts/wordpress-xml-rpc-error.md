@@ -22,7 +22,7 @@ $ yum --enablerepo=remi-php55 install php-xml
 $ service httpd restart
 ```
 
-이제, 정상적으로 동작 합니다. WordPress에 Jetpack이 연결되지 않아 생 고생 했네요(...)
+이제, 정상적으로 동작 합니다. WordPress에 Jetpack이 연결되지 않아 한참 고생했네요.
 
 **관련글**
 
