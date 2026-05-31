@@ -9,14 +9,26 @@ const nextConfig = {
         destination: "/posts/next-js-wp-graphql-static-blog",
         permanent: true,
       },
+      // 옛 underfront.com WordPress 아카이브 퍼머링크 → 복원된 글
+      // /archives/:id, /wp/archives/:id, /blog/archives/:id 를 모두 매칭
       {
-        source: "/:wp(wp)?/archives/31",
+        source: "/:prefix(wp|blog)?/archives/31",
         destination: "/posts/frontend-development-and-web-publishing",
         permanent: true,
       },
       {
-        source: "/:wp(wp)?/archives/706",
+        source: "/:prefix(wp|blog)?/archives/:id(40|706)",
         destination: "/posts/voiceover-on-mac-os-x-lion",
+        permanent: true,
+      },
+      {
+        source: "/:prefix(wp|blog)?/archives/302",
+        destination: "/posts/1px-on-retina-display",
+        permanent: true,
+      },
+      {
+        source: "/:prefix(wp|blog)?/archives/330",
+        destination: "/posts/flava-clipper-postmortem",
         permanent: true,
       },
     ];
