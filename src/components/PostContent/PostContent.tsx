@@ -38,6 +38,18 @@ const MarkdownPre: Components["pre"] = ({ children, ...props }) => {
   return <pre {...props}>{children}</pre>;
 };
 
+const MarkdownImage: Components["img"] = ({ src, alt }) => {
+  if (typeof src !== "string") {
+    return null;
+  }
+  return (
+    <span className={styles.figure}>
+      {/* biome-ignore lint/performance/noImgElement: 정적 마크다운 콘텐츠 렌더링용 */}
+      <img src={src} alt={alt ?? ""} />
+    </span>
+  );
+};
+
 const MarkdownAnchor: Components["a"] = ({ children, href, ...props }) => {
   const isGithubIconLink =
     typeof href === "string" &&
@@ -79,6 +91,7 @@ const PostContent = async ({ value, className }: Props) => {
           code: MarkdownCode,
           pre: MarkdownPre,
           a: MarkdownAnchor,
+          img: MarkdownImage,
         }}
       >
         {value}
