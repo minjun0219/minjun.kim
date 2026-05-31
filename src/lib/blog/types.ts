@@ -9,4 +9,5 @@ export type Post = {
   date: string;
   author: Author;
   content: string;
+  mediumUrl?: string;
 };

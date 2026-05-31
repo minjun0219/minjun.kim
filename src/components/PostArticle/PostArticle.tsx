@@ -8,12 +8,13 @@ export type Props = {
   title: string;
   date: string;
   content: string;
+  mediumUrl?: string;
 };
 
-export const PostArticle = ({ title, date, content }: Props) => {
+export const PostArticle = ({ title, date, content, mediumUrl }: Props) => {
   return (
     <article className={styles.article}>
-      <PostHeader title={title} date={date} />
+      <PostHeader title={title} date={date} mediumUrl={mediumUrl} />
       <PostContent value={content} className={styles.content} />
     </article>
   );

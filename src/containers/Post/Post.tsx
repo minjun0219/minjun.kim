@@ -8,10 +8,15 @@ type Props = PostType & {
   className?: string;
 };
 
-const Post = ({ title, content, date }: Props) => {
+const Post = ({ title, content, date, mediumUrl }: Props) => {
   return (
     <Wrapper className={styles.post}>
-      <PostArticle title={title} content={content} date={date} />
+      <PostArticle
+        title={title}
+        content={content}
+        date={date}
+        mediumUrl={mediumUrl}
+      />
     </Wrapper>
   );
 };

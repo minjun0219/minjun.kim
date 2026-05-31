@@ -1,3 +1,17 @@
+.figure {
+  display: block;
+  width: calc(100% + 2 * var(--page-margin));
+  margin-left: calc(-1 * var(--page-margin));
+  margin-right: calc(-1 * var(--page-margin));
+  text-align: center;
+}
+
+.figure img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
 .content :global(.wp-block-image) {
   margin-left: calc(-1 * var(--page-margin));
   margin-right: calc(-1 * var(--page-margin));

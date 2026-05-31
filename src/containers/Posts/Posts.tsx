@@ -12,15 +12,15 @@ const Posts = () => {
         url="/posts/next-js-wp-graphql-static-blog"
       />
       <PostExcerpt
-        title="드디어 메인 홈 개편! 다시 시작!"
-        date="2019-07-17"
-        url="https://medium.com/wadiz/a69a5c032f1e"
-        source="와디즈 서비스 (Medium)"
-      />
-      <PostExcerpt
         title="메이커 스튜디오 개편하기"
         date="2019-08-05"
         url="https://medium.com/wadiz/8a14dde78442"
+        source="와디즈 서비스 (Medium)"
+      />
+      <PostExcerpt
+        title="드디어 메인 홈 개편! 다시 시작!"
+        date="2019-07-17"
+        url="https://medium.com/wadiz/a69a5c032f1e"
         source="와디즈 서비스 (Medium)"
       />
       <PostExcerpt
@@ -30,28 +30,63 @@ const Posts = () => {
         source="XEOpenSeminar (Youtube)"
       />
       <PostExcerpt
+        title="WordPress XML-RPC 오류 관련"
+        date="2015-11-17"
+        url="/posts/wordpress-xml-rpc-error"
+      />
+      <PostExcerpt
         title="플라바 클리퍼 제작 후기"
         date="2013-07-17"
-        url="https://medium.com/@minjun.kim/3da4285f1a9"
-        source="Medium"
+        url="/posts/flava-clipper-postmortem"
+        mediumUrl="https://medium.com/@minjun.kim/3da4285f1a9"
       />
       <PostExcerpt
         title="Retina Display에서 1px을 1px로 보이게 하는 법"
         date="2013-04-16"
-        url="https://medium.com/@minjun.kim/220c6280f395"
-        source="Medium"
+        url="/posts/1px-on-retina-display"
+        mediumUrl="https://medium.com/@minjun.kim/220c6280f395"
+      />
+      <PostExcerpt
+        title="IE10에서 Input Box, Clear 버튼 삭제하기"
+        date="2012-12-17"
+        url="/posts/ie10-input-clear-button"
+      />
+      <PostExcerpt
+        title="PHP에서 Session 오류 시 해결 방법"
+        date="2012-11-06"
+        url="/posts/php-session-error-fix"
+      />
+      <PostExcerpt
+        title="AppleGothic과 Apple SD Neo Gothic"
+        date="2012-03-28"
+        url="/posts/applegothic-and-apple-sd-neo-gothic"
+      />
+      <PostExcerpt
+        title="PDF를 Load한 이후 발생되는 Mobile Safari 버그"
+        date="2012-03-08"
+        url="/posts/mobile-safari-pdf-security-bug"
+      />
+      <PostExcerpt
+        title="jQuery로 Key Visual 만들기"
+        date="2011-09-09"
+        url="/posts/jquery-key-visual"
       />
       <PostExcerpt
         title="프론트엔드 개발, 그리고 웹 퍼블리싱"
-        date="2011-06-11"
-        url="https://medium.com/@minjun.kim/b3333eee0888"
-        source="Medium"
+        date="2011-06-03"
+        url="/posts/frontend-development-and-web-publishing"
+        mediumUrl="https://medium.com/@minjun.kim/b3333eee0888"
+      />
+      <PostExcerpt
+        title="jQuery로 Flash와 같이 내비게이션 만들기"
+        date="2011-06-03"
+        url="/posts/jquery-flash-like-navigation"
       />
       <PostExcerpt
         title="Mac OS X Lion에서 VoiceOver 사용하기"
         date="2011-06-03"
-        url="https://medium.com/@minjun.kim/647c22f2cecd"
-        source="Medium"
+        url="/posts/voiceover-on-mac-os-x-lion"
+        mediumUrl="https://medium.com/@minjun.kim/647c22f2cecd"
       />
       <footer className={styles.footer}>
         <a
