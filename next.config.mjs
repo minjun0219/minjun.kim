@@ -14,6 +14,11 @@ const nextConfig = {
         destination: "/posts/frontend-development-and-web-publishing",
         permanent: true,
       },
+      {
+        source: "/wp/archives/706",
+        destination: "/posts/voiceover-on-mac-os-x-lion",
+        permanent: true,
+      },
     ];
   },
 };
