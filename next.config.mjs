@@ -10,17 +10,12 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/archives/31",
+        source: "/:wp(wp)?/archives/31",
         destination: "/posts/frontend-development-and-web-publishing",
         permanent: true,
       },
       {
-        source: "/wp/archives/706",
-        destination: "/posts/voiceover-on-mac-os-x-lion",
-        permanent: true,
-      },
-      {
-        source: "/archives/706",
+        source: "/:wp(wp)?/archives/706",
         destination: "/posts/voiceover-on-mac-os-x-lion",
         permanent: true,
       },
