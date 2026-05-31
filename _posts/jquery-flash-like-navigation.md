@@ -1,5 +1,5 @@
 ---
-title: "jQuery로 Flash인척 내비게이션 만들기"
+title: "jQuery로 Flash와 같이 내비게이션 만들기"
 date: "2011-06-03"
 author:
   name: logan
@@ -10,7 +10,7 @@ author:
 
 때문에 개인적으로는 여러가지 이유로 특히 내비게이션(Navigation)에 Flash로 만드는 것을 좋아하지 않는다. 내가 사용하는 맥북에서 Flash는 CPU사용율을 잡아먹는 주범이기 때문에 Adblock은 안 써도 Flash Block 플러그인은 쓴다. 그럼 Web을 이용하는데 굉장히 쾌적한데. 문제는 내비게이션을 Flash로 만들면 메뉴 내비게이션을 사용하기 위해 차단(Block)되어 있는 메뉴를 활성화 시켜줘야 한다. (Flash 만드시는 분들은 싫어하겠지만..)
 
-그러다가 요즘에는 jQuery라는 기특한 녀석도 널리 보급되고 있으니 나도 jQuery로 조금은 인터렉티브하게 만들어 봤다. 굳이 Flash를 사용하지 않아도 충분히 매력적이다.
+그러다가 요즘에는 jQuery라는 녀석도 널리 보급되고 있으니 나도 jQuery로 조금은 인터렉티브하게 만들어 봤다. 굳이 Flash를 사용하지 않아도 충분히 매력적이다.
 
 ![](/images/posts/joytouch_nav.png)
 
