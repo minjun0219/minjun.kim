@@ -1,2 +1,2 @@
-export * from "./PostArticle";
-export { default } from "./PostArticle";
+export * from './PostArticle';
+export { default } from './PostArticle';

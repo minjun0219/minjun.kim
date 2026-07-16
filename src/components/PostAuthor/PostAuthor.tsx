@@ -1,4 +1,4 @@
-import styles from "./PostAuthor.module.css";
+import styles from './PostAuthor.module.css';
 
 type Props = {
   className?: string;
@@ -15,8 +15,7 @@ const PostAuthor = ({ avatar, name, description }: Props) => {
           role="img"
           className={styles.avatar}
           style={{
-            backgroundImage:
-              typeof avatar === "string" ? `url(${avatar})` : undefined,
+            backgroundImage: typeof avatar === 'string' ? `url(${avatar})` : undefined,
           }}
         />
         <div className={styles.description}>

@@ -1,7 +1,7 @@
-import PostExcerpt from "@/components/PostExcerpt";
-import Wrapper from "@/components/Wrapper";
+import PostExcerpt from '@/components/PostExcerpt';
+import Wrapper from '@/components/Wrapper';
 
-import styles from "./Posts.module.css";
+import styles from './Posts.module.css';
 
 const Posts = () => {
   return (
@@ -89,11 +89,7 @@ const Posts = () => {
         mediumUrl="https://medium.com/@minjun.kim/647c22f2cecd"
       />
       <footer className={styles.footer}>
-        <a
-          href="/posts/feed.xml"
-          className={styles.feedLink}
-          aria-label="RSS 피드 구독"
-        >
+        <a href="/posts/feed.xml" className={styles.feedLink} aria-label="RSS 피드 구독">
           <svg
             className={styles.feedIcon}
             width="14"

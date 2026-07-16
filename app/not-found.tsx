@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import type { Metadata } from 'next';
+import Link from 'next/link';
 
-import Layout from "@/components/Layout";
-import Wrapper from "@/components/Wrapper";
+import Layout from '@/components/Layout';
+import Wrapper from '@/components/Wrapper';
 
-import styles from "./not-found.module.css";
+import styles from './not-found.module.css';
 
 export const metadata: Metadata = {
-  title: "페이지를 찾을 수 없습니다 (404)",
+  title: '페이지를 찾을 수 없습니다 (404)',
   robots: { index: false, follow: false },
 };
 

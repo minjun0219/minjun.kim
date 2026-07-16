@@ -1,2 +1,2 @@
-export * from "./PostHogPageView";
-export { default } from "./PostHogPageView";
+export * from './PostHogPageView';
+export { default } from './PostHogPageView';

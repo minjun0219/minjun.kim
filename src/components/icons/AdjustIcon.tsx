@@ -1,6 +1,6 @@
-import type React from "react";
+import type React from 'react';
 
-export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, "viewBox">;
+export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, 'viewBox'>;
 
 export const AdjustIcon = (props: Props) => (
   <svg {...props} viewBox="0 0 438.533 438.533" aria-label="adjust">
@@ -16,6 +16,6 @@ c13.891-23.791,32.738-42.637,56.527-56.531c23.791-13.894,49.772-20.841,77.943-20
   </svg>
 );
 
-AdjustIcon.displayName = "AdjustIcon";
+AdjustIcon.displayName = 'AdjustIcon';
 
 export default AdjustIcon;

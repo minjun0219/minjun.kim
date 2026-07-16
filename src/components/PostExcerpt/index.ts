@@ -1,2 +1,2 @@
-export * from "./PostExcerpt";
-export { default } from "./PostExcerpt";
+export * from './PostExcerpt';
+export { default } from './PostExcerpt';

@@ -1,6 +1,6 @@
-import type React from "react";
+import type React from 'react';
 
-export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, "viewBox">;
+export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, 'viewBox'>;
 
 export const MoonIcon = (props: Props) => (
   <svg {...props} viewBox="0 0 24 24" aria-label="moon">
@@ -8,6 +8,6 @@ export const MoonIcon = (props: Props) => (
   </svg>
 );
 
-MoonIcon.displayName = "MoonIcon";
+MoonIcon.displayName = 'MoonIcon';
 
 export default MoonIcon;

@@ -1,4 +1,4 @@
-import { THEME_STORAGE_KEY } from "@/lib/theme";
+import { THEME_STORAGE_KEY } from '@/lib/theme';
 
 const noFlash = `(function() {
 function setDataThemeAttribute(theme) {
@@ -19,7 +19,7 @@ var preferredTheme = getPreferredTheme();
 if (preferredTheme === 'light' || preferredTheme === 'dark') {
   setDataThemeAttribute(preferredTheme);
 }
-})();`.replace(/(\s{2}|\n)/g, "");
+})();`.replace(/(\s{2}|\n)/g, '');
 
 const NoFlashThemeScript = () => (
   <script

@@ -1,6 +1,6 @@
-import type React from "react";
+import type React from 'react';
 
-export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, "viewBox">;
+export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, 'viewBox'>;
 
 export const InstagramIcon = (props: Props) => (
   <svg {...props} viewBox="0 0 24 24" aria-label="instagram">
@@ -8,6 +8,6 @@ export const InstagramIcon = (props: Props) => (
   </svg>
 );
 
-InstagramIcon.displayName = "InstagramIcon";
+InstagramIcon.displayName = 'InstagramIcon';
 
 export default InstagramIcon;

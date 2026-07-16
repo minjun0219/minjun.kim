@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import AdjustIcon from "@/components/icons/AdjustIcon";
-import GithubIcon from "@/components/icons/GithubIcon";
-import InstagramIcon from "@/components/icons/InstagramIcon";
-import LinkedinIcon from "@/components/icons/LinkedinIcon";
-import MoonIcon from "@/components/icons/MoonIcon";
-import SunIcon from "@/components/icons/SunIcon";
-import Logo from "@/components/Logo";
-import Wrapper from "@/components/Wrapper";
-import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
-import styles from "./Header.module.css";
+import AdjustIcon from '@/components/icons/AdjustIcon';
+import GithubIcon from '@/components/icons/GithubIcon';
+import InstagramIcon from '@/components/icons/InstagramIcon';
+import LinkedinIcon from '@/components/icons/LinkedinIcon';
+import MoonIcon from '@/components/icons/MoonIcon';
+import SunIcon from '@/components/icons/SunIcon';
+import Logo from '@/components/Logo';
+import Wrapper from '@/components/Wrapper';
+import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from '@/lib/theme';
+import styles from './Header.module.css';
 
 function handleSwitchTheme() {
-  if (typeof document === "undefined") {
+  if (typeof document === 'undefined') {
     return;
   }
 
   const html = document.documentElement;
-  const current = (html.getAttribute("data-theme") as Theme | null) ?? "system";
+  const current = (html.getAttribute('data-theme') as Theme | null) ?? 'system';
   const index = THEME_CYCLE.indexOf(current);
   const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
 
-  if (next === "system") {
-    html.removeAttribute("data-theme");
+  if (next === 'system') {
+    html.removeAttribute('data-theme');
     try {
       localStorage.removeItem(THEME_STORAGE_KEY);
     } catch (_err) {
@@ -30,7 +30,7 @@ function handleSwitchTheme() {
       // the document attribute has already been updated.
     }
   } else {
-    html.setAttribute("data-theme", next);
+    html.setAttribute('data-theme', next);
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch (_err) {

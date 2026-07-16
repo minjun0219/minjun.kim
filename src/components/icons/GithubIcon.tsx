@@ -1,6 +1,6 @@
-import type React from "react";
+import type React from 'react';
 
-export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, "viewBox">;
+export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, 'viewBox'>;
 
 export const GithubIcon = (props: Props) => (
   <svg {...props} viewBox="0 0 14 14" aria-label="github">
@@ -12,6 +12,6 @@ export const GithubIcon = (props: Props) => (
   </svg>
 );
 
-GithubIcon.displayName = "GithubIcon";
+GithubIcon.displayName = 'GithubIcon';
 
 export default GithubIcon;

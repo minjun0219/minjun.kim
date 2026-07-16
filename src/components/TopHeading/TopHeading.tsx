@@ -1,7 +1,7 @@
-import cx from "classnames";
-import type React from "react";
+import cx from 'classnames';
+import type React from 'react';
 
-import styles from "./TopHeading.module.css";
+import styles from './TopHeading.module.css';
 
 export type Props<T = HTMLHeadingElement> = React.DelHTMLAttributes<T> & {
   children?: React.ReactNode;

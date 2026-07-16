@@ -1,8 +1,8 @@
-import cx from "classnames";
-import Link from "next/link";
-import type React from "react";
+import cx from 'classnames';
+import Link from 'next/link';
+import type React from 'react';
 
-import styles from "./SocialLink.module.css";
+import styles from './SocialLink.module.css';
 
 export type Props<E = HTMLUListElement> = React.DetailsHTMLAttributes<E>;
 
