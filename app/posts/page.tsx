@@ -1,11 +1,11 @@
-import type { Metadata, NextPage } from "next";
+import type { Metadata, NextPage } from 'next';
 
-import Posts from "@/containers/Posts";
+import Posts from '@/containers/Posts';
 
 export const metadata: Metadata = {
-  title: "Posts",
+  title: 'Posts',
   alternates: {
-    canonical: "/posts",
+    canonical: '/posts',
   },
 };
 

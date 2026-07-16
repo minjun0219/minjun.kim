@@ -1,14 +1,11 @@
-import cx from "classnames";
-import Link from "next/link";
-import type React from "react";
-import { useMemo } from "react";
+import cx from 'classnames';
+import Link from 'next/link';
+import type React from 'react';
+import { useMemo } from 'react';
 
-import styles from "./PostHeader.module.css";
+import styles from './PostHeader.module.css';
 
-const PostLink = ({
-  href,
-  children,
-}: React.PropsWithChildren<{ href: string }>) => {
+const PostLink = ({ href, children }: React.PropsWithChildren<{ href: string }>) => {
   if (/^https?:\/\//i.test(href)) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer">
@@ -49,20 +46,9 @@ type Props = {
   compact?: boolean;
 };
 
-const PostHeader = ({
-  title,
-  date,
-  url,
-  source,
-  mediumUrl,
-  className,
-  compact,
-}: Props) => {
+const PostHeader = ({ title, date, url, source, mediumUrl, className, compact }: Props) => {
   const created = useMemo(
-    () =>
-      new Intl.DateTimeFormat("ko-KR", { timeZone: "UTC" }).format(
-        new Date(date),
-      ),
+    () => new Intl.DateTimeFormat('ko-KR', { timeZone: 'UTC' }).format(new Date(date)),
     [date],
   );
   return (
@@ -80,18 +66,13 @@ const PostHeader = ({
         <span>{created}</span>
         {source ? (
           <>
-            {" "}
+            {' '}
             • <span>{source}</span>
           </>
         ) : null}
       </div>
       {mediumUrl ? (
-        <a
-          className={styles.mediumLink}
-          href={mediumUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a className={styles.mediumLink} href={mediumUrl} target="_blank" rel="noopener noreferrer">
           Medium에서 보기
           <ExternalLinkIcon className={styles.mediumLinkIcon} />
         </a>

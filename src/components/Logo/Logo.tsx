@@ -1,6 +1,6 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import TopHeading from "@/components/TopHeading";
+import TopHeading from '@/components/TopHeading';
 
 type Props = {
   className?: string;
@@ -14,9 +14,7 @@ const Logo = ({ className, link }: Props) => {
     </>
   );
   return (
-    <TopHeading className={className}>
-      {link ? <Link href="/">{title}</Link> : title}
-    </TopHeading>
+    <TopHeading className={className}>{link ? <Link href="/">{title}</Link> : title}</TopHeading>
   );
 };
 

@@ -1,34 +1,34 @@
-import { withSentryConfig } from "@sentry/nextjs";
+import { withSentryConfig } from '@sentry/nextjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   redirects: async () => {
     return [
       {
-        source: "/blog/2020/05/24/next-js-wp-graphql-static-blog",
-        destination: "/posts/next-js-wp-graphql-static-blog",
+        source: '/blog/2020/05/24/next-js-wp-graphql-static-blog',
+        destination: '/posts/next-js-wp-graphql-static-blog',
         permanent: true,
       },
       // 옛 underfront.com WordPress 아카이브 퍼머링크 → 복원된 글
       // /archives/:id, /wp/archives/:id, /blog/archives/:id 를 모두 매칭
       {
-        source: "/:prefix(wp|blog)?/archives/31",
-        destination: "/posts/frontend-development-and-web-publishing",
+        source: '/:prefix(wp|blog)?/archives/31',
+        destination: '/posts/frontend-development-and-web-publishing',
         permanent: true,
       },
       {
-        source: "/:prefix(wp|blog)?/archives/:id(40|706)",
-        destination: "/posts/voiceover-on-mac-os-x-lion",
+        source: '/:prefix(wp|blog)?/archives/:id(40|706)',
+        destination: '/posts/voiceover-on-mac-os-x-lion',
         permanent: true,
       },
       {
-        source: "/:prefix(wp|blog)?/archives/302",
-        destination: "/posts/1px-on-retina-display",
+        source: '/:prefix(wp|blog)?/archives/302',
+        destination: '/posts/1px-on-retina-display',
         permanent: true,
       },
       {
-        source: "/:prefix(wp|blog)?/archives/330",
-        destination: "/posts/flava-clipper-postmortem",
+        source: '/:prefix(wp|blog)?/archives/330',
+        destination: '/posts/flava-clipper-postmortem',
         permanent: true,
       },
     ];

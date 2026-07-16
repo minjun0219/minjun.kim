@@ -1,13 +1,13 @@
-import type { Metadata, NextPage } from "next";
+import type { Metadata, NextPage } from 'next';
 
-import Logo from "@/components/Logo";
-import SocialLink from "@/components/SocialLink";
+import Logo from '@/components/Logo';
+import SocialLink from '@/components/SocialLink';
 
-import styles from "./page.module.css";
+import styles from './page.module.css';
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: "/",
+    canonical: '/',
   },
 };
 

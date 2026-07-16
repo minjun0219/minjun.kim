@@ -1,7 +1,7 @@
-import cx from "classnames";
-import type React from "react";
+import cx from 'classnames';
+import type React from 'react';
 
-import styles from "./Wrapper.module.css";
+import styles from './Wrapper.module.css';
 
 export type Props = {
   children: React.ReactNode;

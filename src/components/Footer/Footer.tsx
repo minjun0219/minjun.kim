@@ -1,6 +1,6 @@
-import cx from "classnames";
+import cx from 'classnames';
 
-import styles from "./Footer.module.css";
+import styles from './Footer.module.css';
 
 export type Props = {
   className?: string;

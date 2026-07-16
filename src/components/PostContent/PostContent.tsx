@@ -1,25 +1,25 @@
-import cx from "classnames";
-import React from "react";
-import Markdown, { type Components } from "react-markdown";
-import remarkGfm from "remark-gfm";
+import cx from 'classnames';
+import React from 'react';
+import Markdown, { type Components } from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
-import CodeBlock from "../CodeBlock";
-import GithubIcon from "../icons/GithubIcon";
+import CodeBlock from '../CodeBlock';
+import GithubIcon from '../icons/GithubIcon';
 
-import styles from "./PostContent.module.css";
+import styles from './PostContent.module.css';
 
-const MarkdownCode: Components["code"] = ({ children, className, node }) => {
+const MarkdownCode: Components['code'] = ({ children, className, node }) => {
   // https://github.com/remarkjs/react-markdown/issues/820#issuecomment-2108253421
   if (node?.position?.start.line === node?.position?.end.line) {
     return <code className={className}>{children}</code>;
   }
 
-  const lang = /language-(\w+)/.exec(className || "")?.[1];
-  if (typeof children === "string") {
+  const lang = /language-(\w+)/.exec(className || '')?.[1];
+  if (typeof children === 'string') {
     return (
       <CodeBlock
-        language={lang || "text"}
-        code={children.replace(/\n$/, "")}
+        language={lang || 'text'}
+        code={children.replace(/\n$/, '')}
         title={node?.data?.meta}
       />
     );
@@ -28,34 +28,34 @@ const MarkdownCode: Components["code"] = ({ children, className, node }) => {
   return null;
 };
 
-const MarkdownPre: Components["pre"] = ({ children, ...props }) => {
+const MarkdownPre: Components['pre'] = ({ children, ...props }) => {
   if (
     React.isValidElement(children) &&
-    (children.type === "code" || children.type === MarkdownCode)
+    (children.type === 'code' || children.type === MarkdownCode)
   ) {
     return children;
   }
   return <pre {...props}>{children}</pre>;
 };
 
-const MarkdownImage: Components["img"] = ({ src, alt }) => {
-  if (typeof src !== "string") {
+const MarkdownImage: Components['img'] = ({ src, alt }) => {
+  if (typeof src !== 'string') {
     return null;
   }
   return (
     <span className={styles.figure}>
       {/* biome-ignore lint/performance/noImgElement: 정적 마크다운 콘텐츠 렌더링용 */}
-      <img src={src} alt={alt ?? ""} />
+      <img src={src} alt={alt ?? ''} />
     </span>
   );
 };
 
-const MarkdownAnchor: Components["a"] = ({ children, href, ...props }) => {
+const MarkdownAnchor: Components['a'] = ({ children, href, ...props }) => {
   const isGithubIconLink =
-    typeof href === "string" &&
+    typeof href === 'string' &&
     /^https:\/\/github\.com\//.test(href) &&
-    typeof children === "string" &&
-    children.trim().toLowerCase() === "github";
+    typeof children === 'string' &&
+    children.trim().toLowerCase() === 'github';
 
   if (isGithubIconLink) {
     return (

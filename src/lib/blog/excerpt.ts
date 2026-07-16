@@ -1,22 +1,25 @@
-import { remark } from "remark";
-import remarkGfm from "remark-gfm";
-import remarkHtml from "remark-html";
-import strip from "strip-markdown";
+import rehypeSanitize from 'rehype-sanitize';
+import rehypeStringify from 'rehype-stringify';
+import { remark } from 'remark';
+import remarkGfm from 'remark-gfm';
+import remarkRehype from 'remark-rehype';
+import strip from 'strip-markdown';
 
 export async function markdownToHtml(markdown: string): Promise<string> {
   const file = await remark()
     .use(remarkGfm)
-    .use(remarkHtml, { sanitize: true })
+    .use(remarkRehype)
+    .use(rehypeSanitize)
+    .use(rehypeStringify)
     .process(markdown);
   return String(file);
 }
 
-export async function getExcerpt(
-  markdown: string,
-  length = 200,
-): Promise<string> {
+export async function getExcerpt(markdown: string, length = 200): Promise<string> {
   const file = await remark().use(strip).process(markdown);
-  const text = String(file).replace(/\s+/g, " ").trim();
-  if (text.length <= length) return text;
+  const text = String(file).replace(/\s+/g, ' ').trim();
+  if (text.length <= length) {
+    return text;
+  }
   return `${text.slice(0, length).trimEnd()}…`;
 }

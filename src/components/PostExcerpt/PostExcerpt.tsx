@@ -1,8 +1,8 @@
-import cx from "classnames";
+import cx from 'classnames';
 
-import PostHeader from "../PostHeader";
+import PostHeader from '../PostHeader';
 
-import styles from "./PostExcerpt.module.css";
+import styles from './PostExcerpt.module.css';
 
 type Props = {
   title: string;
@@ -14,15 +14,7 @@ type Props = {
   className?: string;
 };
 
-const PostExcerpt = ({
-  title,
-  date,
-  excerpt,
-  url,
-  source,
-  mediumUrl,
-  className,
-}: Props) => {
+const PostExcerpt = ({ title, date, excerpt, url, source, mediumUrl, className }: Props) => {
   return (
     <div className={cx(styles.excerpt, className)}>
       <PostHeader
