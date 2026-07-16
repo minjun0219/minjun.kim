@@ -12,11 +12,11 @@ const PostAuthor = ({ avatar, name, description }: Props) => {
     <div className={styles.container}>
       <aside className={styles.author}>
         <span
-          role="img"
           className={styles.avatar}
           style={{
             backgroundImage: typeof avatar === 'string' ? `url(${avatar})` : undefined,
           }}
+          aria-hidden="true"
         />
         <div className={styles.description}>
           <p>

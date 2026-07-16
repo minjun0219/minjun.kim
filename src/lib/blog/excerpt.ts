@@ -1,10 +1,17 @@
+import rehypeSanitize from 'rehype-sanitize';
+import rehypeStringify from 'rehype-stringify';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
-import remarkHtml from 'remark-html';
+import remarkRehype from 'remark-rehype';
 import strip from 'strip-markdown';
 
 export async function markdownToHtml(markdown: string): Promise<string> {
-  const file = await remark().use(remarkGfm).use(remarkHtml, { sanitize: true }).process(markdown);
+  const file = await remark()
+    .use(remarkGfm)
+    .use(remarkRehype)
+    .use(rehypeSanitize)
+    .use(rehypeStringify)
+    .process(markdown);
   return String(file);
 }
 

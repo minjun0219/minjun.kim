@@ -25,11 +25,12 @@ export default async function OpengraphImage({ params }: Props) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
-  const formattedDate = new Date(post.date).toLocaleDateString('ko-KR', {
+  const formattedDate = new Intl.DateTimeFormat('ko-KR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  });
+    timeZone: 'UTC',
+  }).format(new Date(post.date));
 
   return new ImageResponse(
     <div
