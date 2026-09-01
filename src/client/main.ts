@@ -42,18 +42,6 @@ document.addEventListener("click", (event) => {
   }
 });
 
-/* ------------------------------------------------------------------- htmx */
-
-// htmx 는 기본적으로 2xx 가 아닌 응답을 스왑하지 않는다. 그대로 두면 내부 링크가
-// 깨졌을 때 클릭해도 아무 일이 일어나지 않으므로, 404 는 정상 렌더링하도록 허용한다.
-document.addEventListener("htmx:beforeSwap", (event) => {
-  const detail = (event as CustomEvent).detail;
-  if (detail?.xhr?.status === 404) {
-    detail.shouldSwap = true;
-    detail.isError = false;
-  }
-});
-
 /* -------------------------------------------------------------- 관측 도구 */
 
 if (SENTRY_DSN) {
@@ -88,5 +76,5 @@ if (POSTHOG_KEY) {
   };
 
   capturePageview();
-  document.addEventListener("htmx:pushedIntoHistory", capturePageview);
+  document.addEventListener("htmx:after:history:push", capturePageview);
 }

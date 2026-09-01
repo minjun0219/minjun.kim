@@ -6,11 +6,18 @@ const OUT_DIR = "dist";
 const SSR_DIR = "dist-ssr";
 const CLIENT_DIR = "dist-client";
 
-/** htmx 본체와 확장은 CDN 대신 직접 번들해 서빙한다. */
-const VENDOR_FILES = [
-  ["htmx.org/dist/htmx.min.js", "htmx.min.js"],
-  ["htmx-ext-preload/dist/preload.min.js", "preload.min.js"],
-  ["htmx-ext-head-support/dist/head-support.min.js", "head-support.min.js"],
+/**
+ * htmx 본체와 확장은 CDN 대신 직접 번들해 서빙한다.
+ * htmx 4 부터 확장이 본체 패키지에 동봉돼 별도 npm 패키지가 필요 없다.
+ *
+ * 파일명에 버전을 박는 이유: `_headers` 가 `/vendor/*` 를 `immutable` 로 캐시한다.
+ * 이름이 버전과 무관하면 htmx 를 올려도 브라우저가 옛 버전을 1년간 붙들고,
+ * 새 확장이 옛 코어 위에 얹혀 깨진다. immutable 은 URL 이 내용에 고정될 때만 안전하다.
+ */
+const VENDOR_SOURCES = [
+  "htmx.org/dist/htmx.min.js",
+  "htmx.org/dist/ext/hx-preload.min.js",
+  "htmx.org/dist/ext/hx-head.min.js",
 ];
 
 async function findEmittedCss() {
@@ -49,14 +56,25 @@ async function main() {
     recursive: true,
   });
 
-  for (const [from, to] of VENDOR_FILES) {
+  const htmxVersion = JSON.parse(
+    await readFile("node_modules/htmx.org/package.json", "utf8"),
+  ).version;
+  const vendorScriptSrcs = [];
+  for (const from of VENDOR_SOURCES) {
+    const base = from
+      .split("/")
+      .pop()
+      .replace(/\.min\.js$/, "");
+    const to = `${base}-${htmxVersion}.min.js`;
     await cp(join("node_modules", from), join(OUT_DIR, "vendor", to));
+    vendorScriptSrcs.push(`/vendor/${to}`);
   }
 
   const { default: app, setAssetPaths } = await import(`../${SSR_DIR}/app.js`);
   setAssetPaths({
     stylesheetHref: `/assets/${cssFile}`,
     clientScriptSrc: `/${clientEntry}`,
+    vendorScriptSrcs,
   });
 
   const result = await toSSG(app, fsPromises, {

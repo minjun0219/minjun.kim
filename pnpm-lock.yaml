@@ -35,15 +35,9 @@ importers:
       hono:
         specifier: ^4.13.5
         version: 4.13.5
-      htmx-ext-head-support:
-        specifier: ^2.0.5
-        version: 2.0.5
-      htmx-ext-preload:
-        specifier: ^2.1.2
-        version: 2.1.2
       htmx.org:
-        specifier: ^2.0.10
-        version: 2.0.10
+        specifier: ^4.0.0
+        version: 4.0.0
       posthog-js:
         specifier: ^1.373.4
         version: 1.373.4
@@ -1143,14 +1137,9 @@ packages:
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
 
-  htmx-ext-head-support@2.0.5:
-    resolution: {integrity: sha512-fTzqnCw7OnMijiS48CCBFBHTuOMvycbX0nEFRL0lkRxyu5DFWX90IV1SwXpQ92fJf02IzkXcRNyjXn3j0QtYxA==}
-
-  htmx-ext-preload@2.1.2:
-    resolution: {integrity: sha512-foD06XAITUUQApCUQnPexyJ6B7+4vFGMQ+t42unTVTGRu/CYHdAAt6oHg7eekPHT7NRnbM5hjnGVKtClryPabg==}
-
-  htmx.org@2.0.10:
-    resolution: {integrity: sha512-kdeJe7ZVwaS6QMz/ebBIVtZdpwen6L0OQ5GOhPV9MKBb196TCZeZu4yA7ZIQsaLKv7EpXz+So7KSXNuHXhj7Cw==}
+  htmx.org@4.0.0:
+    resolution: {integrity: sha512-T/171FUY93Kdfp8t+DnHdk45QvKRiBhVhhrwSzrXgUi4pHKvhp77dUA/qg8FAjsFWPIHNbmUuIdCrcVHuiZWng==}
+    hasBin: true
 
   is-extendable@0.1.1:
     resolution: {integrity: sha512-5BMULNob1vgFX6EjQw5izWDxrecWK9AM72rugNr0TFldMOi0fj6Jk+zeKIt0xGj4cEfQIJth4w3OKWOJ4f+AFw==}
@@ -2539,15 +2528,7 @@ snapshots:
 
   html-void-elements@3.0.0: {}
 
-  htmx-ext-head-support@2.0.5:
-    dependencies:
-      htmx.org: 2.0.10
-
-  htmx-ext-preload@2.1.2:
-    dependencies:
-      htmx.org: 2.0.10
-
-  htmx.org@2.0.10: {}
+  htmx.org@4.0.0: {}
 
   is-extendable@0.1.1: {}
 

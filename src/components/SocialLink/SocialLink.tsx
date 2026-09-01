@@ -1,5 +1,4 @@
 import cx from "classnames";
-import { PRELOAD_ATTR } from "@/lib/htmx";
 
 import styles from "./SocialLink.module.css";
 
@@ -10,14 +9,10 @@ export type Props = {
 export const SocialLink = ({ className }: Props) => (
   <ul className={cx(styles.links, className)}>
     <li>
-      <a href="/resume" {...PRELOAD_ATTR}>
-        Resume
-      </a>
+      <a href="/resume">Resume</a>
     </li>
     <li>
-      <a href="/posts" {...PRELOAD_ATTR}>
-        Posts
-      </a>
+      <a href="/posts">Posts</a>
     </li>
     <li>
       <a href="https://github.com/minjun0219">Github</a>

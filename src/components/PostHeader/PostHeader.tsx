@@ -1,6 +1,6 @@
 import cx from "classnames";
 import type { Child } from "hono/jsx";
-import { isInternalHref, PRELOAD_ATTR } from "@/lib/htmx";
+import { isInternalHref } from "@/lib/htmx";
 
 import styles from "./PostHeader.module.css";
 
@@ -13,11 +13,7 @@ const PostLink = ({ href, children }: { href: string; children: Child }) => {
     );
   }
 
-  return (
-    <a href={href} {...PRELOAD_ATTR}>
-      {children}
-    </a>
-  );
+  return <a href={href}>{children}</a>;
 };
 
 const ExternalLinkIcon = ({ className }: { className?: string }) => (

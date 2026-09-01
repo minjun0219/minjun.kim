@@ -1,5 +1,4 @@
 import TopHeading from "@/components/TopHeading";
-import { PRELOAD_ATTR } from "@/lib/htmx";
 
 type Props = {
   className?: string;
@@ -14,13 +13,7 @@ const Logo = ({ className, link }: Props) => {
   );
   return (
     <TopHeading className={className}>
-      {link ? (
-        <a href="/" {...PRELOAD_ATTR}>
-          {title}
-        </a>
-      ) : (
-        title
-      )}
+      {link ? <a href="/">{title}</a> : title}
     </TopHeading>
   );
 };

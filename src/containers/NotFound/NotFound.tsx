@@ -1,5 +1,4 @@
 import Wrapper from "@/components/Wrapper";
-import { PRELOAD_ATTR } from "@/lib/htmx";
 
 import styles from "./NotFound.module.css";
 
@@ -10,7 +9,7 @@ const NotFound = () => (
     <p className={styles.description}>
       요청하신 페이지가 이동되었거나 더 이상 존재하지 않습니다.
     </p>
-    <a href="/" className={styles.home} {...PRELOAD_ATTR}>
+    <a href="/" className={styles.home}>
       ← 홈으로 돌아가기
     </a>
   </Wrapper>

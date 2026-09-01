@@ -78,21 +78,33 @@ pre-paint 로 `localStorage` 를 읽어 `<html data-theme>` 을 세팅하고, �
 
 ## htmx
 
-`<body hx-boost="true" hx-ext="preload,head-support">` 로 전역 적용. htmx 본체와 확장은 CDN 이 아니라
-`node_modules` 에서 `dist/vendor/` 로 복사해 서빙한다(`scripts/ssg.mjs`).
+htmx **4**. `<body hx-boost:inherited="true">` 로 전역 적용하고, 본체와 확장은 CDN 이 아니라
+`node_modules` 에서 `dist/vendor/` 로 복사해 서빙한다(`scripts/ssg.mjs`). 확장은 htmx 4 부터
+본체 패키지(`htmx.org/dist/ext/`)에 동봉돼 별도 npm 패키지가 없다.
 
-주의할 점 세 가지:
+htmx 4 에서 특히 주의할 점:
 
-- **`hx-boost` 는 `<body>` 요소가 아니라 그 내용만 교체한다.** 그래서 body 속성은 이동 후 갱신되지
-  않고, 요소에 직접 건 이벤트 리스너는 사라진다. 페이지 표식은 `<head>` 의 meta(`x-page-id`)로 넣고,
-  이벤트는 `document` 위임으로 건다.
-- **`head-support` 확장이 있어야** 이동 후 canonical/OG/description 이 갱신된다. 없으면 첫 페이지
-  것으로 남는다.
-- **htmx 는 기본적으로 non-2xx 응답을 스왑하지 않는다.** 깨진 내부 링크가 무반응이 되는 걸 막으려고
-  `src/client/main.ts` 에서 `htmx:beforeSwap` 으로 404 스왑을 허용한다.
+- **속성 상속이 암시적이지 않다.** `hx-boost` 를 자손 링크에 물리려면 `:inherited` 가 필요하다.
+  빠뜨리면 **에러 없이 조용히 전체 새로고침으로 떨어진다** — 공식 upgrade-check 도 잡아주지
+  않으니 직접 확인해야 한다.
+- **`hx-ext` 는 없어졌다.** 확장 스크립트를 로드하는 것만으로 붙는다.
+- **boost 된 앵커는 자동으로 선요청된다.** 링크마다 preload 속성을 붙이지 않는다. 기본 트리거가
+  `mousedown`+`touchstart` 인데, 이 사이트는 Next.js `<Link>` 의 hover prefetch 를 대체하는 게
+  목적이라 `<meta name="htmx-config">` 로 `preload.boostEvent` 를 `mouseover` 로 되돌렸다.
+  외부 도메인 링크는 boost 대상이 아니라 자동으로 선요청에서 빠진다.
+- **non-2xx 도 기본 스왑된다**(`noSwap: [204, 304]`). htmx 2 에서 필요했던 404 스왑 우회 코드가
+  htmx 4 에는 필요 없다.
 
-내부 링크에만 `preload="mouseover"` 를 붙인다 — `src/lib/htmx.ts` 의 `PRELOAD_ATTR` /
-`isInternalHref()` 를 쓴다. 외부 도메인은 선요청해도 이득이 없다.
+`hx-boost` 는 `<body>` 요소가 아니라 그 **내용만** 교체한다. 그래서 body 속성은 이동 후 갱신되지
+않고, 요소에 직접 건 이벤트 리스너는 사라진다. 페이지 표식은 `<head>` 의 meta(`x-page-id`)로 넣고,
+이벤트는 `document` 위임으로 건다.
+
+**`hx-head` 확장이 있어야** 이동 후 canonical/OG/description 이 갱신된다. 없으면 첫 페이지 것으로
+남는다.
+
+htmx 4 는 공식 업그레이드 가이드와 체커를 패키지에 동봉한다:
+`node_modules/htmx.org/dist/skills/htmx-upgrade-from-htmx2.md`,
+`npx htmx.org@4 upgrade-check <경로> --ext=.tsx`.
 
 ## Cloudflare Workers
 

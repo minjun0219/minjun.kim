@@ -1,6 +1,10 @@
 import type { Child } from "hono/jsx";
 import NoFlashThemeScript from "@/components/NoFlashThemeScript";
-import { getClientScriptSrc, getStylesheetHref } from "@/lib/assets";
+import {
+  getClientScriptSrc,
+  getStylesheetHref,
+  getVendorScriptSrcs,
+} from "@/lib/assets";
 import {
   AUTHOR_NAME,
   LOCALE,
@@ -24,9 +28,13 @@ type Props = {
 /**
  * 모든 페이지의 HTML 셸.
  *
- * `hx-boost` 가 `<body>` 를 통째로 교체하며 이동하고, `head-support` 확장이
+ * `hx-boost` 가 `<body>` 를 통째로 교체하며 이동하고, `hx-head` 확장이
  * `<head>` 를 머지한다 — 이게 없으면 이동 후에도 canonical/OG 가 첫 페이지 것으로 남는다.
- * `preload` 확장은 내부 링크의 `preload` 속성(`src/lib/htmx.ts`)을 읽는다.
+ * `preload` 확장은 boost 된 앵커를 자동으로 선요청하므로 링크마다 속성을 붙이지 않는다.
+ *
+ * htmx 4 는 `hx-ext` 없이 스크립트 로드만으로 확장이 붙는다. 대신 속성 상속이
+ * 암시적이지 않아 `hx-boost` 를 자손 링크에 물리려면 `:inherited` 를 붙여야 한다
+ * (빠뜨리면 에러 없이 그냥 전체 새로고침으로 떨어진다).
  */
 export const Document = ({ meta, pageId, children }: Props) => {
   const naverVerification = process.env.NAVER_SITE_VERIFICATION;
@@ -109,15 +117,20 @@ export const Document = ({ meta, pageId, children }: Props) => {
         />
         <link rel="stylesheet" href={getStylesheetHref()} />
 
+        {/* preload 기본 트리거는 mousedown+touchstart 인데, 이 사이트는 Next.js Link 의
+            hover prefetch 를 대체하는 게 목적이라 mouseover 로 되돌린다. */}
+        <meta
+          name="htmx-config"
+          content='{"preload":{"boostEvent":"mouseover"}}'
+        />
+
         <NoFlashThemeScript />
-        <script src="/vendor/htmx.min.js" defer />
-        <script src="/vendor/preload.min.js" defer />
-        <script src="/vendor/head-support.min.js" defer />
+        {getVendorScriptSrcs().map((src) => (
+          <script key={src} src={src} defer />
+        ))}
         <script src={getClientScriptSrc()} defer />
       </head>
-      <body hx-boost="true" hx-ext="preload,head-support">
-        {children}
-      </body>
+      <body hx-boost:inherited="true">{children}</body>
     </html>
   );
 };
