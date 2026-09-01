@@ -1,19 +1,22 @@
 import PostArticle from "@/components/PostArticle";
 import Wrapper from "@/components/Wrapper";
-import type { Post as PostType } from "@/lib/blog/types";
 
 import styles from "./Post.module.css";
 
-type Props = PostType & {
+type Props = {
+  title: string;
+  date: string;
+  html: string;
+  mediumUrl?: string;
   className?: string;
 };
 
-const Post = ({ title, content, date, mediumUrl }: Props) => {
+const Post = ({ title, html, date, mediumUrl }: Props) => {
   return (
     <Wrapper className={styles.post}>
       <PostArticle
         title={title}
-        content={content}
+        html={html}
         date={date}
         mediumUrl={mediumUrl}
       />

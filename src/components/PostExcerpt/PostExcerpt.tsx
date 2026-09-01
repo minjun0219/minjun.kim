@@ -33,10 +33,7 @@ const PostExcerpt = ({
         mediumUrl={mediumUrl}
         compact
       />
-      {excerpt ? (
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: 내부 마크다운 변환 결과물 렌더링용
-        <div dangerouslySetInnerHTML={{ __html: excerpt }} />
-      ) : null}
+      {excerpt ? <div dangerouslySetInnerHTML={{ __html: excerpt }} /> : null}
     </div>
   );
 };

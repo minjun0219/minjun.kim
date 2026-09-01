@@ -1,10 +1,10 @@
 import cx from "classnames";
-import type React from "react";
+import type { Child } from "hono/jsx";
 
 import styles from "./Wrapper.module.css";
 
 export type Props = {
-  children: React.ReactNode;
+  children: Child;
   className?: string;
 };
 

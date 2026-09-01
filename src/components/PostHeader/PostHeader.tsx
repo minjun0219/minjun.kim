@@ -1,15 +1,11 @@
 import cx from "classnames";
-import Link from "next/link";
-import type React from "react";
-import { useMemo } from "react";
+import type { Child } from "hono/jsx";
+import { isInternalHref, PRELOAD_ATTR } from "@/lib/htmx";
 
 import styles from "./PostHeader.module.css";
 
-const PostLink = ({
-  href,
-  children,
-}: React.PropsWithChildren<{ href: string }>) => {
-  if (/^https?:\/\//i.test(href)) {
+const PostLink = ({ href, children }: { href: string; children: Child }) => {
+  if (!isInternalHref(href)) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer">
         {children}
@@ -17,7 +13,11 @@ const PostLink = ({
     );
   }
 
-  return <Link href={href}>{children}</Link>;
+  return (
+    <a href={href} {...PRELOAD_ATTR}>
+      {children}
+    </a>
+  );
 };
 
 const ExternalLinkIcon = ({ className }: { className?: string }) => (
@@ -58,13 +58,10 @@ const PostHeader = ({
   className,
   compact,
 }: Props) => {
-  const created = useMemo(
-    () =>
-      new Intl.DateTimeFormat("ko-KR", { timeZone: "UTC" }).format(
-        new Date(date),
-      ),
-    [date],
+  const created = new Intl.DateTimeFormat("ko-KR", { timeZone: "UTC" }).format(
+    new Date(date),
   );
+
   return (
     <div className={cx(styles.header, className)}>
       <div className={cx(styles.title, compact && styles.compact)}>

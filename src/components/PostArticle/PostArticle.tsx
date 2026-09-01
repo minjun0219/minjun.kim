@@ -7,15 +7,15 @@ export type Props = {
   className?: string;
   title: string;
   date: string;
-  content: string;
+  html: string;
   mediumUrl?: string;
 };
 
-export const PostArticle = ({ title, date, content, mediumUrl }: Props) => {
+export const PostArticle = ({ title, date, html, mediumUrl }: Props) => {
   return (
     <article className={styles.article}>
       <PostHeader title={title} date={date} mediumUrl={mediumUrl} />
-      <PostContent value={content} className={styles.content} />
+      <PostContent html={html} className={styles.content} />
     </article>
   );
 };

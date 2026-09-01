@@ -1,5 +1,5 @@
 import cx from "classnames";
-import type React from "react";
+import type { Child } from "hono/jsx";
 import Footer from "@/components/Footer";
 import Header from "@/containers/Header";
 
@@ -7,7 +7,7 @@ import styles from "./Layout.module.css";
 
 export type Props = {
   className?: string;
-  children: React.ReactNode;
+  children: Child;
 };
 
 export const Layout = ({ className, children }: Props) => {

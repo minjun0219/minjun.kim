@@ -1,103 +1,38 @@
 import cx from "classnames";
-import React from "react";
-import Markdown, { type Components } from "react-markdown";
-import remarkGfm from "remark-gfm";
-
-import CodeBlock from "../CodeBlock";
-import GithubIcon from "../icons/GithubIcon";
+import { renderPostHtml } from "@/lib/blog/markdown";
+import codeStyles from "../CodeBlock/CodeBlock.module.css";
 
 import styles from "./PostContent.module.css";
 
-const MarkdownCode: Components["code"] = ({ children, className, node }) => {
-  // https://github.com/remarkjs/react-markdown/issues/820#issuecomment-2108253421
-  if (node?.position?.start.line === node?.position?.end.line) {
-    return <code className={className}>{children}</code>;
-  }
-
-  const lang = /language-(\w+)/.exec(className || "")?.[1];
-  if (typeof children === "string") {
-    return (
-      <CodeBlock
-        language={lang || "text"}
-        code={children.replace(/\n$/, "")}
-        title={node?.data?.meta}
-      />
-    );
-  }
-
-  return null;
-};
-
-const MarkdownPre: Components["pre"] = ({ children, ...props }) => {
-  if (
-    React.isValidElement(children) &&
-    (children.type === "code" || children.type === MarkdownCode)
-  ) {
-    return children;
-  }
-  return <pre {...props}>{children}</pre>;
-};
-
-const MarkdownImage: Components["img"] = ({ src, alt }) => {
-  if (typeof src !== "string") {
-    return null;
-  }
-  return (
-    <span className={styles.figure}>
-      {/* biome-ignore lint/performance/noImgElement: 정적 마크다운 콘텐츠 렌더링용 */}
-      <img src={src} alt={alt ?? ""} />
-    </span>
-  );
-};
-
-const MarkdownAnchor: Components["a"] = ({ children, href, ...props }) => {
-  const isGithubIconLink =
-    typeof href === "string" &&
-    /^https:\/\/github\.com\//.test(href) &&
-    typeof children === "string" &&
-    children.trim().toLowerCase() === "github";
-
-  if (isGithubIconLink) {
-    return (
-      <a
-        {...props}
-        href={href}
-        className={cx(props.className, styles.iconLink)}
-        aria-label="GitHub repository"
-      >
-        <GithubIcon className={styles.icon} />
-      </a>
-    );
-  }
-
-  return (
-    <a {...props} href={href}>
-      {children}
-    </a>
-  );
-};
+/**
+ * 마크다운을 이 컴포넌트가 기대하는 HTML 로 변환한다.
+ *
+ * 클래스명 주입 때문에 변환이 CSS Modules 를 아는 쪽에 있어야 해서 여기서 내보낸다.
+ * 컴포넌트 자체는 동기로 두고, 호출부(라우트)가 미리 변환해 `html` 로 넘긴다.
+ */
+export function renderContentHtml(markdown: string): Promise<string> {
+  return renderPostHtml(markdown, {
+    codeRoot: codeStyles.root,
+    codeContainer: codeStyles.container,
+    codeBody: codeStyles.code,
+    figure: styles.figure,
+    iconLink: styles.iconLink,
+    icon: styles.icon,
+  });
+}
 
 type Props = {
-  value: string;
+  html: string;
   className?: string;
 };
 
-const PostContent = async ({ value, className }: Props) => {
+const PostContent = ({ html, className }: Props) => {
   return (
-    <div className={cx(styles.content, className)}>
-      <Markdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-          code: MarkdownCode,
-          pre: MarkdownPre,
-          a: MarkdownAnchor,
-          img: MarkdownImage,
-        }}
-      >
-        {value}
-      </Markdown>
-    </div>
+    <div
+      className={cx(styles.content, className)}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
   );
 };
 
-export default React.memo(PostContent);
+export default PostContent;

@@ -1,5 +1,3 @@
-"use client";
-
 import AdjustIcon from "@/components/icons/AdjustIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
 import InstagramIcon from "@/components/icons/InstagramIcon";
@@ -8,37 +6,7 @@ import MoonIcon from "@/components/icons/MoonIcon";
 import SunIcon from "@/components/icons/SunIcon";
 import Logo from "@/components/Logo";
 import Wrapper from "@/components/Wrapper";
-import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 import styles from "./Header.module.css";
-
-function handleSwitchTheme() {
-  if (typeof document === "undefined") {
-    return;
-  }
-
-  const html = document.documentElement;
-  const current = (html.getAttribute("data-theme") as Theme | null) ?? "system";
-  const index = THEME_CYCLE.indexOf(current);
-  const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
-
-  if (next === "system") {
-    html.removeAttribute("data-theme");
-    try {
-      localStorage.removeItem(THEME_STORAGE_KEY);
-    } catch (_err) {
-      // Ignore storage failures (private mode, disabled cookies);
-      // the document attribute has already been updated.
-    }
-  } else {
-    html.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch (_err) {
-      // Ignore storage failures (private mode, disabled cookies);
-      // the document attribute has already been updated.
-    }
-  }
-}
 
 export const Header = () => {
   return (
@@ -46,10 +14,12 @@ export const Header = () => {
       <Wrapper className={styles.container}>
         <Logo link className={styles.logo} />
         <div className={styles.utils}>
+          {/* 토글 동작은 public/app.js 가 document 위임으로 처리한다.
+              hx-boost 가 body 를 통째로 교체하므로 요소에 직접 건 리스너는 살아남지 못한다. */}
           <button
             type="button"
             className={styles.mode}
-            onClick={handleSwitchTheme}
+            data-theme-toggle
             aria-label="toggle theme"
           >
             <AdjustIcon className={`${styles.icon} ${styles.iconSystem}`} />

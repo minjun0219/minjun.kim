@@ -10,13 +10,11 @@
     "includes": [
       "**",
       "!**/node_modules",
-      "!**/.next",
-      "!**/out",
-      "!**/build",
+      "!**/dist",
+      "!**/dist-ssr",
+      "!**/dist-client",
       "!**/coverage",
-      "!**/.vercel",
       "!**/*.md",
-      "!next-env.d.ts",
       "!pnpm-lock.yaml"
     ]
   },
@@ -67,8 +65,6 @@
         "noExplicitAny": "warn"
       },
       "correctness": {
-        "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error",
         "noUnusedVariables": "warn",
         "noUnusedImports": "warn"
       },

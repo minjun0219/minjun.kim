@@ -1,18 +1,23 @@
 import cx from "classnames";
-import Link from "next/link";
-import type React from "react";
+import { PRELOAD_ATTR } from "@/lib/htmx";
 
 import styles from "./SocialLink.module.css";
 
-export type Props<E = HTMLUListElement> = React.DetailsHTMLAttributes<E>;
+export type Props = {
+  className?: string;
+};
 
-export const SocialLink = ({ className, ...props }: Props) => (
-  <ul className={cx(styles.links, className)} {...props}>
+export const SocialLink = ({ className }: Props) => (
+  <ul className={cx(styles.links, className)}>
     <li>
-      <Link href="/resume">Resume</Link>
+      <a href="/resume" {...PRELOAD_ATTR}>
+        Resume
+      </a>
     </li>
     <li>
-      <Link href="/posts">Posts</Link>
+      <a href="/posts" {...PRELOAD_ATTR}>
+        Posts
+      </a>
     </li>
     <li>
       <a href="https://github.com/minjun0219">Github</a>

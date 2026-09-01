@@ -1,18 +1,15 @@
 import cx from "classnames";
-import type React from "react";
+import type { Child } from "hono/jsx";
 
 import styles from "./TopHeading.module.css";
 
-export type Props<T = HTMLHeadingElement> = React.DelHTMLAttributes<T> & {
-  children?: React.ReactNode;
+export type Props = {
+  className?: string;
+  children?: Child;
 };
 
-const TopHeading = ({ children, className, ...props }: Props) => {
-  return (
-    <h1 className={cx(styles.root, className)} {...props}>
-      {children}
-    </h1>
-  );
+const TopHeading = ({ children, className }: Props) => {
+  return <h1 className={cx(styles.root, className)}>{children}</h1>;
 };
 
 export default TopHeading;
