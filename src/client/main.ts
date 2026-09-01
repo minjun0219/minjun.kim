@@ -1,8 +1,7 @@
-import * as Sentry from "@sentry/browser";
-import posthog from "posthog-js";
+// slim 번들: 코어만. 확장은 켜진 것만 런타임 지연 로드.
+import posthog from "posthog-js/dist/module.slim";
 import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 
-const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY;
 const POSTHOG_HOST =
   import.meta.env.VITE_POSTHOG_HOST ?? "https://us.i.posthog.com";
@@ -44,14 +43,6 @@ document.addEventListener("click", (event) => {
 
 /* -------------------------------------------------------------- 관측 도구 */
 
-if (SENTRY_DSN) {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    tracesSampleRate: 1.0,
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
-  });
-}
 
 if (POSTHOG_KEY) {
   posthog.init(POSTHOG_KEY, {
@@ -61,6 +52,9 @@ if (POSTHOG_KEY) {
     capture_pageview: false,
     capture_pageleave: true,
     capture_exceptions: true,
+    autocapture: false,
+    disable_session_recording: true,
+    disable_surveys: true,
   });
 
   const capturePageview = () => {
