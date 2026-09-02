@@ -16,8 +16,6 @@ import { renderFeed } from "@/lib/seo/feed";
 import { renderRobots } from "@/lib/seo/robots";
 import { renderSitemap } from "@/lib/seo/sitemap";
 
-import "@/styles/globals.css";
-
 const app = new Hono();
 
 function page(meta: PageMeta, body: Child, pageId?: string) {

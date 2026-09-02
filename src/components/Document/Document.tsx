@@ -5,6 +5,7 @@ import {
   getStylesheetHref,
   getVendorScriptSrcs,
 } from "@/lib/assets";
+import { Style } from "@/lib/css";
 import {
   AUTHOR_NAME,
   LOCALE,
@@ -12,6 +13,7 @@ import {
   SITE_NAME,
   SITE_URL,
 } from "@/lib/meta";
+import { globalCss } from "@/styles/global";
 
 type Props = {
   meta: ResolvedMeta;
@@ -116,6 +118,8 @@ export const Document = ({ meta, pageId, children }: Props) => {
           crossOrigin="anonymous"
         />
         <link rel="stylesheet" href={getStylesheetHref()} />
+        {/* hono/css 가 렌더 중 등록한 스타일을 이 자리에 splice 한다. child 는 정확히 하나여야 한다. */}
+        <Style>{globalCss}</Style>
 
         {/* preload 기본 트리거는 mousedown+touchstart 인데, 이 사이트는 Next.js Link 의
             hover prefetch 를 대체하는 게 목적이라 mouseover 로 되돌린다. */}

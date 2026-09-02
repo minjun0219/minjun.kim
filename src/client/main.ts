@@ -43,7 +43,6 @@ document.addEventListener("click", (event) => {
 
 /* -------------------------------------------------------------- 관측 도구 */
 
-
 if (POSTHOG_KEY) {
   posthog.init(POSTHOG_KEY, {
     api_host: POSTHOG_HOST,
