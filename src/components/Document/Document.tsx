@@ -3,7 +3,7 @@ import NoFlashThemeScript from '@/components/NoFlashThemeScript';
 import type { BuildAssets } from '@/lib/build';
 import { Style } from '@/lib/css';
 import { AUTHOR_NAME, LOCALE, type ResolvedMeta, SITE_NAME, SITE_URL } from '@/lib/meta';
-import { globalCss } from '@/styles/global';
+import { createGlobalCss } from '@/styles/global';
 
 type Props = {
   meta: ResolvedMeta;
@@ -85,15 +85,16 @@ export const Document = ({ meta, pageId, build, children }: Props) => {
           <meta name="naver-site-verification" content={naverVerification} />
         ) : null}
 
+        {/* 700 은 본문 strong·소제목이 있는 글에서만 쓰여 preload 하지 않는다 */}
         <link
           rel="preload"
           as="font"
           type="font/woff2"
-          href="/fonts/nunito-latin-400-normal.woff2"
+          href={build.fontSrcs.nunitoRegular}
           crossOrigin="anonymous"
         />
         {/* hono/css 가 렌더 중 등록한 스타일을 이 자리에 splice 한다. child 는 정확히 하나여야 한다. */}
-        <Style>{globalCss}</Style>
+        <Style>{createGlobalCss(build.fontSrcs)}</Style>
 
         {/* preload 기본 트리거는 mousedown+touchstart 인데, 이 사이트는 Next.js Link 의
             hover prefetch 를 대체하는 게 목적이라 mouseover 로 되돌린다. 선요청 재사용 기한은

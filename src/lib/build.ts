@@ -7,6 +7,12 @@ import type { ImageManifest } from '@/lib/images';
  * 실제 경로는 `scripts/ssg.mjs` 만 안다. 전역 가변 상태 대신 `createApp(build)` 인자로
  * 흘려보내 렌더가 빌드 순서에 의존하지 않게 한다.
  */
+/** 셀프호스팅 Nunito woff2 경로. 파일명에 @fontsource 버전이 박힌다 (`/fonts/*` 는 immutable) */
+export type FontSrcs = {
+  nunitoRegular: string;
+  nunitoBold: string;
+};
+
 export type BuildAssets = {
   /** `_posts/images/*` 변환 결과. `src/build/images.ts` 가 만든다 */
   images: ImageManifest;
@@ -14,4 +20,5 @@ export type BuildAssets = {
   clientScriptSrc: string;
   /** htmx 본체와 확장. 로드 순서가 의미 있어 배열 순서를 그대로 지킨다. */
   vendorScriptSrcs: string[];
+  fontSrcs: FontSrcs;
 };

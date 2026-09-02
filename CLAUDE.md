@@ -31,10 +31,11 @@ assertions in `scripts/ssg.mjs`).
 2. `vite build -c vite.client.config.ts` — 브라우저로 나가는 유일한 자체 번들
    (`src/client/main.ts`: 테마 토글, htmx 훅, PostHog). `dist-client/` 로 나간다.
 3. `node scripts/ssg.mjs` — `dist/` 를 비우고 `public/` 복사 → 글 이미지 webp 변환 → 클라이언트
-   자산·htmx vendor 복사 → **`createApp(build)`** → Hono `toSSG` → 인라인 스타일 단언 → OG 이미지.
+   자산·htmx vendor·Nunito 폰트(`@fontsource/nunito`) 복사 → **`createApp(build)`** → Hono `toSSG` →
+   인라인 스타일 단언 → OG 이미지.
 
 **앱은 팩토리다.** `src/app.tsx` 의 `createApp(build: BuildAssets)` 가 빌드 산출물 경로(클라이언트
-스크립트, vendor 스크립트, 이미지 매니페스트)를 인자로 받는다(`src/lib/build.ts`). 전역 가변 상태로
+스크립트, vendor 스크립트, 폰트, 이미지 매니페스트)를 인자로 받는다(`src/lib/build.ts`). 전역 가변 상태로
 자산 경로를 주입하지 않는다 — 렌더에 필요한 빌드 정보는 전부 `BuildAssets` 를 통해 흐른다.
 
 **`@hono/vite-ssg` 는 쓰지 않는다.** 클라이언트 번들·vendor 복사·이미지·OG 는 어차피 직접 해야
@@ -94,7 +95,7 @@ hono 4.13 소스·실행으로 확인한 규칙 — 어기면 대부분 **에러
 - **`:-hono-global` 블록 안에 개행이 하나라도 남으면 전역 규칙이 통째로 죽고 컴포넌트 규칙이
   `<script>` 폴백으로 떨어진다.** minify 는 `{ } ; : ,` 주변 공백만 지우므로: 여러 줄 `/* */`
   주석 금지(설명은 TS 주석으로 밖에), 공백 구분 다중 토큰 값·결합자·`@media … and` 를 줄바꿈하지
-  않기, `url("…")` 은 항상 따옴표, `\` 와 `${` 금지. 콤마·콜론 뒤 줄바꿈은 안전.
+  않기, `url("…")` 은 항상 따옴표, `\` 금지, `${` 는 평문 문자열(폰트 URL)만. 콤마·콜론 뒤 줄바꿈은 안전.
 - **`<Style>` 의 child 는 정확히 하나.** 둘이면 `<style>undefined</style>` 가 나온다.
 - `cx(a, b)` 는 css 값들의 **선언을 병합한 새 해시 클래스 하나**를 만든다(뒤가 이김). 그래서
   부모→자식 `class` 전달에 `!important` 가 필요 없지만, **부모가 `${childRoot} …` 로 자식 루트를
@@ -178,15 +179,23 @@ htmx 4 는 공식 업그레이드 가이드와 체커를 패키지에 동봉한�
   이러면 htmx preload 가 응답을 캐시에 남기지 못해 무력화된다.** HTML 에 짧은 `max-age` 를 주는 게
   필수다. 또한 **여러 규칙이 같은 경로에 매치되면 헤더가 덮어써지지 않고 콤마로 이어붙으므로**
   규칙끼리 경로가 겹치면 안 된다 (`/*` 캐치올 금지).
-- **`/assets/*`, `/vendor/*`, `/images/*` 는 `immutable` 캐시다.** immutable 은 URL 이 내용에 고정될
-  때만 안전하다 — 클라이언트 번들은 Vite 해시, vendor 는 버전 스탬프, 이미지는 내용 해시가 그걸
-  보장한다. 해시 없는 경로를 immutable 로 걸면 브라우저가 옛 파일을 1년간 붙든다(htmx 코어에서
+- **`/assets/*`, `/vendor/*`, `/fonts/*`, `/images/*` 는 `immutable` 캐시다.** immutable 은 URL 이 내용에
+  고정될 때만 안전하다 — 클라이언트 번들은 Vite 해시, vendor 와 폰트는 패키지 버전 스탬프, 이미지는
+  내용 해시가 그걸 보장한다. 해시 없는 경로를 immutable 로 걸면 브라우저가 옛 파일을 1년간 붙든다(htmx 코어에서
   실제로 겪은 사고).
 - `public/_redirects` — 옛 퍼머링크 301. Cloudflare 는 정규식 제약(`:id(40|706)`)과 선택적
   세그먼트(`:prefix(wp|blog)?`)를 지원하지 않아 경로를 명시적으로 펼쳐 두었다.
   **도메인 레벨 리다이렉트는 지원하지 않는다** — `www → apex` 는 Cloudflare Redirect Rule 이 필요하다.
 - `compatibility_date` 는 설치된 `workerd` 버전보다 미래일 수 없다. 미래 날짜면 `wrangler dev` 가
   뜨지 않는다.
+
+## 폰트
+
+Nunito 는 `@fontsource/nunito` 의 latin 400/700 woff2 를 빌드가 `dist/fonts/<name>-<version>.woff2` 로
+복사해 셀프호스팅한다(`scripts/ssg.mjs` `copyFonts()`, 경로는 `BuildAssets.fontSrcs`). `@font-face` 는
+`src/styles/global.ts` 의 `createGlobalCss(fonts)` 에 있고, **`"Nunito Fallback"`(Arial 에 `size-adjust`/
+`ascent-override` 등 Nunito 지표를 씌운 것)** 이 next/font 의 `adjustFontFallback` 을 대신한다 — 이게
+없으면 `font-display: swap` 순간에 글꼴 폭이 달라져 흔들린다. 지표 계산식은 그 파일 주석에.
 
 ## OG 이미지
 

@@ -77,6 +77,23 @@ async function findClientEntry() {
   return entry.file;
 }
 
+/**
+ * Nunito woff2 를 @fontsource/nunito 에서 dist/fonts/ 로 복사한다.
+ * vendor 와 같은 이유로 파일명에 패키지 버전을 박는다 — `/fonts/*` 가 immutable 이라
+ * 이름이 고정이면 폰트를 갱신해도 브라우저가 옛 파일을 1년간 붙든다.
+ */
+async function copyFonts() {
+  const pkg = 'node_modules/@fontsource/nunito';
+  const version = JSON.parse(await readFile(join(pkg, 'package.json'), 'utf8')).version;
+  await mkdir(join(OUT_DIR, 'fonts'), { recursive: true });
+  const copy = async (weight) => {
+    const to = `nunito-latin-${weight}-normal-${version}.woff2`;
+    await cp(join(pkg, 'files', `nunito-latin-${weight}-normal.woff2`), join(OUT_DIR, 'fonts', to));
+    return `/fonts/${to}`;
+  };
+  return { nunitoRegular: await copy(400), nunitoBold: await copy(700) };
+}
+
 async function main() {
   await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(join(OUT_DIR, 'assets'), { recursive: true });
@@ -108,11 +125,14 @@ async function main() {
     vendorScriptSrcs.push(`/vendor/${to}`);
   }
 
+  const fontSrcs = await copyFonts();
+
   const { createApp } = await import(`../${SSR_DIR}/app.js`);
   const app = createApp({
     images,
     clientScriptSrc: `/${clientEntry}`,
     vendorScriptSrcs,
+    fontSrcs,
   });
 
   const result = await toSSG(app, fsPromises, {

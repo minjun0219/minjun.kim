@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.4",
+    "@fontsource/nunito": "5.3.0",
     "@minjun0219/biome-config": "^2.1.0",
     "@types/hast": "^3.0.5",
     "@types/mdast": "^4.0.4",
