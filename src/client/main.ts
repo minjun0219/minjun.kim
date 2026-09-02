@@ -2,6 +2,12 @@
 import posthog from "posthog-js/dist/module.slim";
 import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
 
+declare global {
+  interface Window {
+    __siteClientInit?: true;
+  }
+}
+
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY;
 const POSTHOG_HOST =
   import.meta.env.VITE_POSTHOG_HOST ?? "https://us.i.posthog.com";
@@ -32,18 +38,11 @@ function switchTheme() {
   }
 }
 
-// hx-boost 가 <body> 를 통째로 갈아끼우므로 버튼에 직접 건 리스너는 이동 후 사라진다.
-// document 위임으로 걸어야 네비게이션 뒤에도 계속 동작한다.
-document.addEventListener("click", (event) => {
-  const target = event.target as HTMLElement | null;
-  if (target?.closest("[data-theme-toggle]")) {
-    switchTheme();
-  }
-});
-
 /* -------------------------------------------------------------- 관측 도구 */
 
-if (POSTHOG_KEY) {
+function initAnalytics() {
+  if (!POSTHOG_KEY) return;
+
   posthog.init(POSTHOG_KEY, {
     api_host: POSTHOG_HOST,
     defaults: "2025-05-24",
@@ -70,4 +69,25 @@ if (POSTHOG_KEY) {
 
   capturePageview();
   document.addEventListener("htmx:after:history:push", capturePageview);
+}
+
+function init() {
+  // hx-boost 가 <body> 를 통째로 갈아끼우므로 버튼에 직접 건 리스너는 이동 후 사라진다.
+  // document 위임으로 걸어야 네비게이션 뒤에도 계속 동작한다.
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("[data-theme-toggle]")) {
+      switchTheme();
+    }
+  });
+
+  initAnalytics();
+}
+
+// 배포 직후 HTML 캐시와 새 자산 URL 이 섞이면, hx-head 가 head 를 머지하면서
+// 해시가 바뀐 이 번들을 새로 실행할 수 있다. 그러면 리스너가 중복 등록돼
+// 테마 토글이 클릭당 두 단계씩 넘어간다. 한 번만 돌게 막는다.
+if (!window.__siteClientInit) {
+  window.__siteClientInit = true;
+  init();
 }
