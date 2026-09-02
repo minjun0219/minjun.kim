@@ -1,25 +1,93 @@
-import { renderPostHtml } from "@/lib/blog/markdown";
-import { type ClassName, cx } from "@/lib/css";
-import codeStyles from "../CodeBlock/CodeBlock.module.css";
-
-import styles from "./PostContent.module.css";
+import { MD_CLASS } from "@/lib/blog/markdownClassNames";
+import { type ClassName, css, cx } from "@/lib/css";
 
 /**
- * 마크다운을 이 컴포넌트가 기대하는 HTML 로 변환한다.
- *
- * 클래스명 주입 때문에 변환이 CSS Modules 를 아는 쪽에 있어야 해서 여기서 내보낸다.
- * 컴포넌트 자체는 동기로 두고, 호출부(라우트)가 미리 변환해 `html` 로 넘긴다.
+ * 마크다운이 만든 raw HTML 의 스타일. hono/css 는 렌더된 값에만 클래스를 등록하므로
+ * 본문 요소는 `MD_CLASS` 의 고정 클래스명을 루트에서 자손 셀렉터로 겨냥한다
+ * (`markdown.ts` 의 rehype 가 같은 상수로 클래스를 박는다).
  */
-export function renderContentHtml(markdown: string): Promise<string> {
-  return renderPostHtml(markdown, {
-    codeRoot: codeStyles.root,
-    codeContainer: codeStyles.container,
-    codeBody: codeStyles.code,
-    figure: styles.figure,
-    iconLink: styles.iconLink,
-    icon: styles.icon,
-  });
-}
+const root = css`
+  & blockquote {
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 4px solid var(--text-secondary-color);
+  }
+
+  & .${MD_CLASS.figure} {
+    display: block;
+    width: calc(100% + 2 * var(--page-margin));
+    margin-left: calc(-1 * var(--page-margin));
+    margin-right: calc(-1 * var(--page-margin));
+    text-align: center;
+  }
+
+  & .${MD_CLASS.figure} img {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  & .${MD_CLASS.iconLink} {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin-left: 0.25em;
+  }
+
+  & .${MD_CLASS.icon} {
+    width: 1em;
+    height: 1em;
+  }
+
+  & .${MD_CLASS.code} {
+    position: relative;
+    background: #1a1f28;
+    margin-left: calc(-1 * var(--page-margin));
+    margin-right: calc(-1 * var(--page-margin));
+    border-radius: 0;
+    transition-property: border-radius;
+    transition-duration: var(--transition-duration);
+  }
+
+  & .${MD_CLASS.code}[title]::before {
+    display: block;
+    padding-left: var(--page-margin);
+    padding-right: var(--page-margin);
+    font-family: var(--font-family-base);
+    font-size: 0.8em;
+    font-weight: bold;
+    color: var(--code-title-color);
+    content: attr(title);
+  }
+
+  & .${MD_CLASS.codeContainer} {
+    position: relative;
+    margin: 0;
+    border-radius: 0;
+    transition-property: border-radius;
+    transition-duration: var(--transition-duration);
+  }
+
+  & .${MD_CLASS.codeContainer}[data-language]::after {
+    content: attr(data-language);
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-transform: uppercase;
+    padding: 0.5em;
+    line-height: 1;
+    font-size: 0.5em;
+    opacity: 0.4;
+    font-family: var(--font-family-code);
+  }
+
+  & .${MD_CLASS.codeBody} {
+    font-family: var(--font-family-code);
+    padding: var(--page-margin);
+    font-size: 0.7em;
+    overflow-x: auto;
+  }
+`;
 
 type Props = {
   html: string;
@@ -29,7 +97,7 @@ type Props = {
 const PostContent = ({ html, className }: Props) => {
   return (
     <div
-      className={cx(styles.content, className)}
+      className={cx(root, className)}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

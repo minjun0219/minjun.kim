@@ -1,10 +1,6 @@
 import type { Child } from "hono/jsx";
 import NoFlashThemeScript from "@/components/NoFlashThemeScript";
-import {
-  getClientScriptSrc,
-  getStylesheetHref,
-  getVendorScriptSrcs,
-} from "@/lib/assets";
+import { getClientScriptSrc, getVendorScriptSrcs } from "@/lib/assets";
 import { Style } from "@/lib/css";
 import {
   AUTHOR_NAME,
@@ -117,7 +113,6 @@ export const Document = ({ meta, pageId, children }: Props) => {
           href="/fonts/nunito-latin-400-normal.woff2"
           crossOrigin="anonymous"
         />
-        <link rel="stylesheet" href={getStylesheetHref()} />
         {/* hono/css 가 렌더 중 등록한 스타일을 이 자리에 splice 한다. child 는 정확히 하나여야 한다. */}
         <Style>{globalCss}</Style>
 

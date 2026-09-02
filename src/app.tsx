@@ -3,13 +3,13 @@ import type { Child } from "hono/jsx";
 import { ssgParams } from "hono/ssg";
 import Document from "@/components/Document";
 import Layout from "@/components/Layout";
-import { renderContentHtml } from "@/components/PostContent";
 import Home from "@/containers/Home";
 import NotFound from "@/containers/NotFound";
 import Post from "@/containers/Post";
 import Posts from "@/containers/Posts";
 import Resume from "@/containers/Resume";
 import { getAllPosts, getExcerpt, getPostBySlug } from "@/lib/blog";
+import { renderPostHtml } from "@/lib/blog/markdown";
 import { type PageMeta, resolveMeta } from "@/lib/meta";
 import { getResume } from "@/lib/resume";
 import { renderFeed } from "@/lib/seo/feed";
@@ -41,7 +41,7 @@ app.get("/posts", (c) =>
 
 app.get("/resume", async (c) => {
   const { content, updatedAt } = getResume();
-  const html = await renderContentHtml(content);
+  const html = await renderPostHtml(content);
 
   return c.html(
     page(
@@ -67,7 +67,7 @@ app.get(
     const slug = c.req.param("slug");
     const post = getPostBySlug(slug);
     const [html, description] = await Promise.all([
-      renderContentHtml(post.content),
+      renderPostHtml(post.content),
       getExcerpt(post.content),
     ]);
 

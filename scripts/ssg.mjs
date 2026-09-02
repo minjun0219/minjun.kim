@@ -1,4 +1,4 @@
-import fsPromises, { cp, mkdir, readdir, readFile, rm } from "node:fs/promises";
+import fsPromises, { cp, mkdir, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { toSSG } from "hono/ssg";
 
@@ -20,17 +20,6 @@ const VENDOR_SOURCES = [
   "htmx.org/dist/ext/hx-head.min.js",
 ];
 
-async function findEmittedCss() {
-  const dir = join(SSR_DIR, "assets");
-  const files = (await readdir(dir)).filter((name) => name.endsWith(".css"));
-  if (files.length !== 1) {
-    throw new Error(
-      `CSS 자산이 정확히 1개일 것으로 기대했지만 ${files.length}개다: ${files.join(", ")}`,
-    );
-  }
-  return files[0];
-}
-
 async function findClientEntry() {
   const manifest = JSON.parse(
     await readFile(join(CLIENT_DIR, ".vite", "manifest.json"), "utf8"),
@@ -47,9 +36,6 @@ async function main() {
 
   // 정적 자산: public/ → dist/
   await cp("public", OUT_DIR, { recursive: true });
-
-  const cssFile = await findEmittedCss();
-  await cp(join(SSR_DIR, "assets", cssFile), join(OUT_DIR, "assets", cssFile));
 
   const clientEntry = await findClientEntry();
   await cp(join(CLIENT_DIR, "assets"), join(OUT_DIR, "assets"), {
@@ -72,7 +58,6 @@ async function main() {
 
   const { default: app, setAssetPaths } = await import(`../${SSR_DIR}/app.js`);
   setAssetPaths({
-    stylesheetHref: `/assets/${cssFile}`,
     clientScriptSrc: `/${clientEntry}`,
     vendorScriptSrcs,
   });

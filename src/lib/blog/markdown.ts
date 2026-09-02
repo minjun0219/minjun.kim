@@ -11,6 +11,7 @@ import {
   GITHUB_ICON_PATH,
   GITHUB_ICON_VIEWBOX,
 } from "@/components/icons/githubIconPath";
+import { MD_CLASS } from "./markdownClassNames";
 
 /** VS Code 기본 다크. 이전 prism-react-renderer `themes.vsDark` 에 가장 가깝다. */
 const SHIKI_THEME = "dark-plus";
@@ -29,25 +30,6 @@ function getHighlighter() {
   });
   return highlighterPromise;
 }
-
-/**
- * 마크다운 → HTML 변환 시 붙일 CSS Modules 클래스명.
- * 파이프라인이 raw HTML 을 만들기 때문에 해시된 실제 클래스명을 밖에서 주입받아야 한다.
- */
-export type MarkdownClassNames = {
-  /** CodeBlock.module.css `root` — `<pre>` */
-  codeRoot: string;
-  /** CodeBlock.module.css `container` — 언어 뱃지를 그리는 래퍼 */
-  codeContainer: string;
-  /** CodeBlock.module.css `code` — 실제 코드 영역 */
-  codeBody: string;
-  /** PostContent.module.css `figure` — 이미지 래퍼 */
-  figure: string;
-  /** PostContent.module.css `iconLink` */
-  iconLink: string;
-  /** PostContent.module.css `icon` */
-  icon: string;
-};
 
 function isElement(node: RootContent | undefined, tagName: string) {
   return node?.type === "element" && node.tagName === tagName;
@@ -75,20 +57,20 @@ function remarkForwardCodeMeta() {
 }
 
 /**
- * shiki 로 하이라이팅한 뒤 CodeBlock.module.css 가 기대하는 DOM 으로 재조립한다.
+ * shiki 로 하이라이팅한 뒤 PostContent 의 스타일이 기대하는 DOM 으로 재조립한다.
  *
  * ```
- * <pre class={codeRoot} title={meta}>
- *   <div class={codeContainer} data-language={lang} style={shiki 배경/전경}>
- *     <div class={codeBody}><code>…</code></div>
+ * <pre class="md-code" title={meta}>
+ *   <div class="md-code-container" data-language={lang} style={shiki 배경/전경}>
+ *     <div class="md-code-body"><code>…</code></div>
  *   </div>
  * </pre>
  * ```
  *
- * `title` / `data-language` 는 각각 `.root[title]::before` 와
- * `.container[data-language]::after` 가 읽어 코드 제목과 언어 뱃지를 그린다.
+ * `title` / `data-language` 는 각각 `.md-code[title]::before` 와
+ * `.md-code-container[data-language]::after` 가 읽어 코드 제목과 언어 뱃지를 그린다.
  */
-function rehypeCodeBlock(classNames: MarkdownClassNames) {
+function rehypeCodeBlock() {
   return async (tree: HastRoot) => {
     const highlighter = await getHighlighter();
     const targets: Array<{ pre: Element; code: Element }> = [];
@@ -126,7 +108,7 @@ function rehypeCodeBlock(classNames: MarkdownClassNames) {
       const meta = code.properties?.["data-meta"];
 
       pre.properties = {
-        className: [classNames.codeRoot],
+        className: [MD_CLASS.code],
         ...(typeof meta === "string" && meta ? { title: meta } : {}),
       };
       pre.children = [
@@ -134,7 +116,7 @@ function rehypeCodeBlock(classNames: MarkdownClassNames) {
           type: "element",
           tagName: "div",
           properties: {
-            className: [classNames.codeContainer],
+            className: [MD_CLASS.codeContainer],
             "data-language": requested || FALLBACK_LANG,
             style: shikiPre.properties?.style,
           },
@@ -142,7 +124,7 @@ function rehypeCodeBlock(classNames: MarkdownClassNames) {
             {
               type: "element",
               tagName: "div",
-              properties: { className: [classNames.codeBody] },
+              properties: { className: [MD_CLASS.codeBody] },
               children: [shikiCode],
             },
           ],
@@ -160,8 +142,8 @@ function toPlainText(node: Element): string {
   return out;
 }
 
-/** 이미지를 `<span class={figure}>` 로 감싼다(이전 PostContent 의 img 렌더러와 동일). */
-function rehypeWrapImages(classNames: MarkdownClassNames) {
+/** 이미지를 `<span class="md-figure">` 로 감싼다(이전 PostContent 의 img 렌더러와 동일). */
+function rehypeWrapImages() {
   return (tree: HastRoot) => {
     visit(tree, "element", (node, index, parent) => {
       if (node.tagName !== "img" || !parent || index === undefined) return;
@@ -169,7 +151,7 @@ function rehypeWrapImages(classNames: MarkdownClassNames) {
       parent.children[index] = {
         type: "element",
         tagName: "span",
-        properties: { className: [classNames.figure] },
+        properties: { className: [MD_CLASS.figure] },
         children: [node],
       };
     });
@@ -180,7 +162,7 @@ function rehypeWrapImages(classNames: MarkdownClassNames) {
  * 텍스트가 "github" 인 github.com 링크를 아이콘 링크로 바꾼다
  * (이전 PostContent 의 a 렌더러와 동일한 규칙).
  */
-function rehypeGithubIconLink(classNames: MarkdownClassNames) {
+function rehypeGithubIconLink() {
   return (tree: HastRoot) => {
     visit(tree, "element", (node) => {
       if (node.tagName !== "a") return;
@@ -192,7 +174,7 @@ function rehypeGithubIconLink(classNames: MarkdownClassNames) {
 
       node.properties = {
         ...node.properties,
-        className: [...classList(node), classNames.iconLink],
+        className: [...classList(node), MD_CLASS.iconLink],
         "aria-label": "GitHub repository",
       };
       node.children = [
@@ -200,7 +182,7 @@ function rehypeGithubIconLink(classNames: MarkdownClassNames) {
           type: "element",
           tagName: "svg",
           properties: {
-            className: [classNames.icon],
+            className: [MD_CLASS.icon],
             viewBox: GITHUB_ICON_VIEWBOX,
             "aria-label": "github",
           },
@@ -229,18 +211,15 @@ function rehypeGithubIconLink(classNames: MarkdownClassNames) {
  * raw HTML 은 의도적으로 처리하지 않는다 — 이전 react-markdown 구성도
  * rehype-raw 없이 동작했고, `_posts` / `_content` 에 본문 레벨 raw HTML 이 없다.
  */
-export async function renderPostHtml(
-  markdown: string,
-  classNames: MarkdownClassNames,
-): Promise<string> {
+export async function renderPostHtml(markdown: string): Promise<string> {
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkForwardCodeMeta)
     .use(remarkRehype)
-    .use(rehypeCodeBlock, classNames)
-    .use(rehypeWrapImages, classNames)
-    .use(rehypeGithubIconLink, classNames)
+    .use(rehypeCodeBlock)
+    .use(rehypeWrapImages)
+    .use(rehypeGithubIconLink)
     .use(rehypeStringify)
     .process(markdown);
 
