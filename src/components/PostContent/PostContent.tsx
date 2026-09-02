@@ -1,5 +1,5 @@
-import cx from "classnames";
 import { renderPostHtml } from "@/lib/blog/markdown";
+import { type ClassName, cx } from "@/lib/css";
 import codeStyles from "../CodeBlock/CodeBlock.module.css";
 
 import styles from "./PostContent.module.css";
@@ -23,7 +23,7 @@ export function renderContentHtml(markdown: string): Promise<string> {
 
 type Props = {
   html: string;
-  className?: string;
+  className?: ClassName;
 };
 
 const PostContent = ({ html, className }: Props) => {

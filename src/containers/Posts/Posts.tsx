@@ -1,8 +1,35 @@
 import PostExcerpt from "@/components/PostExcerpt";
 import Wrapper from "@/components/Wrapper";
 import { getPostListing } from "@/lib/blog";
+import { css } from "@/lib/css";
 
-import styles from "./Posts.module.css";
+const footer = css`
+  margin-top: 3em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--border-color, rgba(127, 127, 127, 0.2));
+  font-size: 0.85rem;
+  text-align: right;
+`;
+
+const feedLink = css`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--text-color);
+  opacity: 0.6;
+  text-decoration: none;
+  transition: opacity 0.2s;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+    color: var(--primary-color);
+  }
+`;
+
+const feedIcon = css`
+  flex-shrink: 0;
+`;
 
 const Posts = () => {
   const posts = getPostListing();
@@ -19,14 +46,14 @@ const Posts = () => {
           mediumUrl={post.mediumUrl}
         />
       ))}
-      <footer className={styles.footer}>
+      <footer className={footer}>
         <a
           href="/posts/feed.xml"
-          className={styles.feedLink}
+          className={feedLink}
           aria-label="RSS 피드 구독"
         >
           <svg
-            className={styles.feedIcon}
+            className={feedIcon}
             width="14"
             height="14"
             viewBox="0 0 24 24"

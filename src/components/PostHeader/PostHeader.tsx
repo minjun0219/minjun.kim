@@ -1,8 +1,63 @@
-import cx from "classnames";
 import type { Child } from "hono/jsx";
+import { type ClassName, css, cx } from "@/lib/css";
 import { isInternalHref } from "@/lib/htmx";
 
-import styles from "./PostHeader.module.css";
+const root = css`
+  margin: 3em 0 2em;
+`;
+
+const title = css`
+  & > h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.3em;
+    word-break: keep-all;
+  }
+
+  & > h1 > a:link,
+  & > h1 > a:visited {
+    text-decoration: none;
+    color: var(--primary-color);
+  }
+
+  & > h1 > a:focus,
+  & > h1 > a:hover {
+    text-decoration: underline;
+  }
+`;
+
+// cx 병합에서 뒤에 오는 같은 셀렉터가 이긴다 — 목록에서만 제목을 줄인다.
+const titleCompact = css`
+  & > h1 {
+    font-size: 1.6rem;
+  }
+`;
+
+const info = css`
+  font-size: 0.8em;
+  color: var(--text-secondary-color);
+`;
+
+const mediumLink = css`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-top: 0.6em;
+  font-size: 0.85em;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+`;
+
+const mediumLinkIcon = css`
+  flex-shrink: 0;
+`;
 
 const PostLink = ({ href, children }: { href: string; children: Child }) => {
   if (!isInternalHref(href)) {
@@ -16,7 +71,7 @@ const PostLink = ({ href, children }: { href: string; children: Child }) => {
   return <a href={href}>{children}</a>;
 };
 
-const ExternalLinkIcon = ({ className }: { className?: string }) => (
+const ExternalLinkIcon = ({ className }: { className?: ClassName }) => (
   <svg
     className={className}
     width="12"
@@ -39,14 +94,14 @@ type Props = {
   url?: string;
   title: string;
   date: string;
-  className?: string;
+  className?: ClassName;
   source?: string;
   mediumUrl?: string;
   compact?: boolean;
 };
 
 const PostHeader = ({
-  title,
+  title: heading,
   date,
   url,
   source,
@@ -59,17 +114,17 @@ const PostHeader = ({
   );
 
   return (
-    <div className={cx(styles.header, className)}>
-      <div className={cx(styles.title, compact && styles.compact)}>
+    <div className={cx(root, className)}>
+      <div className={cx(title, compact && titleCompact)}>
         {url ? (
           <h1>
-            <PostLink href={url}>{title}</PostLink>
+            <PostLink href={url}>{heading}</PostLink>
           </h1>
         ) : (
-          <h1>{title}</h1>
+          <h1>{heading}</h1>
         )}
       </div>
-      <div className={styles.info}>
+      <div className={info}>
         <span>{created}</span>
         {source ? (
           <>
@@ -80,13 +135,13 @@ const PostHeader = ({
       </div>
       {mediumUrl ? (
         <a
-          className={styles.mediumLink}
+          className={mediumLink}
           href={mediumUrl}
           target="_blank"
           rel="noopener noreferrer"
         >
           Medium에서 보기
-          <ExternalLinkIcon className={styles.mediumLinkIcon} />
+          <ExternalLinkIcon className={mediumLinkIcon} />
         </a>
       ) : null}
     </div>
