@@ -47,7 +47,8 @@ const Posts = () => {
         />
       ))}
       <footer className={footer}>
-        <a href="/posts/feed.xml" className={feedLink} aria-label="RSS 피드 구독">
+        {/* same-origin 이라 hx-boost 에 걸리면 XML 이 body 에 스왑된다 — 일반 탐색으로 뺀다 */}
+        <a href="/posts/feed.xml" className={feedLink} aria-label="RSS 피드 구독" hx-boost="false">
           <svg
             className={feedIcon}
             width="14"

@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import fsPromises, { cp, mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { toSSG } from 'hono/ssg';
@@ -95,6 +96,12 @@ async function copyFonts() {
 }
 
 async function main() {
+  // Vite 는 .env 를 import.meta.env 에만 싣는다. 이 프로세스가 렌더하는 Document 는
+  // process.env(NAVER_SITE_VERIFICATION, HOMEPAGE)를 읽으므로 로컬 파일을 직접 올린다.
+  // 이미 있는 값(CI 환경변수)은 덮어쓰지 않는다.
+  if (existsSync('.env.local')) {
+    process.loadEnvFile('.env.local');
+  }
   await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(join(OUT_DIR, 'assets'), { recursive: true });
   await mkdir(join(OUT_DIR, 'vendor'), { recursive: true });
