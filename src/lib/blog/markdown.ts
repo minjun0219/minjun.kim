@@ -11,6 +11,7 @@ import {
   GITHUB_ICON_PATH,
   GITHUB_ICON_VIEWBOX,
 } from "@/components/icons/githubIconPath";
+import type { ImageManifest } from "@/lib/images";
 import { MD_CLASS } from "./markdownClassNames";
 
 /** VS Code 기본 다크. 이전 prism-react-renderer `themes.vsDark` 에 가장 가깝다. */
@@ -142,6 +143,36 @@ function toPlainText(node: Element): string {
   return out;
 }
 
+/** 마크다운의 `./images/<name>` 참조. `_posts/images/` 기준 상대 경로만 인식한다. */
+const LOCAL_IMAGE_RE = /^\.\/images\/([^/]+)$/;
+
+/**
+ * `./images/<name>` 을 빌드가 변환한 webp 로 바꾸고 width/height(CLS 방지)와
+ * lazy 로딩을 붙인다. 매니페스트에 없는 참조는 빌드를 멈춘다 — 깨진 이미지가
+ * 조용히 배포되지 않게.
+ */
+function rehypeImages(images: ImageManifest) {
+  return (tree: HastRoot) => {
+    visit(tree, "element", (node) => {
+      if (node.tagName !== "img") return;
+      const src = node.properties?.src;
+      const name = typeof src === "string" ? LOCAL_IMAGE_RE.exec(src)?.[1] : "";
+      if (!name) return;
+
+      const asset = images[name];
+      if (!asset) throw new Error(`이미지 매니페스트에 없음: ${src}`);
+      node.properties = {
+        ...node.properties,
+        src: asset.url,
+        width: asset.width,
+        height: asset.height,
+        loading: "lazy",
+        decoding: "async",
+      };
+    });
+  };
+}
+
 /** 이미지를 `<span class="md-figure">` 로 감싼다(이전 PostContent 의 img 렌더러와 동일). */
 function rehypeWrapImages() {
   return (tree: HastRoot) => {
@@ -211,13 +242,17 @@ function rehypeGithubIconLink() {
  * raw HTML 은 의도적으로 처리하지 않는다 — 이전 react-markdown 구성도
  * rehype-raw 없이 동작했고, `_posts` / `_content` 에 본문 레벨 raw HTML 이 없다.
  */
-export async function renderPostHtml(markdown: string): Promise<string> {
+export async function renderPostHtml(
+  markdown: string,
+  { images }: { images: ImageManifest },
+): Promise<string> {
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkForwardCodeMeta)
     .use(remarkRehype)
     .use(rehypeCodeBlock)
+    .use(rehypeImages, images)
     .use(rehypeWrapImages)
     .use(rehypeGithubIconLink)
     .use(rehypeStringify)

@@ -15,7 +15,7 @@ iPhone도 마찬가지지만 Mac OS는 오래전 부터 VoiceOver라는 접근�
 
 아무튼, iOS에서도 한국어 VoiceOver가 가능하니 곧 출시될 Mac OS X Lion에도 함께 탑재되지 않을까 해서 해당 항목을 찾아봤습니다.
 
-![](/images/posts/lion_korean_voiceover_01.jpg)
+![](./images/lion_korean_voiceover_01.jpg)
 
 역시 Apple은 저를 실망시키지 않았습니다. Mac OS 10.6에는 영어로 VoiceOver를 들어야 했지만 Lion에서는 iOS에 탑재된 거의 동일한 목소리로 한국어 VoiceOver가 동작하더군요. 그것도 해당 항목이 언어별로 나뉘어져 한국어는 "Narae Compact"라는 제목으로 제공됩니다.
 
@@ -25,7 +25,7 @@ iPhone도 마찬가지지만 Mac OS는 오래전 부터 VoiceOver라는 접근�
 
 뭔가 이상하다 싶어 이리저리 만져보니 방법이 Windows와 조금 달랐습니다. [Tab]키로 이동하는 것이 아니라 마우스를 이용하여(?) 웹 페이지를 클릭하면 자동으로 포커스가 이동하면서 읽어주더군요.
 
-![](/images/posts/lion_korean_voiceover_02.jpg)
+![](./images/lion_korean_voiceover_02.jpg)
 
 왠지 이것도 아니다 싶어서 보니 역시나 [Option]+[Tab]를 통해 탐색이 가능하더군요. 역시 Mac에서 [Option]키는 다용도네요. 마찬가지로 [Option]+[Shift]+[Tab]키를 누르면 역 탐색이 가능합니다.
 

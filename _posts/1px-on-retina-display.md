@@ -31,7 +31,7 @@ input[type="text"]{
 
 이렇게 마크업을 하면 평범한 텍스트 입력 박스가 만들어 지게 됩니다. 물론, Retina Display에서도 2 pixel로 표현이 될 겁니다.
 
-![](/images/posts/input_text_1px.png)
+![](./images/input_text_1px.png)
 
 이제, border를 1 pixel로 만들 차례 인데요. 사용자의 Mobile Web browser가 [CSS3 Transform](https://developer.mozilla.org/en-US/docs/CSS/transform)을 지원한다는 가정하에 Transform을 이용해 2배로 키워 줍니다.
 
@@ -52,7 +52,7 @@ input[type="text"]{
 
 코드를 보시면 느끼시겠지만 다소 투박한 방법입니다. Retina Display에서 border만 50% 줄이기 위해 border-width를 제외한 모든 사이즈를 2배씩 늘이고 Transform을 이용해 50% 줄이면 보시는 대로 border-width가 전보다 더 가늘어 진 것을 느끼실 수 있습니다. 보기에도 훨씬 깔끔 해 보이구요.
 
-![](/images/posts/input_text_real_1px.png)
+![](./images/input_text_real_1px.png)
 
 하지만, 여기에도 문제점은 있습니다. 모든 사이즈를 2배 늘이고 Scale만 50% 줄인 것이기 때문에 웹브라우저에서는 여전히 50% 줄이기 이전의 사이즈로 인지하기 때문에 줄어든 나머지 공간에는 여백이 생겨나게 됩니다. 이 여백은 상위 DOM에서 강제로 사이즈를 지정해 주는 방법 밖에는 없습니다.
 

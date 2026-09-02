@@ -8,7 +8,7 @@ author:
 
 정말 오랜만에 글을 쓰는 것 같습니다. 최근 회사에서 운영하는 사이트의 메인 Flash를 jQuery로 변환하는 작업을 진행 했습니다. 해당 사이트에 메인 Key Visual이 유일한 Flash 였죠. 덕분에 iPad등에서는 메인이 휑하니 비어 있어서 jQuery로 변환 해 보았습니다.
 
-![](/images/posts/creartist_keyvisual.png)
+![](./images/creartist_keyvisual.png)
 
 작업에 앞서 기존의 Flash에 포함된 기능과 HTML+jQuery로 변환 하였을때 필요한 기능등을 간단히 정리해 보았습니다.
 

@@ -1,3 +1,5 @@
+import type { ImageManifest } from "@/lib/images";
+
 /**
  * 빌드가 정적 생성 직전에 앱에 넘기는 산출물 정보.
  *
@@ -6,6 +8,8 @@
  * 흘려보내 렌더가 빌드 순서에 의존하지 않게 한다.
  */
 export type BuildAssets = {
+  /** `_posts/images/*` 변환 결과. `src/build/images.ts` 가 만든다 */
+  images: ImageManifest;
   /** `src/client/main.ts` 번들 (`/assets/main-<hash>.js`) */
   clientScriptSrc: string;
   /** htmx 본체와 확장. 로드 순서가 의미 있어 배열 순서를 그대로 지킨다. */

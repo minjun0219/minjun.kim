@@ -28,11 +28,11 @@
   Cache-Control: public, max-age=31536000, immutable
 /vendor/*
   Cache-Control: public, max-age=31536000, immutable
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
 
 # --- 내용이 바뀔 수 있는 정적 파일 ---
 /og/*
-  Cache-Control: public, max-age=86400
-/images/*
   Cache-Control: public, max-age=86400
 /og.png
   Cache-Control: public, max-age=86400

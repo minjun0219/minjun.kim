@@ -47,7 +47,7 @@ export function createApp(build: BuildAssets) {
 
   app.get("/resume", async (c) => {
     const { content, updatedAt } = getResume();
-    const html = await renderPostHtml(content);
+    const html = await renderPostHtml(content, build);
 
     return c.html(
       page(
@@ -61,7 +61,7 @@ export function createApp(build: BuildAssets) {
 
   // `/posts/:slug` 보다 먼저 등록해야 피드가 slug 로 잡히지 않는다.
   app.get("/posts/feed.xml", async (c) => {
-    return c.body(await renderFeed(), 200, {
+    return c.body(await renderFeed(build), 200, {
       "Content-Type": "application/rss+xml; charset=utf-8",
     });
   });
@@ -73,7 +73,7 @@ export function createApp(build: BuildAssets) {
       const slug = c.req.param("slug");
       const post = getPostBySlug(slug);
       const [html, description] = await Promise.all([
-        renderPostHtml(post.content),
+        renderPostHtml(post.content, build),
         getExcerpt(post.content),
       ]);
 

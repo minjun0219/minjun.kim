@@ -12,7 +12,7 @@ author:
 
 그러다가 요즘에는 jQuery라는 녀석도 널리 보급되고 있으니 나도 jQuery로 조금은 인터렉티브하게 만들어 봤다. 굳이 Flash를 사용하지 않아도 충분히 매력적이다.
 
-![](/images/posts/joytouch_nav.png)
+![](./images/joytouch_nav.png)
 
 내가 사용한 코드는 틀을 잡기 위한 HTML, 디자인을 입히기 위한 CSS, 그리고 32줄밖에 되지 않는 Javascript뿐이다. 물론, jQuery가 있었기에 나는 거들기만 했다.
 

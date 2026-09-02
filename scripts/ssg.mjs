@@ -80,6 +80,10 @@ async function main() {
   // 정적 자산: public/ → dist/
   await cp("public", OUT_DIR, { recursive: true });
 
+  const { buildImageManifest } = await import(`../${SSR_DIR}/images.js`);
+  const images = await buildImageManifest(OUT_DIR);
+  console.log(`글 이미지 ${Object.keys(images).length}개 변환`);
+
   const clientEntry = await findClientEntry();
   await cp(join(CLIENT_DIR, "assets"), join(OUT_DIR, "assets"), {
     recursive: true,
@@ -101,6 +105,7 @@ async function main() {
 
   const { createApp } = await import(`../${SSR_DIR}/app.js`);
   const app = createApp({
+    images,
     clientScriptSrc: `/${clientEntry}`,
     vendorScriptSrcs,
   });
@@ -124,8 +129,8 @@ async function main() {
   await assertInlineStyles(OUT_DIR);
 
   const { generateOgImages } = await import(`../${SSR_DIR}/og.js`);
-  const images = await generateOgImages(OUT_DIR);
-  console.log(`OG 이미지 ${images.length}개 생성`);
+  const ogImages = await generateOgImages(OUT_DIR);
+  console.log(`OG 이미지 ${ogImages.length}개 생성`);
 }
 
 await main();

@@ -21,7 +21,11 @@ export default defineConfig({
     emptyOutDir: true,
     copyPublicDir: false,
     rollupOptions: {
-      input: { app: "src/app.tsx", og: "src/build/og.ts" },
+      input: {
+        app: "src/app.tsx",
+        og: "src/build/og.ts",
+        images: "src/build/images.ts",
+      },
       output: {
         entryFileNames: "[name].js",
       },

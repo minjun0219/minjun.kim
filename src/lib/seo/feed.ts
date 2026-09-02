@@ -1,4 +1,5 @@
 import { getAllPosts, getExcerpt, markdownToHtml } from "@/lib/blog";
+import type { ImageManifest } from "@/lib/images";
 import {
   AUTHOR_EMAIL,
   AUTHOR_NAME,
@@ -24,7 +25,23 @@ function toRfc822(date: string | Date): string {
   return new Date(date).toUTCString();
 }
 
-export async function renderFeed(): Promise<string> {
+/**
+ * 본문의 `./images/<name>` 을 절대 URL 로 바꾼다. 상대 경로를 그대로 내보내면 리더가
+ * 글 URL 기준으로 잘못 해석한다. 페이지와 같은 webp 를 가리키도록 매니페스트를 탄다.
+ */
+function resolveImagePaths(markdown: string, images: ImageManifest): string {
+  return markdown.replace(/\]\(\.\/images\/([^)]+)\)/g, (_match, name) => {
+    const asset = images[name];
+    if (!asset) throw new Error(`피드 이미지 매니페스트에 없음: ${name}`);
+    return `](${SITE_URL}${asset.url})`;
+  });
+}
+
+export async function renderFeed({
+  images,
+}: {
+  images: ImageManifest;
+}): Promise<string> {
   const posts = [...getAllPosts()].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
@@ -34,7 +51,7 @@ export async function renderFeed(): Promise<string> {
       const url = `${SITE_URL}/posts/${post.slug}`;
       const [description, contentHtml] = await Promise.all([
         getExcerpt(post.content),
-        markdownToHtml(post.content),
+        markdownToHtml(resolveImagePaths(post.content, images)),
       ]);
       const authorEmail = post.author?.email ?? AUTHOR_EMAIL;
       const authorName = post.author?.name ?? AUTHOR_NAME;
