@@ -1,6 +1,5 @@
 import AdjustIcon from '@/components/icons/AdjustIcon';
 import GithubIcon from '@/components/icons/GithubIcon';
-import InstagramIcon from '@/components/icons/InstagramIcon';
 import LinkedinIcon from '@/components/icons/LinkedinIcon';
 import MoonIcon from '@/components/icons/MoonIcon';
 import SunIcon from '@/components/icons/SunIcon';
@@ -93,14 +92,6 @@ export const Header = () => {
             className={styles.mode}
           >
             <LinkedinIcon className={styles.icon} />
-          </a>
-          <a
-            href="https://instagram.com/3600s"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            className={styles.mode}
-          >
-            <InstagramIcon className={styles.icon} />
           </a>
           <a
             href="https://github.com/minjun0219"

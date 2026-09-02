@@ -81,9 +81,6 @@ export const SocialLink = ({ className }: Props) => (
       <a href="https://www.linkedin.com/in/minjun0219">Linkedin</a>
     </li>
     <li>
-      <a href="https://instagram.com/3600s">Instagram</a>
-    </li>
-    <li>
       <a href="mailto:hi@minjun.kim">
         Mail to<span>hi@minjun.kim</span>
       </a>
