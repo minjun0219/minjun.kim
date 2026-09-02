@@ -4,55 +4,60 @@
   "homepage": "https://minjun.kim",
   "license": "MIT",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
+    "build": "vite build && vite build -c vite.client.config.ts && node scripts/ssg.mjs",
+    "preview": "wrangler dev",
+    "dev": "pnpm build && wrangler dev",
+    "deploy": "wrangler deploy",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "check": "biome check .",
-    "check:fix": "biome check --write ."
+    "check:fix": "biome check --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@opentelemetry/api": "1.9.0",
-    "@opentelemetry/context-async-hooks": "2.1.0",
-    "@opentelemetry/core": "2.1.0",
-    "@opentelemetry/sdk-trace-base": "2.1.0",
-    "@sentry/nextjs": "10.27.0",
-    "@vercel/analytics": "1.3.1",
-    "@vercel/speed-insights": "1.0.12",
-    "classnames": "2.2.6",
-    "dotenv": "8.2.0",
+    "@resvg/resvg-js": "^2.6.2",
     "fast-glob": "3.3.2",
     "gray-matter": "4.0.3",
-    "moment": "2.30.1",
-    "next": "16.2.6",
+    "hono": "^4.13.5",
+    "htmx.org": "^4.0.0",
     "posthog-js": "^1.373.4",
-    "posthog-node": "^4.18.0",
-    "prism-react-renderer": "2.4.0",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-markdown": "9.0.1",
     "rehype-sanitize": "^6.0.0",
     "rehype-stringify": "^10.0.1",
     "remark": "^15.0.1",
     "remark-gfm": "4.0.0",
+    "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "strip-markdown": "^6.0.0"
+    "satori": "^0.33.4",
+    "shiki": "^4.4.3",
+    "strip-markdown": "^6.0.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.4",
+    "@fontsource/nunito": "5.3.0",
     "@minjun0219/biome-config": "^2.1.0",
-    "@types/classnames": "2.2.10",
-    "@types/node": "^20",
-    "@types/prismjs": "1.16.1",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "typescript": "^5.6.2"
+    "@types/hast": "^3.0.5",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^22.20.1",
+    "pretendard": "^1.3.9",
+    "sharp": "^0.35.4",
+    "typescript": "^5.6.2",
+    "vite": "^7.3.6",
+    "wrangler": "^4.127.1"
   },
   "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef",
   "pnpm": {
     "overrides": {
       "@ungap/structured-clone": "^1.3.1"
-    }
-  }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd",
+      "@resvg/resvg-js",
+      "sharp"
+    ]
+  },
+  "type": "module"
 }

@@ -1,6 +1,8 @@
-import type React from 'react';
+import type { ClassName } from '@/lib/css';
 
-export type Props = Omit<React.SVGAttributes<HTMLOrSVGElement>, 'viewBox'>;
+export type Props = {
+  className?: ClassName;
+};
 
 export const AdjustIcon = (props: Props) => (
   <svg {...props} viewBox="0 0 438.533 438.533" aria-label="adjust">

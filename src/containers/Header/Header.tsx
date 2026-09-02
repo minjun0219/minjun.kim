@@ -1,60 +1,89 @@
-'use client';
-
 import AdjustIcon from '@/components/icons/AdjustIcon';
 import GithubIcon from '@/components/icons/GithubIcon';
-import InstagramIcon from '@/components/icons/InstagramIcon';
 import LinkedinIcon from '@/components/icons/LinkedinIcon';
 import MoonIcon from '@/components/icons/MoonIcon';
 import SunIcon from '@/components/icons/SunIcon';
 import Logo from '@/components/Logo';
 import Wrapper from '@/components/Wrapper';
-import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from '@/lib/theme';
-import styles from './Header.module.css';
+import { css, cx } from '@/lib/css';
 
-function handleSwitchTheme() {
-  if (typeof document === 'undefined') {
-    return;
-  }
+const interactive = css`
+  color: var(--text-secondary-color);
+  transition-duration: var(--transition-duration);
+  transition-property: color;
 
-  const html = document.documentElement;
-  const current = (html.getAttribute('data-theme') as Theme | null) ?? 'system';
-  const index = THEME_CYCLE.indexOf(current);
-  const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
-
-  if (next === 'system') {
-    html.removeAttribute('data-theme');
-    try {
-      localStorage.removeItem(THEME_STORAGE_KEY);
-    } catch (_err) {
-      // Ignore storage failures (private mode, disabled cookies);
-      // the document attribute has already been updated.
-    }
-  } else {
-    html.setAttribute('data-theme', next);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch (_err) {
-      // Ignore storage failures (private mode, disabled cookies);
-      // the document attribute has already been updated.
+  @media (hover: hover) {
+    &:hover {
+      color: var(--text-color);
     }
   }
-}
+`;
+
+const styles = {
+  container: css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+  `,
+  // cx 는 선언을 뒤가 이기게 병합하므로 TopHeading 의 color/font-size 를 !important 없이 덮는다.
+  logo: cx(
+    interactive,
+    css`
+      margin: 0;
+      font-size: 2em;
+    `,
+  ),
+  mode: cx(
+    interactive,
+    css`
+      border: 0;
+      background: none;
+      padding: 10px;
+      cursor: pointer;
+      outline: none;
+    `,
+  ),
+  icon: css`
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  `,
+  // 테마 아이콘 3상태. `<html data-theme>` 은 NoFlashThemeScript 와 클라이언트 토글이 세팅한다.
+  iconSystem: css`
+    :root[data-theme="light"] &,
+    :root[data-theme="dark"] & {
+      display: none;
+    }
+  `,
+  iconLight: css`
+    display: none;
+
+    :root[data-theme="light"] & {
+      display: inline-block;
+    }
+  `,
+  iconDark: css`
+    display: none;
+
+    :root[data-theme="dark"] & {
+      display: inline-block;
+    }
+  `,
+};
 
 export const Header = () => {
   return (
     <header>
       <Wrapper className={styles.container}>
         <Logo link className={styles.logo} />
-        <div className={styles.utils}>
-          <button
-            type="button"
-            className={styles.mode}
-            onClick={handleSwitchTheme}
-            aria-label="toggle theme"
-          >
-            <AdjustIcon className={`${styles.icon} ${styles.iconSystem}`} />
-            <SunIcon className={`${styles.icon} ${styles.iconLight}`} />
-            <MoonIcon className={`${styles.icon} ${styles.iconDark}`} />
+        <div>
+          {/* 토글 동작은 src/client/main.ts 가 document 위임으로 처리한다.
+              hx-boost 가 body 를 통째로 교체하므로 요소에 직접 건 리스너는 살아남지 못한다. */}
+          <button type="button" className={styles.mode} data-theme-toggle aria-label="toggle theme">
+            <AdjustIcon className={cx(styles.icon, styles.iconSystem)} />
+            <SunIcon className={cx(styles.icon, styles.iconLight)} />
+            <MoonIcon className={cx(styles.icon, styles.iconDark)} />
           </button>
           <a
             href="https://www.linkedin.com/in/minjun0219"
@@ -63,14 +92,6 @@ export const Header = () => {
             className={styles.mode}
           >
             <LinkedinIcon className={styles.icon} />
-          </a>
-          <a
-            href="https://instagram.com/3600s"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            className={styles.mode}
-          >
-            <InstagramIcon className={styles.icon} />
           </a>
           <a
             href="https://github.com/minjun0219"

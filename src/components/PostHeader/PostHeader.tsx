@@ -1,12 +1,63 @@
-import cx from 'classnames';
-import Link from 'next/link';
-import type React from 'react';
-import { useMemo } from 'react';
+import type { Child } from 'hono/jsx';
+import { type ClassName, css, cx } from '@/lib/css';
+import { isInternalHref } from '@/lib/htmx';
 
-import styles from './PostHeader.module.css';
+const styles = {
+  root: css`
+    margin: 3em 0 2em;
+  `,
+  title: css`
+    & > h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.3em;
+      word-break: keep-all;
+    }
 
-const PostLink = ({ href, children }: React.PropsWithChildren<{ href: string }>) => {
-  if (/^https?:\/\//i.test(href)) {
+    & > h1 > a:link,
+    & > h1 > a:visited {
+      text-decoration: none;
+      color: var(--primary-color);
+    }
+
+    & > h1 > a:focus,
+    & > h1 > a:hover {
+      text-decoration: underline;
+    }
+  `,
+  // cx 병합에서 뒤에 오는 같은 셀렉터가 이긴다 — 목록에서만 제목을 줄인다.
+  titleCompact: css`
+    & > h1 {
+      font-size: 1.6rem;
+    }
+  `,
+  info: css`
+    font-size: 0.8em;
+    color: var(--text-secondary-color);
+  `,
+  mediumLink: css`
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    margin-top: 0.6em;
+    font-size: 0.85em;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  `,
+  mediumLinkIcon: css`
+    flex-shrink: 0;
+  `,
+};
+
+const PostLink = ({ href, children }: { href: string; children: Child }) => {
+  if (!isInternalHref(href)) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer">
         {children}
@@ -14,10 +65,10 @@ const PostLink = ({ href, children }: React.PropsWithChildren<{ href: string }>)
     );
   }
 
-  return <Link href={href}>{children}</Link>;
+  return <a href={href}>{children}</a>;
 };
 
-const ExternalLinkIcon = ({ className }: { className?: string }) => (
+const ExternalLinkIcon = ({ className }: { className?: ClassName }) => (
   <svg
     className={className}
     width="12"
@@ -40,26 +91,32 @@ type Props = {
   url?: string;
   title: string;
   date: string;
-  className?: string;
+  className?: ClassName;
   source?: string;
   mediumUrl?: string;
   compact?: boolean;
 };
 
-const PostHeader = ({ title, date, url, source, mediumUrl, className, compact }: Props) => {
-  const created = useMemo(
-    () => new Intl.DateTimeFormat('ko-KR', { timeZone: 'UTC' }).format(new Date(date)),
-    [date],
-  );
+const PostHeader = ({
+  title: heading,
+  date,
+  url,
+  source,
+  mediumUrl,
+  className,
+  compact,
+}: Props) => {
+  const created = new Intl.DateTimeFormat('ko-KR', { timeZone: 'UTC' }).format(new Date(date));
+
   return (
-    <div className={cx(styles.header, className)}>
-      <div className={cx(styles.title, compact && styles.compact)}>
+    <div className={cx(styles.root, className)}>
+      <div className={cx(styles.title, compact && styles.titleCompact)}>
         {url ? (
           <h1>
-            <PostLink href={url}>{title}</PostLink>
+            <PostLink href={url}>{heading}</PostLink>
           </h1>
         ) : (
-          <h1>{title}</h1>
+          <h1>{heading}</h1>
         )}
       </div>
       <div className={styles.info}>

@@ -1,16 +1,23 @@
-import cx from 'classnames';
+import { type ClassName, css, cx } from '@/lib/css';
 
-import styles from './Footer.module.css';
+const styles = {
+  root: css`
+    margin-top: 3em;
+    margin-bottom: 5em;
+    text-align: center;
+    color: var(--text-secondary-color);
+  `,
+};
 
 export type Props = {
-  className?: string;
+  className?: ClassName;
 };
 
 export const Footer = ({ className }: Props) => {
   const date = new Date();
   return (
-    <footer className={cx(styles.footer, className)}>
-      <p className={styles.copy}>&copy; {date.getFullYear()} by minjun.kim</p>
+    <footer className={cx(styles.root, className)}>
+      <p>&copy; {date.getFullYear()} by minjun.kim</p>
     </footer>
   );
 };

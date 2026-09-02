@@ -1,0 +1,23 @@
+# 옛 퍼머링크 → 복원된 글.
+# Next.js 의 `/:prefix(wp|blog)?/archives/:id(40|706)` 같은 정규식 제약과 선택적
+# 세그먼트를 Cloudflare 는 지원하지 않아 접두사 3종을 명시적으로 펼쳤다.
+/blog/2020/05/24/next-js-wp-graphql-static-blog /posts/next-js-wp-graphql-static-blog 301
+
+/archives/31 /posts/frontend-development-and-web-publishing 301
+/wp/archives/31 /posts/frontend-development-and-web-publishing 301
+/blog/archives/31 /posts/frontend-development-and-web-publishing 301
+
+/archives/40 /posts/voiceover-on-mac-os-x-lion 301
+/wp/archives/40 /posts/voiceover-on-mac-os-x-lion 301
+/blog/archives/40 /posts/voiceover-on-mac-os-x-lion 301
+/archives/706 /posts/voiceover-on-mac-os-x-lion 301
+/wp/archives/706 /posts/voiceover-on-mac-os-x-lion 301
+/blog/archives/706 /posts/voiceover-on-mac-os-x-lion 301
+
+/archives/302 /posts/1px-on-retina-display 301
+/wp/archives/302 /posts/1px-on-retina-display 301
+/blog/archives/302 /posts/1px-on-retina-display 301
+
+/archives/330 /posts/flava-clipper-postmortem 301
+/wp/archives/330 /posts/flava-clipper-postmortem 301
+/blog/archives/330 /posts/flava-clipper-postmortem 301
