@@ -1,6 +1,6 @@
 import type { Child } from "hono/jsx";
 import NoFlashThemeScript from "@/components/NoFlashThemeScript";
-import { getClientScriptSrc, getVendorScriptSrcs } from "@/lib/assets";
+import type { BuildAssets } from "@/lib/build";
 import { Style } from "@/lib/css";
 import {
   AUTHOR_NAME,
@@ -20,6 +20,8 @@ type Props = {
    * head 는 head-support 가 머지하므로 meta 라야 boosted 이동에서도 정확하다.
    */
   pageId?: string;
+  /** 스크립트 경로 — 빌드가 `createApp` 에 넘긴 것을 그대로 받는다. */
+  build: BuildAssets;
   children: Child;
 };
 
@@ -34,7 +36,7 @@ type Props = {
  * 암시적이지 않아 `hx-boost` 를 자손 링크에 물리려면 `:inherited` 를 붙여야 한다
  * (빠뜨리면 에러 없이 그냥 전체 새로고침으로 떨어진다).
  */
-export const Document = ({ meta, pageId, children }: Props) => {
+export const Document = ({ meta, pageId, build, children }: Props) => {
   const naverVerification = process.env.NAVER_SITE_VERIFICATION;
 
   return (
@@ -124,10 +126,10 @@ export const Document = ({ meta, pageId, children }: Props) => {
         />
 
         <NoFlashThemeScript />
-        {getVendorScriptSrcs().map((src) => (
+        {build.vendorScriptSrcs.map((src) => (
           <script key={src} src={src} defer />
         ))}
-        <script src={getClientScriptSrc()} defer />
+        <script src={build.clientScriptSrc} defer />
       </head>
       <body hx-boost:inherited="true">{children}</body>
     </html>

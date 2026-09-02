@@ -1,4 +1,4 @@
-import fsPromises, { cp, mkdir, readFile, rm } from "node:fs/promises";
+import fsPromises, { cp, mkdir, readdir, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { toSSG } from "hono/ssg";
 
@@ -19,6 +19,49 @@ const VENDOR_SOURCES = [
   "htmx.org/dist/ext/hx-preload.min.js",
   "htmx.org/dist/ext/hx-head.min.js",
 ];
+
+/**
+ * hono/css 가 조용히 실패하는 모드를 빌드에서 잡는다.
+ *
+ * `<Style>` 누락·전역 블록 안의 개행·스트리밍 청크 같은 상황에서 hono/css 는 에러 대신
+ * `<script>document.querySelector('#hono-css')…</script>` 폴백을 내거나 전역 규칙을
+ * 통째로 버린다. 브라우저에선 스타일이 "대체로" 먹어 보이니 여기서 문자열로 단언한다.
+ */
+async function assertInlineStyles(dir) {
+  const problems = [];
+  for (const file of await listHtmlFiles(dir)) {
+    const html = await readFile(file, "utf8");
+    const styles = html.match(/<style id="hono-css">[\s\S]*?<\/style>/g) ?? [];
+    if (styles.length !== 1) {
+      problems.push(`${file}: <style id="hono-css"> 가 ${styles.length}개`);
+      continue;
+    }
+    if (styles[0].includes("\n")) {
+      problems.push(`${file}: 인라인 스타일에 개행 — 전역 블록이 깨졌다`);
+    }
+    for (const bad of [
+      ":-hono-global",
+      "#hono-css')",
+      '<link rel="stylesheet"',
+      "undefined</style>",
+    ]) {
+      if (html.includes(bad)) problems.push(`${file}: "${bad}" 발견`);
+    }
+  }
+  if (problems.length > 0) {
+    throw new Error(`인라인 스타일 단언 실패:\n${problems.join("\n")}`);
+  }
+}
+
+async function listHtmlFiles(dir) {
+  const out = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...(await listHtmlFiles(path)));
+    else if (entry.name.endsWith(".html")) out.push(path);
+  }
+  return out;
+}
 
 async function findClientEntry() {
   const manifest = JSON.parse(
@@ -56,8 +99,8 @@ async function main() {
     vendorScriptSrcs.push(`/vendor/${to}`);
   }
 
-  const { default: app, setAssetPaths } = await import(`../${SSR_DIR}/app.js`);
-  setAssetPaths({
+  const { createApp } = await import(`../${SSR_DIR}/app.js`);
+  const app = createApp({
     clientScriptSrc: `/${clientEntry}`,
     vendorScriptSrcs,
   });
@@ -78,6 +121,7 @@ async function main() {
     process.exit(1);
   }
   console.log(`정적 페이지 ${result.files.length}개 생성`);
+  await assertInlineStyles(OUT_DIR);
 
   const { generateOgImages } = await import(`../${SSR_DIR}/og.js`);
   const images = await generateOgImages(OUT_DIR);
