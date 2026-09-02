@@ -79,11 +79,14 @@ CSS 파일이 없다. 모든 스타일은 `hono/css`(`src/lib/css.ts` 로 재수
 
 ```tsx
 import { type ClassName, css, cx } from "@/lib/css";
-const root = css`…`;
+const styles = { root: css`…`, title: css`…` };
 const Wrapper = ({ children, className }: { children: Child; className?: ClassName }) => (
-  <div className={cx(root, className)}>{children}</div>
+  <div className={cx(styles.root, className)}>{children}</div>
 );
 ```
+
+한 파일의 스타일은 `styles` 객체 하나에 모은다. 다른 항목이 `cx` 로 참조하는 기반 스타일만
+객체 밖 별도 `const` 로 둔다(`Header` 의 `interactive`).
 
 hono 4.13 소스·실행으로 확인한 규칙 — 어기면 대부분 **에러 없이 조용히** 깨진다:
 

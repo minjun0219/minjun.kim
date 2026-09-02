@@ -3,33 +3,33 @@ import Wrapper from '@/components/Wrapper';
 import { getPostListing } from '@/lib/blog';
 import { css } from '@/lib/css';
 
-const footer = css`
-  margin-top: 3em;
-  padding-top: 1.5em;
-  border-top: 1px solid var(--border-color, rgba(127, 127, 127, 0.2));
-  font-size: 0.85rem;
-  text-align: right;
-`;
+const styles = {
+  footer: css`
+    margin-top: 3em;
+    padding-top: 1.5em;
+    border-top: 1px solid var(--border-color, rgba(127, 127, 127, 0.2));
+    font-size: 0.85rem;
+    text-align: right;
+  `,
+  feedLink: css`
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--text-color);
+    opacity: 0.6;
+    text-decoration: none;
+    transition: opacity 0.2s;
 
-const feedLink = css`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  color: var(--text-color);
-  opacity: 0.6;
-  text-decoration: none;
-  transition: opacity 0.2s;
-
-  &:hover,
-  &:focus {
-    opacity: 1;
-    color: var(--primary-color);
-  }
-`;
-
-const feedIcon = css`
-  flex-shrink: 0;
-`;
+    &:hover,
+    &:focus {
+      opacity: 1;
+      color: var(--primary-color);
+    }
+  `,
+  feedIcon: css`
+    flex-shrink: 0;
+  `,
+};
 
 const Posts = () => {
   const posts = getPostListing();
@@ -46,11 +46,16 @@ const Posts = () => {
           mediumUrl={post.mediumUrl}
         />
       ))}
-      <footer className={footer}>
+      <footer className={styles.footer}>
         {/* same-origin 이라 hx-boost 에 걸리면 XML 이 body 에 스왑된다 — 일반 탐색으로 뺀다 */}
-        <a href="/posts/feed.xml" className={feedLink} aria-label="RSS 피드 구독" hx-boost="false">
+        <a
+          href="/posts/feed.xml"
+          className={styles.feedLink}
+          aria-label="RSS 피드 구독"
+          hx-boost="false"
+        >
           <svg
-            className={feedIcon}
+            className={styles.feedIcon}
             width="14"
             height="14"
             viewBox="0 0 24 24"

@@ -1,13 +1,15 @@
 import type { Child } from 'hono/jsx';
 import { type ClassName, css, cx } from '@/lib/css';
 
-const root = css`
-  margin: 0 auto;
-  padding-left: var(--page-margin);
-  padding-right: var(--page-margin);
-  max-width: var(--page-max-width);
-  box-sizing: content-box;
-`;
+const styles = {
+  root: css`
+    margin: 0 auto;
+    padding-left: var(--page-margin);
+    padding-right: var(--page-margin);
+    max-width: var(--page-max-width);
+    box-sizing: content-box;
+  `,
+};
 
 export type Props = {
   children: Child;
@@ -15,7 +17,7 @@ export type Props = {
 };
 
 export const Wrapper = ({ children, className }: Props) => {
-  return <div className={cx(root, className)}>{children}</div>;
+  return <div className={cx(styles.root, className)}>{children}</div>;
 };
 
 export default Wrapper;

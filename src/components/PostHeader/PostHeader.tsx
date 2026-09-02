@@ -2,62 +2,59 @@ import type { Child } from 'hono/jsx';
 import { type ClassName, css, cx } from '@/lib/css';
 import { isInternalHref } from '@/lib/htmx';
 
-const root = css`
-  margin: 3em 0 2em;
-`;
+const styles = {
+  root: css`
+    margin: 3em 0 2em;
+  `,
+  title: css`
+    & > h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.3em;
+      word-break: keep-all;
+    }
 
-const title = css`
-  & > h1 {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1.3em;
-    word-break: keep-all;
-  }
+    & > h1 > a:link,
+    & > h1 > a:visited {
+      text-decoration: none;
+      color: var(--primary-color);
+    }
 
-  & > h1 > a:link,
-  & > h1 > a:visited {
-    text-decoration: none;
+    & > h1 > a:focus,
+    & > h1 > a:hover {
+      text-decoration: underline;
+    }
+  `,
+  // cx 병합에서 뒤에 오는 같은 셀렉터가 이긴다 — 목록에서만 제목을 줄인다.
+  titleCompact: css`
+    & > h1 {
+      font-size: 1.6rem;
+    }
+  `,
+  info: css`
+    font-size: 0.8em;
+    color: var(--text-secondary-color);
+  `,
+  mediumLink: css`
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    margin-top: 0.6em;
+    font-size: 0.85em;
     color: var(--primary-color);
-  }
+    text-decoration: none;
+    transition: color 0.3s;
 
-  & > h1 > a:focus,
-  & > h1 > a:hover {
-    text-decoration: underline;
-  }
-`;
-
-// cx 병합에서 뒤에 오는 같은 셀렉터가 이긴다 — 목록에서만 제목을 줄인다.
-const titleCompact = css`
-  & > h1 {
-    font-size: 1.6rem;
-  }
-`;
-
-const info = css`
-  font-size: 0.8em;
-  color: var(--text-secondary-color);
-`;
-
-const mediumLink = css`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3em;
-  margin-top: 0.6em;
-  font-size: 0.85em;
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: color 0.3s;
-
-  &:hover,
-  &:focus {
-    text-decoration: underline;
-  }
-`;
-
-const mediumLinkIcon = css`
-  flex-shrink: 0;
-`;
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  `,
+  mediumLinkIcon: css`
+    flex-shrink: 0;
+  `,
+};
 
 const PostLink = ({ href, children }: { href: string; children: Child }) => {
   if (!isInternalHref(href)) {
@@ -112,8 +109,8 @@ const PostHeader = ({
   const created = new Intl.DateTimeFormat('ko-KR', { timeZone: 'UTC' }).format(new Date(date));
 
   return (
-    <div className={cx(root, className)}>
-      <div className={cx(title, compact && titleCompact)}>
+    <div className={cx(styles.root, className)}>
+      <div className={cx(styles.title, compact && styles.titleCompact)}>
         {url ? (
           <h1>
             <PostLink href={url}>{heading}</PostLink>
@@ -122,7 +119,7 @@ const PostHeader = ({
           <h1>{heading}</h1>
         )}
       </div>
-      <div className={info}>
+      <div className={styles.info}>
         <span>{created}</span>
         {source ? (
           <>
@@ -132,9 +129,9 @@ const PostHeader = ({
         ) : null}
       </div>
       {mediumUrl ? (
-        <a className={mediumLink} href={mediumUrl} target="_blank" rel="noopener noreferrer">
+        <a className={styles.mediumLink} href={mediumUrl} target="_blank" rel="noopener noreferrer">
           Medium에서 보기
-          <ExternalLinkIcon className={mediumLinkIcon} />
+          <ExternalLinkIcon className={styles.mediumLinkIcon} />
         </a>
       ) : null}
     </div>

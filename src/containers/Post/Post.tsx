@@ -2,10 +2,12 @@ import PostArticle from '@/components/PostArticle';
 import Wrapper from '@/components/Wrapper';
 import { css } from '@/lib/css';
 
-const root = css`
-  margin: 3em auto 5em;
-  color: var(--text-color);
-`;
+const styles = {
+  root: css`
+    margin: 3em auto 5em;
+    color: var(--text-color);
+  `,
+};
 
 type Props = {
   title: string;
@@ -16,7 +18,7 @@ type Props = {
 
 const Post = ({ title, html, date, mediumUrl }: Props) => {
   return (
-    <Wrapper className={root}>
+    <Wrapper className={styles.root}>
       <PostArticle title={title} html={html} date={date} mediumUrl={mediumUrl} />
     </Wrapper>
   );
