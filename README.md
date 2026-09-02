@@ -1,6 +1,7 @@
 # minjun.kim
 
-개인 블로그 웹사이트. Hono + htmx로 정적 사이트를 만들어 Cloudflare Workers에 배포합니다.
+개인 블로그 웹사이트. Hono(JSX + hono/css) + htmx 4로 정적 사이트를 만들어 Cloudflare Workers에 배포합니다.
+자세한 구조와 주의점은 `CLAUDE.md`를 참고하세요.
 
 ## 개발
 
