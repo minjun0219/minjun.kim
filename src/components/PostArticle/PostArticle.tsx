@@ -1,6 +1,6 @@
-import { css } from "@/lib/css";
-import PostContent from "../PostContent";
-import PostHeader from "../PostHeader";
+import { css } from '@/lib/css';
+import PostContent from '../PostContent';
+import PostHeader from '../PostHeader';
 
 const article = css`
   margin: 3em 0;

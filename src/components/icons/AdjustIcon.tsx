@@ -1,4 +1,4 @@
-import type { ClassName } from "@/lib/css";
+import type { ClassName } from '@/lib/css';
 
 export type Props = {
   className?: ClassName;
@@ -18,6 +18,6 @@ c13.891-23.791,32.738-42.637,56.527-56.531c23.791-13.894,49.772-20.841,77.943-20
   </svg>
 );
 
-AdjustIcon.displayName = "AdjustIcon";
+AdjustIcon.displayName = 'AdjustIcon';
 
 export default AdjustIcon;

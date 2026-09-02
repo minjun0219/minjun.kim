@@ -1,6 +1,6 @@
-import PostContent from "@/components/PostContent";
-import Wrapper from "@/components/Wrapper";
-import { css } from "@/lib/css";
+import PostContent from '@/components/PostContent';
+import Wrapper from '@/components/Wrapper';
+import { css } from '@/lib/css';
 
 const root = css`
   margin: 3em auto 5em;
@@ -63,9 +63,7 @@ const Resume = ({ html, updatedAt }: Props) => (
   <Wrapper className={root}>
     <article className={article}>
       <PostContent html={html} className={content} />
-      {updatedAt ? (
-        <p className={updatedAtStyle}>마지막 업데이트: {updatedAt}</p>
-      ) : null}
+      {updatedAt ? <p className={updatedAtStyle}>마지막 업데이트: {updatedAt}</p> : null}
     </article>
   </Wrapper>
 );

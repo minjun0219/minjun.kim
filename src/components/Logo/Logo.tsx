@@ -1,5 +1,5 @@
-import TopHeading from "@/components/TopHeading";
-import type { ClassName } from "@/lib/css";
+import TopHeading from '@/components/TopHeading';
+import type { ClassName } from '@/lib/css';
 
 type Props = {
   className?: ClassName;
@@ -12,11 +12,7 @@ const Logo = ({ className, link }: Props) => {
       minjun<span>.</span>kim
     </>
   );
-  return (
-    <TopHeading className={className}>
-      {link ? <a href="/">{title}</a> : title}
-    </TopHeading>
-  );
+  return <TopHeading className={className}>{link ? <a href="/">{title}</a> : title}</TopHeading>;
 };
 
 export default Logo;

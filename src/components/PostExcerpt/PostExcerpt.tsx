@@ -1,5 +1,5 @@
-import { type ClassName, css, cx } from "@/lib/css";
-import PostHeader from "../PostHeader";
+import { type ClassName, css, cx } from '@/lib/css';
+import PostHeader from '../PostHeader';
 
 const root = css`
   font-family: var(--font-family-base);
@@ -49,15 +49,7 @@ type Props = {
   className?: ClassName;
 };
 
-const PostExcerpt = ({
-  title,
-  date,
-  excerpt,
-  url,
-  source,
-  mediumUrl,
-  className,
-}: Props) => {
+const PostExcerpt = ({ title, date, excerpt, url, source, mediumUrl, className }: Props) => {
   return (
     <div className={cx(root, className)}>
       <PostHeader

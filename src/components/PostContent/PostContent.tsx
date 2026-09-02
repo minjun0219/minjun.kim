@@ -1,5 +1,5 @@
-import { MD_CLASS } from "@/lib/blog/markdownClassNames";
-import { type ClassName, css, cx } from "@/lib/css";
+import { MD_CLASS } from '@/lib/blog/markdownClassNames';
+import { type ClassName, css, cx } from '@/lib/css';
 
 /**
  * 마크다운이 만든 raw HTML 의 스타일. hono/css 는 렌더된 값에만 클래스를 등록하므로
@@ -95,12 +95,7 @@ type Props = {
 };
 
 const PostContent = ({ html, className }: Props) => {
-  return (
-    <div
-      className={cx(root, className)}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
+  return <div className={cx(root, className)} dangerouslySetInnerHTML={{ __html: html }} />;
 };
 
 export default PostContent;

@@ -12,21 +12,21 @@ export type ExternalPost = {
 
 export const EXTERNAL_POSTS: ExternalPost[] = [
   {
-    title: "메이커 스튜디오 개편하기",
-    date: "2019-08-05",
-    url: "https://medium.com/wadiz/8a14dde78442",
-    source: "와디즈 서비스 (Medium)",
+    title: '메이커 스튜디오 개편하기',
+    date: '2019-08-05',
+    url: 'https://medium.com/wadiz/8a14dde78442',
+    source: '와디즈 서비스 (Medium)',
   },
   {
-    title: "드디어 메인 홈 개편! 다시 시작!",
-    date: "2019-07-17",
-    url: "https://medium.com/wadiz/a69a5c032f1e",
-    source: "와디즈 서비스 (Medium)",
+    title: '드디어 메인 홈 개편! 다시 시작!',
+    date: '2019-07-17',
+    url: 'https://medium.com/wadiz/a69a5c032f1e',
+    source: '와디즈 서비스 (Medium)',
   },
   {
-    title: "레거시 시스템 탈출과 React 도입기",
-    date: "2018-12-26",
-    url: "https://youtu.be/7Tk-dQVhk18",
-    source: "XEOpenSeminar (Youtube)",
+    title: '레거시 시스템 탈출과 React 도입기',
+    date: '2018-12-26',
+    url: 'https://youtu.be/7Tk-dQVhk18',
+    source: 'XEOpenSeminar (Youtube)',
   },
 ];

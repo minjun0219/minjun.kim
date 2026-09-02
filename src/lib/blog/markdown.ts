@@ -1,26 +1,23 @@
-import type { Element, Root as HastRoot, RootContent } from "hast";
-import type { Root as MdastRoot } from "mdast";
-import rehypeStringify from "rehype-stringify";
-import remarkGfm from "remark-gfm";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import { createHighlighter, type Highlighter } from "shiki";
-import { unified } from "unified";
-import { visit } from "unist-util-visit";
-import {
-  GITHUB_ICON_PATH,
-  GITHUB_ICON_VIEWBOX,
-} from "@/components/icons/githubIconPath";
-import type { ImageManifest } from "@/lib/images";
-import { MD_CLASS } from "./markdownClassNames";
+import type { Element, Root as HastRoot, RootContent } from 'hast';
+import type { Root as MdastRoot } from 'mdast';
+import rehypeStringify from 'rehype-stringify';
+import remarkGfm from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import { createHighlighter, type Highlighter } from 'shiki';
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
+import { GITHUB_ICON_PATH, GITHUB_ICON_VIEWBOX } from '@/components/icons/githubIconPath';
+import type { ImageManifest } from '@/lib/images';
+import { MD_CLASS } from './markdownClassNames';
 
 /** VS Code 기본 다크. 이전 prism-react-renderer `themes.vsDark` 에 가장 가깝다. */
-const SHIKI_THEME = "dark-plus";
+const SHIKI_THEME = 'dark-plus';
 
 /** 본문에서 실제로 쓰이는 언어만 번들한다. 그 외는 plaintext 로 떨어뜨린다. */
-const SHIKI_LANGS = ["typescript", "css", "bash"] as const;
+const SHIKI_LANGS = ['typescript', 'css', 'bash'] as const;
 
-const FALLBACK_LANG = "text";
+const FALLBACK_LANG = 'text';
 
 let highlighterPromise: Promise<Highlighter> | undefined;
 
@@ -33,25 +30,31 @@ function getHighlighter() {
 }
 
 function isElement(node: RootContent | undefined, tagName: string) {
-  return node?.type === "element" && node.tagName === tagName;
+  return node?.type === 'element' && node.tagName === tagName;
 }
 
 function classList(node: Element): string[] {
   const value: unknown = node.properties?.className;
-  if (Array.isArray(value)) return value.map(String);
-  if (typeof value === "string") return value.split(/\s+/);
+  if (Array.isArray(value)) {
+    return value.map(String);
+  }
+  if (typeof value === 'string') {
+    return value.split(/\s+/);
+  }
   return [];
 }
 
 /** 코드 펜스의 meta(``` ts /path/to/file.tsx``)를 hast 까지 실어 나른다. */
 function remarkForwardCodeMeta() {
   return (tree: MdastRoot) => {
-    visit(tree, "code", (node) => {
-      if (!node.meta) return;
+    visit(tree, 'code', (node) => {
+      if (!node.meta) {
+        return;
+      }
       node.data ??= {};
       node.data.hProperties = {
         ...node.data.hProperties,
-        "data-meta": node.meta,
+        'data-meta': node.meta,
       };
     });
   };
@@ -76,55 +79,57 @@ function rehypeCodeBlock() {
     const highlighter = await getHighlighter();
     const targets: Array<{ pre: Element; code: Element }> = [];
 
-    visit(tree, "element", (node) => {
-      if (node.tagName !== "pre") return;
-      const code = node.children.find((child) => isElement(child, "code")) as
-        | Element
-        | undefined;
-      if (code) targets.push({ pre: node, code });
+    visit(tree, 'element', (node) => {
+      if (node.tagName !== 'pre') {
+        return;
+      }
+      const code = node.children.find((child) => isElement(child, 'code')) as Element | undefined;
+      if (code) {
+        targets.push({ pre: node, code });
+      }
     });
 
     for (const { pre, code } of targets) {
-      const languageClass = classList(code).find((name) =>
-        name.startsWith("language-"),
-      );
-      const requested = languageClass?.slice("language-".length) ?? "";
+      const languageClass = classList(code).find((name) => name.startsWith('language-'));
+      const requested = languageClass?.slice('language-'.length) ?? '';
       const lang = (SHIKI_LANGS as readonly string[]).includes(requested)
         ? requested
         : FALLBACK_LANG;
 
-      const source = toPlainText(code).replace(/\n$/, "");
+      const source = toPlainText(code).replace(/\n$/, '');
       const highlighted = highlighter.codeToHast(source, {
         lang,
         theme: SHIKI_THEME,
       });
-      const shikiPre = highlighted.children.find((child) =>
-        isElement(child, "pre"),
-      ) as Element | undefined;
-      const shikiCode = shikiPre?.children.find((child) =>
-        isElement(child, "code"),
-      ) as Element | undefined;
-      if (!shikiPre || !shikiCode) continue;
+      const shikiPre = highlighted.children.find((child) => isElement(child, 'pre')) as
+        | Element
+        | undefined;
+      const shikiCode = shikiPre?.children.find((child) => isElement(child, 'code')) as
+        | Element
+        | undefined;
+      if (!shikiPre || !shikiCode) {
+        continue;
+      }
 
-      const meta = code.properties?.["data-meta"];
+      const meta = code.properties?.['data-meta'];
 
       pre.properties = {
         className: [MD_CLASS.code],
-        ...(typeof meta === "string" && meta ? { title: meta } : {}),
+        ...(typeof meta === 'string' && meta ? { title: meta } : {}),
       };
       pre.children = [
         {
-          type: "element",
-          tagName: "div",
+          type: 'element',
+          tagName: 'div',
           properties: {
             className: [MD_CLASS.codeContainer],
-            "data-language": requested || FALLBACK_LANG,
+            'data-language': requested || FALLBACK_LANG,
             style: shikiPre.properties?.style,
           },
           children: [
             {
-              type: "element",
-              tagName: "div",
+              type: 'element',
+              tagName: 'div',
               properties: { className: [MD_CLASS.codeBody] },
               children: [shikiCode],
             },
@@ -136,8 +141,8 @@ function rehypeCodeBlock() {
 }
 
 function toPlainText(node: Element): string {
-  let out = "";
-  visit(node, "text", (text) => {
+  let out = '';
+  visit(node, 'text', (text) => {
     out += text.value;
   });
   return out;
@@ -153,21 +158,27 @@ const LOCAL_IMAGE_RE = /^\.\/images\/([^/]+)$/;
  */
 function rehypeImages(images: ImageManifest) {
   return (tree: HastRoot) => {
-    visit(tree, "element", (node) => {
-      if (node.tagName !== "img") return;
+    visit(tree, 'element', (node) => {
+      if (node.tagName !== 'img') {
+        return;
+      }
       const src = node.properties?.src;
-      const name = typeof src === "string" ? LOCAL_IMAGE_RE.exec(src)?.[1] : "";
-      if (!name) return;
+      const name = typeof src === 'string' ? LOCAL_IMAGE_RE.exec(src)?.[1] : '';
+      if (!name) {
+        return;
+      }
 
       const asset = images[name];
-      if (!asset) throw new Error(`이미지 매니페스트에 없음: ${src}`);
+      if (!asset) {
+        throw new Error(`이미지 매니페스트에 없음: ${src}`);
+      }
       node.properties = {
         ...node.properties,
         src: asset.url,
         width: asset.width,
         height: asset.height,
-        loading: "lazy",
-        decoding: "async",
+        loading: 'lazy',
+        decoding: 'async',
       };
     });
   };
@@ -176,12 +187,16 @@ function rehypeImages(images: ImageManifest) {
 /** 이미지를 `<span class="md-figure">` 로 감싼다(이전 PostContent 의 img 렌더러와 동일). */
 function rehypeWrapImages() {
   return (tree: HastRoot) => {
-    visit(tree, "element", (node, index, parent) => {
-      if (node.tagName !== "img" || !parent || index === undefined) return;
-      if (isElement(parent as RootContent, "span")) return;
+    visit(tree, 'element', (node, index, parent) => {
+      if (node.tagName !== 'img' || !parent || index === undefined) {
+        return;
+      }
+      if (isElement(parent as RootContent, 'span')) {
+        return;
+      }
       parent.children[index] = {
-        type: "element",
-        tagName: "span",
+        type: 'element',
+        tagName: 'span',
         properties: { className: [MD_CLASS.figure] },
         children: [node],
       };
@@ -195,36 +210,40 @@ function rehypeWrapImages() {
  */
 function rehypeGithubIconLink() {
   return (tree: HastRoot) => {
-    visit(tree, "element", (node) => {
-      if (node.tagName !== "a") return;
-      const href = node.properties?.href;
-      if (typeof href !== "string" || !/^https:\/\/github\.com\//.test(href)) {
+    visit(tree, 'element', (node) => {
+      if (node.tagName !== 'a') {
         return;
       }
-      if (toPlainText(node).trim().toLowerCase() !== "github") return;
+      const href = node.properties?.href;
+      if (typeof href !== 'string' || !/^https:\/\/github\.com\//.test(href)) {
+        return;
+      }
+      if (toPlainText(node).trim().toLowerCase() !== 'github') {
+        return;
+      }
 
       node.properties = {
         ...node.properties,
         className: [...classList(node), MD_CLASS.iconLink],
-        "aria-label": "GitHub repository",
+        'aria-label': 'GitHub repository',
       };
       node.children = [
         {
-          type: "element",
-          tagName: "svg",
+          type: 'element',
+          tagName: 'svg',
           properties: {
             className: [MD_CLASS.icon],
             viewBox: GITHUB_ICON_VIEWBOX,
-            "aria-label": "github",
+            'aria-label': 'github',
           },
           children: [
             {
-              type: "element",
-              tagName: "path",
+              type: 'element',
+              tagName: 'path',
               properties: {
                 d: GITHUB_ICON_PATH,
-                fill: "currentColor",
-                fillRule: "nonzero",
+                fill: 'currentColor',
+                fillRule: 'nonzero',
               },
               children: [],
             },

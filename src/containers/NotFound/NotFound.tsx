@@ -1,5 +1,5 @@
-import Wrapper from "@/components/Wrapper";
-import { css } from "@/lib/css";
+import Wrapper from '@/components/Wrapper';
+import { css } from '@/lib/css';
 
 const container = css`
   display: flex;
@@ -52,9 +52,7 @@ const NotFound = () => (
   <Wrapper className={container}>
     <p className={code}>404</p>
     <h1 className={title}>페이지를 찾을 수 없습니다</h1>
-    <p className={description}>
-      요청하신 페이지가 이동되었거나 더 이상 존재하지 않습니다.
-    </p>
+    <p className={description}>요청하신 페이지가 이동되었거나 더 이상 존재하지 않습니다.</p>
     <a href="/" className={home}>
       ← 홈으로 돌아가기
     </a>

@@ -1,7 +1,7 @@
-import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vite';
 
-const src = fileURLToPath(new URL("./src", import.meta.url));
+const src = fileURLToPath(new URL('./src', import.meta.url));
 
 /**
  * SSR 전용 빌드. 결과 번들(`dist-ssr/app.js`)을 `scripts/ssg.mjs` 가 불러
@@ -13,21 +13,21 @@ const src = fileURLToPath(new URL("./src", import.meta.url));
  */
 export default defineConfig({
   resolve: {
-    alias: { "@": src },
+    alias: { '@': src },
   },
   build: {
     ssr: true,
-    outDir: "dist-ssr",
+    outDir: 'dist-ssr',
     emptyOutDir: true,
     copyPublicDir: false,
     rollupOptions: {
       input: {
-        app: "src/app.tsx",
-        og: "src/build/og.ts",
-        images: "src/build/images.ts",
+        app: 'src/app.tsx',
+        og: 'src/build/og.ts',
+        images: 'src/build/images.ts',
       },
       output: {
-        entryFileNames: "[name].js",
+        entryFileNames: '[name].js',
       },
     },
   },

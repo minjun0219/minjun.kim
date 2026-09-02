@@ -1,7 +1,7 @@
-import PostExcerpt from "@/components/PostExcerpt";
-import Wrapper from "@/components/Wrapper";
-import { getPostListing } from "@/lib/blog";
-import { css } from "@/lib/css";
+import PostExcerpt from '@/components/PostExcerpt';
+import Wrapper from '@/components/Wrapper';
+import { getPostListing } from '@/lib/blog';
+import { css } from '@/lib/css';
 
 const footer = css`
   margin-top: 3em;
@@ -47,11 +47,7 @@ const Posts = () => {
         />
       ))}
       <footer className={footer}>
-        <a
-          href="/posts/feed.xml"
-          className={feedLink}
-          aria-label="RSS 피드 구독"
-        >
+        <a href="/posts/feed.xml" className={feedLink} aria-label="RSS 피드 구독">
           <svg
             className={feedIcon}
             width="14"

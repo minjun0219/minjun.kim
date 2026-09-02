@@ -1,1 +1,1 @@
-export { default } from "./NoFlashThemeScript";
+export { default } from './NoFlashThemeScript';

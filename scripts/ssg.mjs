@@ -1,10 +1,10 @@
-import fsPromises, { cp, mkdir, readdir, readFile, rm } from "node:fs/promises";
-import { join } from "node:path";
-import { toSSG } from "hono/ssg";
+import fsPromises, { cp, mkdir, readdir, readFile, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import { toSSG } from 'hono/ssg';
 
-const OUT_DIR = "dist";
-const SSR_DIR = "dist-ssr";
-const CLIENT_DIR = "dist-client";
+const OUT_DIR = 'dist';
+const SSR_DIR = 'dist-ssr';
+const CLIENT_DIR = 'dist-client';
 
 /**
  * htmx 본체와 확장은 CDN 대신 직접 번들해 서빙한다.
@@ -15,9 +15,9 @@ const CLIENT_DIR = "dist-client";
  * 새 확장이 옛 코어 위에 얹혀 깨진다. immutable 은 URL 이 내용에 고정될 때만 안전하다.
  */
 const VENDOR_SOURCES = [
-  "htmx.org/dist/htmx.min.js",
-  "htmx.org/dist/ext/hx-preload.min.js",
-  "htmx.org/dist/ext/hx-head.min.js",
+  'htmx.org/dist/htmx.min.js',
+  'htmx.org/dist/ext/hx-preload.min.js',
+  'htmx.org/dist/ext/hx-head.min.js',
 ];
 
 /**
@@ -30,26 +30,28 @@ const VENDOR_SOURCES = [
 async function assertInlineStyles(dir) {
   const problems = [];
   for (const file of await listHtmlFiles(dir)) {
-    const html = await readFile(file, "utf8");
+    const html = await readFile(file, 'utf8');
     const styles = html.match(/<style id="hono-css">[\s\S]*?<\/style>/g) ?? [];
     if (styles.length !== 1) {
       problems.push(`${file}: <style id="hono-css"> 가 ${styles.length}개`);
       continue;
     }
-    if (styles[0].includes("\n")) {
+    if (styles[0].includes('\n')) {
       problems.push(`${file}: 인라인 스타일에 개행 — 전역 블록이 깨졌다`);
     }
     for (const bad of [
-      ":-hono-global",
+      ':-hono-global',
       "#hono-css')",
       '<link rel="stylesheet"',
-      "undefined</style>",
+      'undefined</style>',
     ]) {
-      if (html.includes(bad)) problems.push(`${file}: "${bad}" 발견`);
+      if (html.includes(bad)) {
+        problems.push(`${file}: "${bad}" 발견`);
+      }
     }
   }
   if (problems.length > 0) {
-    throw new Error(`인라인 스타일 단언 실패:\n${problems.join("\n")}`);
+    throw new Error(`인라인 스타일 단언 실패:\n${problems.join('\n')}`);
   }
 }
 
@@ -57,49 +59,52 @@ async function listHtmlFiles(dir) {
   const out = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...(await listHtmlFiles(path)));
-    else if (entry.name.endsWith(".html")) out.push(path);
+    if (entry.isDirectory()) {
+      out.push(...(await listHtmlFiles(path)));
+    } else if (entry.name.endsWith('.html')) {
+      out.push(path);
+    }
   }
   return out;
 }
 
 async function findClientEntry() {
-  const manifest = JSON.parse(
-    await readFile(join(CLIENT_DIR, ".vite", "manifest.json"), "utf8"),
-  );
+  const manifest = JSON.parse(await readFile(join(CLIENT_DIR, '.vite', 'manifest.json'), 'utf8'));
   const entry = Object.values(manifest).find((chunk) => chunk.isEntry);
-  if (!entry) throw new Error("클라이언트 매니페스트에서 엔트리를 찾지 못했다");
+  if (!entry) {
+    throw new Error('클라이언트 매니페스트에서 엔트리를 찾지 못했다');
+  }
   return entry.file;
 }
 
 async function main() {
   await rm(OUT_DIR, { recursive: true, force: true });
-  await mkdir(join(OUT_DIR, "assets"), { recursive: true });
-  await mkdir(join(OUT_DIR, "vendor"), { recursive: true });
+  await mkdir(join(OUT_DIR, 'assets'), { recursive: true });
+  await mkdir(join(OUT_DIR, 'vendor'), { recursive: true });
 
   // 정적 자산: public/ → dist/
-  await cp("public", OUT_DIR, { recursive: true });
+  await cp('public', OUT_DIR, { recursive: true });
 
   const { buildImageManifest } = await import(`../${SSR_DIR}/images.js`);
   const images = await buildImageManifest(OUT_DIR);
   console.log(`글 이미지 ${Object.keys(images).length}개 변환`);
 
   const clientEntry = await findClientEntry();
-  await cp(join(CLIENT_DIR, "assets"), join(OUT_DIR, "assets"), {
+  await cp(join(CLIENT_DIR, 'assets'), join(OUT_DIR, 'assets'), {
     recursive: true,
   });
 
   const htmxVersion = JSON.parse(
-    await readFile("node_modules/htmx.org/package.json", "utf8"),
+    await readFile('node_modules/htmx.org/package.json', 'utf8'),
   ).version;
   const vendorScriptSrcs = [];
   for (const from of VENDOR_SOURCES) {
     const base = from
-      .split("/")
+      .split('/')
       .pop()
-      .replace(/\.min\.js$/, "");
+      .replace(/\.min\.js$/, '');
     const to = `${base}-${htmxVersion}.min.js`;
-    await cp(join("node_modules", from), join(OUT_DIR, "vendor", to));
+    await cp(join('node_modules', from), join(OUT_DIR, 'vendor', to));
     vendorScriptSrcs.push(`/vendor/${to}`);
   }
 
@@ -114,10 +119,10 @@ async function main() {
     dir: OUT_DIR,
     // 기본 맵을 통째로 대체하므로 text/html 도 직접 넣어야 한다(빠뜨리면 .htm 으로 떨어진다).
     extensionMap: {
-      "text/html": "html",
-      "application/rss+xml": "xml",
-      "application/xml": "xml",
-      "text/plain": "txt",
+      'text/html': 'html',
+      'application/rss+xml': 'xml',
+      'application/xml': 'xml',
+      'text/plain': 'txt',
     },
   });
 

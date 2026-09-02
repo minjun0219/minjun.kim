@@ -1,5 +1,5 @@
-import type { ClassName } from "@/lib/css";
-import { GITHUB_ICON_PATH, GITHUB_ICON_VIEWBOX } from "./githubIconPath";
+import type { ClassName } from '@/lib/css';
+import { GITHUB_ICON_PATH, GITHUB_ICON_VIEWBOX } from './githubIconPath';
 
 export type Props = {
   className?: ClassName;
@@ -11,6 +11,6 @@ export const GithubIcon = (props: Props) => (
   </svg>
 );
 
-GithubIcon.displayName = "GithubIcon";
+GithubIcon.displayName = 'GithubIcon';
 
 export default GithubIcon;

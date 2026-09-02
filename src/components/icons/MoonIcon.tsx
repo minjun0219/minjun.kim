@@ -1,4 +1,4 @@
-import type { ClassName } from "@/lib/css";
+import type { ClassName } from '@/lib/css';
 
 export type Props = {
   className?: ClassName;
@@ -10,6 +10,6 @@ export const MoonIcon = (props: Props) => (
   </svg>
 );
 
-MoonIcon.displayName = "MoonIcon";
+MoonIcon.displayName = 'MoonIcon';
 
 export default MoonIcon;

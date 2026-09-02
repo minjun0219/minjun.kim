@@ -1,6 +1,6 @@
-import Logo from "@/components/Logo";
-import SocialLink from "@/components/SocialLink";
-import { css } from "@/lib/css";
+import Logo from '@/components/Logo';
+import SocialLink from '@/components/SocialLink';
+import { css } from '@/lib/css';
 
 const spaced = css`
   margin: 20px;

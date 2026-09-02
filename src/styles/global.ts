@@ -1,4 +1,4 @@
-import { css } from "@/lib/css";
+import { css } from '@/lib/css';
 
 /**
  * 전역 스타일. `:-hono-global` 로 감싸면 hono/css 가 클래스 스코프 없이 그대로 방출한다.

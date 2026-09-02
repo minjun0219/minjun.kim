@@ -5,7 +5,7 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_URL,
-} from "./siteConfig";
+} from './siteConfig';
 
 export type PageMeta = {
   /** 페이지 제목. 없으면 사이트명만 쓴다(홈). */
@@ -13,7 +13,7 @@ export type PageMeta = {
   description?: string;
   /** canonical 계산에 쓰는 사이트 내부 경로 */
   path: string;
-  ogType?: "website" | "article";
+  ogType?: 'website' | 'article';
   /** 루트 기준 경로. 없으면 사이트 기본 OG 이미지 */
   ogImage?: string;
   noindex?: boolean;
@@ -28,7 +28,7 @@ export type ResolvedMeta = {
   title: string;
   description: string;
   canonical: string;
-  ogType: "website" | "article";
+  ogType: 'website' | 'article';
   ogImage: string;
   noindex: boolean;
   publishedTime?: string;
@@ -50,7 +50,7 @@ export function resolveMeta(meta: PageMeta): ResolvedMeta {
     title,
     description: meta.description ?? SITE_DESCRIPTION,
     canonical: absoluteUrl(meta.path),
-    ogType: meta.ogType ?? "website",
+    ogType: meta.ogType ?? 'website',
     ogImage: absoluteUrl(meta.ogImage ?? DEFAULT_OG_IMAGE),
     noindex: meta.noindex ?? false,
     publishedTime: meta.publishedTime,

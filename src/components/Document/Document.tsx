@@ -1,15 +1,9 @@
-import type { Child } from "hono/jsx";
-import NoFlashThemeScript from "@/components/NoFlashThemeScript";
-import type { BuildAssets } from "@/lib/build";
-import { Style } from "@/lib/css";
-import {
-  AUTHOR_NAME,
-  LOCALE,
-  type ResolvedMeta,
-  SITE_NAME,
-  SITE_URL,
-} from "@/lib/meta";
-import { globalCss } from "@/styles/global";
+import type { Child } from 'hono/jsx';
+import NoFlashThemeScript from '@/components/NoFlashThemeScript';
+import type { BuildAssets } from '@/lib/build';
+import { Style } from '@/lib/css';
+import { AUTHOR_NAME, LOCALE, type ResolvedMeta, SITE_NAME, SITE_URL } from '@/lib/meta';
+import { globalCss } from '@/styles/global';
 
 type Props = {
   meta: ResolvedMeta;
@@ -47,9 +41,7 @@ export const Document = ({ meta, pageId, build, children }: Props) => {
         <title>{meta.documentTitle}</title>
         <meta name="description" content={meta.description} />
         <link rel="canonical" href={meta.canonical} />
-        {meta.noindex ? (
-          <meta name="robots" content="noindex, nofollow" />
-        ) : null}
+        {meta.noindex ? <meta name="robots" content="noindex, nofollow" /> : null}
         {pageId ? <meta name="x-page-id" content={pageId} /> : null}
 
         <meta name="application-name" content={SITE_NAME} />
@@ -68,15 +60,10 @@ export const Document = ({ meta, pageId, build, children }: Props) => {
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={meta.title} />
         {meta.publishedTime ? (
-          <meta
-            property="article:published_time"
-            content={meta.publishedTime}
-          />
+          <meta property="article:published_time" content={meta.publishedTime} />
         ) : null}
-        {meta.ogType === "article"
-          ? meta.authors.map((name) => (
-              <meta key={name} property="article:author" content={name} />
-            ))
+        {meta.ogType === 'article'
+          ? meta.authors.map((name) => <meta key={name} property="article:author" content={name} />)
           : null}
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -86,18 +73,8 @@ export const Document = ({ meta, pageId, build, children }: Props) => {
 
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link
-          rel="icon"
-          href="/favicon-16.png"
-          type="image/png"
-          sizes="16x16"
-        />
-        <link
-          rel="icon"
-          href="/favicon-32.png"
-          type="image/png"
-          sizes="32x32"
-        />
+        <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
+        <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
         <link
           rel="alternate"
           type="application/rss+xml"
@@ -120,10 +97,7 @@ export const Document = ({ meta, pageId, build, children }: Props) => {
 
         {/* preload 기본 트리거는 mousedown+touchstart 인데, 이 사이트는 Next.js Link 의
             hover prefetch 를 대체하는 게 목적이라 mouseover 로 되돌린다. */}
-        <meta
-          name="htmx-config"
-          content='{"preload":{"boostEvent":"mouseover"}}'
-        />
+        <meta name="htmx-config" content='{"preload":{"boostEvent":"mouseover"}}' />
 
         <NoFlashThemeScript />
         {build.vendorScriptSrcs.map((src) => (

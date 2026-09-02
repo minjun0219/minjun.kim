@@ -128,7 +128,7 @@ hono 4.13 소스·실행으로 확인한 규칙 — 어기면 대부분 **에러
 `width`/`height`(CLS 방지)/`loading="lazy"` 로 바꾸며, 매니페스트에 없는 참조는 빌드 실패다.
 옛 절대 경로(`/images/posts/…`)는 의도적으로 살리지 않았다(404).
 
-RSS 본문만은 별도로 `markdownToHtml`(remark-html, sanitize)을 쓴다. 피드 출력이 바뀌면 구독자에게
+RSS 본문만은 별도로 `markdownToHtml`(remark-rehype + rehype-sanitize)을 쓴다. 피드 출력이 바뀌면 구독자에게
 영향이 가서 이전 사이트와 같게 유지한다 — 이미지만 `resolveImagePaths()` 가 페이지와 같은 webp 의
 절대 URL 로 바꿔 내보낸다(리더는 상대 경로를 잘못 해석한다).
 

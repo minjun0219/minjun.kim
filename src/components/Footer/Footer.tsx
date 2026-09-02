@@ -1,4 +1,4 @@
-import { type ClassName, css, cx } from "@/lib/css";
+import { type ClassName, css, cx } from '@/lib/css';
 
 const root = css`
   margin-top: 3em;

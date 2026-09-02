@@ -1,4 +1,4 @@
-import type { ImageManifest } from "@/lib/images";
+import type { ImageManifest } from '@/lib/images';
 
 /**
  * 빌드가 정적 생성 직전에 앱에 넘기는 산출물 정보.

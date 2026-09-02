@@ -1,6 +1,6 @@
-import PostArticle from "@/components/PostArticle";
-import Wrapper from "@/components/Wrapper";
-import { css } from "@/lib/css";
+import PostArticle from '@/components/PostArticle';
+import Wrapper from '@/components/Wrapper';
+import { css } from '@/lib/css';
 
 const root = css`
   margin: 3em auto 5em;
@@ -17,12 +17,7 @@ type Props = {
 const Post = ({ title, html, date, mediumUrl }: Props) => {
   return (
     <Wrapper className={root}>
-      <PostArticle
-        title={title}
-        html={html}
-        date={date}
-        mediumUrl={mediumUrl}
-      />
+      <PostArticle title={title} html={html} date={date} mediumUrl={mediumUrl} />
     </Wrapper>
   );
 };

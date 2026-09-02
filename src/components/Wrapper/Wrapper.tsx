@@ -1,5 +1,5 @@
-import type { Child } from "hono/jsx";
-import { type ClassName, css, cx } from "@/lib/css";
+import type { Child } from 'hono/jsx';
+import { type ClassName, css, cx } from '@/lib/css';
 
 const root = css`
   margin: 0 auto;

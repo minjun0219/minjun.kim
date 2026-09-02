@@ -1,4 +1,4 @@
-import type { ClassName } from "@/lib/css";
+import type { ClassName } from '@/lib/css';
 
 export type Props = {
   className?: ClassName;
@@ -10,6 +10,6 @@ export const InstagramIcon = (props: Props) => (
   </svg>
 );
 
-InstagramIcon.displayName = "InstagramIcon";
+InstagramIcon.displayName = 'InstagramIcon';
 
 export default InstagramIcon;

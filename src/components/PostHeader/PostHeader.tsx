@@ -1,6 +1,6 @@
-import type { Child } from "hono/jsx";
-import { type ClassName, css, cx } from "@/lib/css";
-import { isInternalHref } from "@/lib/htmx";
+import type { Child } from 'hono/jsx';
+import { type ClassName, css, cx } from '@/lib/css';
+import { isInternalHref } from '@/lib/htmx';
 
 const root = css`
   margin: 3em 0 2em;
@@ -109,9 +109,7 @@ const PostHeader = ({
   className,
   compact,
 }: Props) => {
-  const created = new Intl.DateTimeFormat("ko-KR", { timeZone: "UTC" }).format(
-    new Date(date),
-  );
+  const created = new Intl.DateTimeFormat('ko-KR', { timeZone: 'UTC' }).format(new Date(date));
 
   return (
     <div className={cx(root, className)}>
@@ -128,18 +126,13 @@ const PostHeader = ({
         <span>{created}</span>
         {source ? (
           <>
-            {" "}
+            {' '}
             • <span>{source}</span>
           </>
         ) : null}
       </div>
       {mediumUrl ? (
-        <a
-          className={mediumLink}
-          href={mediumUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a className={mediumLink} href={mediumUrl} target="_blank" rel="noopener noreferrer">
           Medium에서 보기
           <ExternalLinkIcon className={mediumLinkIcon} />
         </a>

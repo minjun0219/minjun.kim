@@ -1,12 +1,12 @@
-import AdjustIcon from "@/components/icons/AdjustIcon";
-import GithubIcon from "@/components/icons/GithubIcon";
-import InstagramIcon from "@/components/icons/InstagramIcon";
-import LinkedinIcon from "@/components/icons/LinkedinIcon";
-import MoonIcon from "@/components/icons/MoonIcon";
-import SunIcon from "@/components/icons/SunIcon";
-import Logo from "@/components/Logo";
-import Wrapper from "@/components/Wrapper";
-import { css, cx } from "@/lib/css";
+import AdjustIcon from '@/components/icons/AdjustIcon';
+import GithubIcon from '@/components/icons/GithubIcon';
+import InstagramIcon from '@/components/icons/InstagramIcon';
+import LinkedinIcon from '@/components/icons/LinkedinIcon';
+import MoonIcon from '@/components/icons/MoonIcon';
+import SunIcon from '@/components/icons/SunIcon';
+import Logo from '@/components/Logo';
+import Wrapper from '@/components/Wrapper';
+import { css, cx } from '@/lib/css';
 
 const container = css`
   display: flex;
@@ -85,12 +85,7 @@ export const Header = () => {
         <div>
           {/* 토글 동작은 src/client/main.ts 가 document 위임으로 처리한다.
               hx-boost 가 body 를 통째로 교체하므로 요소에 직접 건 리스너는 살아남지 못한다. */}
-          <button
-            type="button"
-            className={mode}
-            data-theme-toggle
-            aria-label="toggle theme"
-          >
+          <button type="button" className={mode} data-theme-toggle aria-label="toggle theme">
             <AdjustIcon className={cx(icon, iconSystem)} />
             <SunIcon className={cx(icon, iconLight)} />
             <MoonIcon className={cx(icon, iconDark)} />
