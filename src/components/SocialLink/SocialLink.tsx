@@ -1,13 +1,71 @@
-import cx from "classnames";
+import { type ClassName, css, cx } from "@/lib/css";
 
-import styles from "./SocialLink.module.css";
+const root = css`
+  margin: 0;
+  padding: 0;
+
+  &::after {
+    clear: both;
+    display: block;
+    content: "";
+  }
+
+  & li {
+    list-style: none;
+    float: left;
+  }
+
+  & li::after {
+    content: "|";
+    margin: 0 5px;
+  }
+
+  & li:last-child::after {
+    content: none;
+  }
+
+  & span,
+  & li::after {
+    color: var(--text-secondary-color);
+    opacity: 0.5;
+  }
+
+  & a:link,
+  & a:visited {
+    color: var(--text-secondary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  & a:hover,
+  & a:focus {
+    color: var(--text-color);
+  }
+
+  & a:active {
+    text-decoration: underline;
+  }
+
+  & a > span {
+    display: none;
+  }
+
+  & a > span::before {
+    content: " ";
+  }
+
+  & a:hover > span,
+  & a:focus > span {
+    display: inline;
+  }
+`;
 
 export type Props = {
-  className?: string;
+  className?: ClassName;
 };
 
 export const SocialLink = ({ className }: Props) => (
-  <ul className={cx(styles.links, className)}>
+  <ul className={cx(root, className)}>
     <li>
       <a href="/resume">Resume</a>
     </li>
