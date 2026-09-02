@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import type { Child } from 'hono/jsx';
 import { ssgParams } from 'hono/ssg';
-import Document from '@/components/Document';
+import Document, { type Props as DocumentProps } from '@/components/Document';
 import Layout from '@/components/Layout';
 import Home from '@/containers/Home';
 import NotFound from '@/containers/NotFound';
@@ -24,9 +24,11 @@ import { renderSitemap } from '@/lib/seo/sitemap';
 export function createApp(build: BuildAssets) {
   const app = new Hono();
 
-  function page(meta: PageMeta, body: Child, pageId?: string) {
+  type PageOptions = Pick<DocumentProps, 'pageId' | 'preloadImages'>;
+
+  function page(meta: PageMeta, body: Child, options: PageOptions = {}) {
     return (
-      <Document meta={resolveMeta(meta)} pageId={pageId} build={build}>
+      <Document meta={resolveMeta(meta)} build={build} {...options}>
         {body}
       </Document>
     );
@@ -47,7 +49,7 @@ export function createApp(build: BuildAssets) {
 
   app.get('/resume', async (c) => {
     const { content, updatedAt } = getResume();
-    const html = await renderPostHtml(content, build);
+    const { html } = await renderPostHtml(content, build);
 
     return c.html(
       page(
@@ -72,7 +74,7 @@ export function createApp(build: BuildAssets) {
     async (c) => {
       const slug = c.req.param('slug');
       const post = getPostBySlug(slug);
-      const [html, description] = await Promise.all([
+      const [{ html, images }, description] = await Promise.all([
         renderPostHtml(post.content, build),
         getExcerpt(post.content),
       ]);
@@ -91,6 +93,7 @@ export function createApp(build: BuildAssets) {
           <Layout>
             <Post title={post.title} date={post.date} html={html} mediumUrl={post.mediumUrl} />
           </Layout>,
+          { preloadImages: images },
         ),
       );
     },
@@ -108,7 +111,7 @@ export function createApp(build: BuildAssets) {
         <Layout>
           <NotFound />
         </Layout>,
-        'not-found',
+        { pageId: 'not-found' },
       ),
     ),
   );

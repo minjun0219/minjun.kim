@@ -99,10 +99,31 @@ async function prefetchPage(pathname: string) {
   try {
     // 응답 본문을 끝까지 읽어야 브라우저가 캐시에 확실히 남긴다.
     const response = await fetch(pathname, { priority: 'low' });
-    await response.arrayBuffer();
+    prefetchImages(await response.text());
   } catch {
     // 선요청 실패는 무시한다 — 클릭 시 정상 요청으로 간다.
     prefetchedUrls.delete(pathname);
+  }
+}
+
+// 받아 둔 HTML 의 `<link rel="preload" as="image">` 를 읽어 글 이미지도 미리 받는다.
+// 옛 Next.js 사이트는 RSC 프리페치에 이 힌트가 실려 와 클릭 전에 이미지까지 캐시에 있었다.
+// DOMParser 문서는 리소스를 스스로 로드하지 않으므로 off-DOM `<img>` 로 요청을 낸다 —
+// 브라우저가 srcset/sizes 후보를 실제 렌더와 똑같이 고르고, `/images/*` 는 immutable 이라
+// 캐시가 그대로 재사용된다.
+function prefetchImages(html: string) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  for (const link of doc.querySelectorAll<HTMLLinkElement>('link[rel="preload"][as="image"]')) {
+    const href = link.getAttribute('href');
+    if (!href || prefetchedUrls.has(href)) {
+      continue;
+    }
+    prefetchedUrls.add(href);
+    const image = new Image();
+    image.fetchPriority = 'low';
+    image.sizes = link.getAttribute('imagesizes') ?? '';
+    image.srcset = link.getAttribute('imagesrcset') ?? '';
+    image.src = href;
   }
 }
 
@@ -115,7 +136,7 @@ function initViewportPrefetch() {
     return;
   }
 
-  const dwellTimers = new WeakMap<Element, number>();
+  const dwellTimers = new Map<Element, number>();
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       const anchor = entry.target as HTMLAnchorElement;
@@ -139,8 +160,12 @@ function initViewportPrefetch() {
   });
 
   const observeLinks = () => {
-    // 스왑으로 떨어져 나간 옛 앵커는 관찰을 끊고 새 본문의 링크를 다시 건다.
+    // 스왑으로 떨어져 나간 옛 앵커는 관찰을 끊고(체류 타이머 포함) 새 본문의 링크를 다시 건다.
     observer.disconnect();
+    for (const timer of dwellTimers.values()) {
+      clearTimeout(timer);
+    }
+    dwellTimers.clear();
     for (const anchor of document.querySelectorAll<HTMLAnchorElement>('a[href]')) {
       if (isPrefetchableLink(anchor)) {
         observer.observe(anchor);

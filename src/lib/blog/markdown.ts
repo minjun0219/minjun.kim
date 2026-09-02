@@ -8,7 +8,7 @@ import { createHighlighter, type Highlighter } from 'shiki';
 import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 import { GITHUB_ICON_PATH, GITHUB_ICON_VIEWBOX } from '@/components/icons/githubIconPath';
-import type { ImageManifest } from '@/lib/images';
+import type { ImageAsset, ImageManifest } from '@/lib/images';
 import { MD_CLASS } from './markdownClassNames';
 
 /** VS Code 기본 다크. 이전 prism-react-renderer `themes.vsDark` 에 가장 가깝다. */
@@ -152,11 +152,37 @@ function toPlainText(node: Element): string {
 const LOCAL_IMAGE_RE = /^\.\/images\/([^/]+)$/;
 
 /**
- * `./images/<name>` 을 빌드가 변환한 webp 로 바꾸고 width/height(CLS 방지)와
- * lazy 로딩을 붙인다. 매니페스트에 없는 참조는 빌드를 멈춘다 — 깨진 이미지가
- * 조용히 배포되지 않게.
+ * 본문 이미지의 최대 표시 폭(px). `PostContent` 의 figure 가 `--page-max-width`(700) 양쪽으로
+ * `--page-margin`(16) 만큼 삐져나오므로 700 + 16 × 2. 전역 CSS 값을 바꾸면 여기도 맞춘다.
  */
-function rehypeImages(images: ImageManifest) {
+const FIGURE_MAX_WIDTH = 732;
+
+/**
+ * `<img srcset>` / `<link rel="preload" imagesrcset>` 에 같은 문자열을 써야 브라우저가
+ * 같은 후보를 고른다. 축소본이 없으면(원본이 가장 작은 후보보다 작음) `undefined`.
+ */
+export function imageSrcset(asset: ImageAsset): string | undefined {
+  if (asset.variants.length < 2) {
+    return undefined;
+  }
+  return asset.variants.map((variant) => `${variant.url} ${variant.width}w`).join(', ');
+}
+
+/** 표시 폭은 `min(뷰포트, figure 최대 폭, 원본 폭)` — `max-width: 100%` 라 원본보다 커지지 않는다. */
+export function imageSizes(asset: ImageAsset): string {
+  const maxWidth = Math.min(FIGURE_MAX_WIDTH, asset.width);
+  return `(max-width: ${maxWidth}px) 100vw, ${maxWidth}px`;
+}
+
+/**
+ * `./images/<name>` 을 빌드가 변환한 webp 로 바꾸고 width/height(CLS 방지)와
+ * `srcset`/`sizes` 를 붙인다. 매니페스트에 없는 참조는 빌드를 멈춘다 — 깨진 이미지가
+ * 조용히 배포되지 않게. 참조한 자산은 `used` 에 문서 순서로 쌓인다(head preload 용).
+ *
+ * `loading="lazy"` 는 일부러 안 건다 — 글마다 이미지가 한두 장이라 전부 preload 하는데,
+ * lazy 는 preload scanner 를 타지 않아 레이아웃 뒤에야 요청이 시작된다.
+ */
+function rehypeImages(images: ImageManifest, used: ImageAsset[]) {
   return (tree: HastRoot) => {
     visit(tree, 'element', (node) => {
       if (node.tagName !== 'img') {
@@ -172,12 +198,17 @@ function rehypeImages(images: ImageManifest) {
       if (!asset) {
         throw new Error(`이미지 매니페스트에 없음: ${src}`);
       }
+      if (!used.includes(asset)) {
+        used.push(asset);
+      }
+      const srcset = imageSrcset(asset);
       node.properties = {
         ...node.properties,
         src: asset.url,
+        srcSet: srcset,
+        sizes: srcset ? imageSizes(asset) : undefined,
         width: asset.width,
         height: asset.height,
-        loading: 'lazy',
         decoding: 'async',
       };
     });
@@ -254,6 +285,12 @@ function rehypeGithubIconLink() {
   };
 }
 
+export type RenderedPost = {
+  html: string;
+  /** 본문이 참조한 글 이미지(문서 순서). `Document` 가 head 에서 preload 한다 */
+  images: ImageAsset[];
+};
+
 /**
  * 글 본문 마크다운을 HTML 로 변환한다. 하이라이팅이 빌드타임에 끝나므로
  * 클라이언트로 나가는 하이라이터 코드가 없다.
@@ -264,18 +301,19 @@ function rehypeGithubIconLink() {
 export async function renderPostHtml(
   markdown: string,
   { images }: { images: ImageManifest },
-): Promise<string> {
+): Promise<RenderedPost> {
+  const usedImages: ImageAsset[] = [];
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkForwardCodeMeta)
     .use(remarkRehype)
     .use(rehypeCodeBlock)
-    .use(rehypeImages, images)
+    .use(rehypeImages, images, usedImages)
     .use(rehypeWrapImages)
     .use(rehypeGithubIconLink)
     .use(rehypeStringify)
     .process(markdown);
 
-  return String(file);
+  return { html: String(file), images: usedImages };
 }

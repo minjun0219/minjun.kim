@@ -127,10 +127,18 @@ hono 4.13 소스·실행으로 확인한 규칙 — 어기면 대부분 **에러
 겨냥한다. rehype 와 스타일이 같은 상수를 쓰므로 이름이 어긋나지 않는다.
 
 **포스트 이미지는 `_posts/images/` 에 두고 마크다운에서 `./images/<name>` 로 참조한다.**
-`src/build/images.ts` 가 빌드 사전 패스로 sharp 로 webp 변환해 `dist/images/<name>-<hash8>.webp` 로
-쓰고 매니페스트(`src/lib/images.ts` 의 `ImageManifest`)를 돌려준다. `rehypeImages` 가 이를 `src`/
-`width`/`height`(CLS 방지)/`loading="lazy"` 로 바꾸며, 매니페스트에 없는 참조는 빌드 실패다.
+`src/build/images.ts` 가 빌드 사전 패스로 sharp 로 webp 변환해 `dist/images/<name>-<hash8>.webp`(원본
+크기)와 `<name>-<hash8>-w<width>.webp`(원본보다 작은 사다리 너비만, 업스케일 없음)로 쓰고
+매니페스트(`src/lib/images.ts` 의 `ImageManifest`)를 돌려준다. `rehypeImages` 가 이를 `src`/`srcset`/
+`sizes`/`width`/`height`(CLS 방지)로 바꾸며, 매니페스트에 없는 참조는 빌드 실패다. `sizes` 의 기준 폭
+`FIGURE_MAX_WIDTH`(732 = `--page-max-width` + `--page-margin`×2)는 전역 CSS 와 손으로 맞춘다.
 옛 절대 경로(`/images/posts/…`)는 의도적으로 살리지 않았다(404).
+
+**글 이미지는 lazy 가 아니라 preload 다.** `renderPostHtml` 이 본문이 참조한 자산을 돌려주고
+`Document` 가 `<link rel="preload" as="image" imagesrcset imagesizes>` 로 head 에 낸다(이전 Next.js
+사이트와 같은 동작). 클라이언트 선요청(`src/client/main.ts` `prefetchImages`)이 받아 둔 HTML 의 이
+링크를 읽어 off-DOM `<img>` 로 이미지까지 미리 받아 두므로, 클릭 시점엔 이미지가 이미 캐시에 있다.
+`<img>` 와 preload 의 `srcset`/`sizes` 문자열은 같아야 브라우저가 같은 후보를 고른다.
 
 RSS 본문만은 별도로 `markdownToHtml`(remark-rehype + rehype-sanitize)을 쓴다. 피드 출력이 바뀌면 구독자에게
 영향이 가서 이전 사이트와 같게 유지한다 — 이미지만 `resolveImagePaths()` 가 페이지와 같은 webp 의
@@ -156,7 +164,8 @@ htmx 4 에서 특히 주의할 점:
 - **뷰포트 선요청은 hx-preload 에 없다.** Next.js `<Link>` 의 뷰포트 prefetch 는 `src/client/main.ts`
   의 `initViewportPrefetch()` 가 IntersectionObserver + `fetch(…, { priority: "low" })` 로 HTTP 캐시를
   데워 대신한다(200ms 체류해야 요청, URL 당 1회, `saveData`/2g 면 끔, `htmx:after:swap` 마다 재관찰).
-  htmx 의 실제 요청이 같은 캐시를 타므로 응답에 `Vary` 가 없어야 한다.
+  받아 둔 HTML 의 이미지 preload 링크도 따라 받는다. htmx 의 실제 요청이 같은 캐시를 타므로 응답에
+  `Vary` 가 없어야 한다.
 - **non-2xx 도 기본 스왑된다**(`noSwap: [204, 304]`). htmx 2 에서 필요했던 404 스왑 우회 코드가
   htmx 4 에는 필요 없다.
 

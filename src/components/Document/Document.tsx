@@ -1,11 +1,13 @@
 import type { Child } from 'hono/jsx';
 import NoFlashThemeScript from '@/components/NoFlashThemeScript';
+import { imageSizes, imageSrcset } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
 import { Style } from '@/lib/css';
+import type { ImageAsset } from '@/lib/images';
 import { AUTHOR_NAME, LOCALE, type ResolvedMeta, SITE_NAME, SITE_URL } from '@/lib/meta';
 import { createGlobalCss } from '@/styles/global';
 
-type Props = {
+export type Props = {
   meta: ResolvedMeta;
   /**
    * 클라이언트에서 페이지 종류를 구분해야 할 때 쓰는 표식(예: 404 이벤트).
@@ -16,6 +18,12 @@ type Props = {
   pageId?: string;
   /** 스크립트 경로 — 빌드가 `createApp` 에 넘긴 것을 그대로 받는다. */
   build: BuildAssets;
+  /**
+   * 본문이 쓰는 글 이미지. `<link rel="preload" as="image">` 로 내서 본문 파싱보다 먼저
+   * 요청이 나가게 한다 — 이전 Next.js 사이트가 하던 것과 같다. 클라이언트 선요청
+   * (`src/client/main.ts`)도 이 링크를 읽어 클릭 전에 이미지까지 받아 둔다.
+   */
+  preloadImages?: ImageAsset[];
   children: Child;
 };
 
@@ -30,7 +38,7 @@ type Props = {
  * 암시적이지 않아 `hx-boost` 를 자손 링크에 물리려면 `:inherited` 를 붙여야 한다
  * (빠뜨리면 에러 없이 그냥 전체 새로고침으로 떨어진다).
  */
-export const Document = ({ meta, pageId, build, children }: Props) => {
+export const Document = ({ meta, pageId, build, preloadImages = [], children }: Props) => {
   const naverVerification = process.env.NAVER_SITE_VERIFICATION;
 
   return (
@@ -95,6 +103,16 @@ export const Document = ({ meta, pageId, build, children }: Props) => {
         />
         {/* hono/css 가 렌더 중 등록한 스타일을 이 자리에 splice 한다. child 는 정확히 하나여야 한다. */}
         <Style>{createGlobalCss(build.fontSrcs)}</Style>
+        {preloadImages.map((image) => (
+          <link
+            key={image.url}
+            rel="preload"
+            as="image"
+            href={image.url}
+            imagesrcset={imageSrcset(image)}
+            imagesizes={imageSrcset(image) ? imageSizes(image) : undefined}
+          />
+        ))}
 
         {/* preload 기본 트리거는 mousedown+touchstart 인데, 이 사이트는 Next.js Link 의
             hover prefetch 를 대체하는 게 목적이라 mouseover 로 되돌린다. 선요청 재사용 기한은
