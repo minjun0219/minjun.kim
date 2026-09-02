@@ -1,7 +1,8 @@
 import TopHeading from "@/components/TopHeading";
+import type { ClassName } from "@/lib/css";
 
 type Props = {
-  className?: string;
+  className?: ClassName;
   link?: boolean;
 };
 

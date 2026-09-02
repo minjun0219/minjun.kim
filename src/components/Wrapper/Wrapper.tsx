@@ -1,15 +1,21 @@
-import cx from "classnames";
 import type { Child } from "hono/jsx";
+import { type ClassName, css, cx } from "@/lib/css";
 
-import styles from "./Wrapper.module.css";
+const root = css`
+  margin: 0 auto;
+  padding-left: var(--page-margin);
+  padding-right: var(--page-margin);
+  max-width: var(--page-max-width);
+  box-sizing: content-box;
+`;
 
 export type Props = {
   children: Child;
-  className?: string;
+  className?: ClassName;
 };
 
 export const Wrapper = ({ children, className }: Props) => {
-  return <div className={cx(styles.wrapper, className)}>{children}</div>;
+  return <div className={cx(root, className)}>{children}</div>;
 };
 
 export default Wrapper;

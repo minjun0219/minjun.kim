@@ -1,7 +1,0 @@
-.wrapper {
-  margin: 0 auto;
-  padding-left: var(--page-margin);
-  padding-right: var(--page-margin);
-  max-width: var(--page-max-width);
-  box-sizing: content-box;
-}
