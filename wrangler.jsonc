@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "minjun-kim",
   "compatibility_date": "2026-08-28",
+  // 대시보드에서 붙인 커스텀 도메인을 코드에도 고정한다 — Workers Builds 배포가 같은 상태를 유지한다.
+  // www 는 커스텀 도메인이 아니라 DNS(A www → 192.0.2.0, proxied) + Redirect Rule 로 apex 에 301.
+  "routes": [{ "pattern": "minjun.kim", "custom_domain": true }],
   // Worker 스크립트 없이 정적 자산만 배포한다(`main` 없음).
   // 정적 자산 요청은 Worker 호출로 과금되지 않고, _redirects/_headers 가 그대로 적용된다.
   "assets": {

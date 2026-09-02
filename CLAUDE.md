@@ -186,6 +186,9 @@ htmx 4 는 공식 업그레이드 가이드와 체커를 패키지에 동봉한�
 ## Cloudflare Workers
 
 `wrangler.jsonc` 는 **assets-only** 배포다(`main` 없음). 정적 자산 요청은 Worker 호출로 과금되지 않는다.
+`minjun.kim` 은 `routes` 의 **custom domain** 으로 Worker 에 붙어 있다(DNS·인증서는 Cloudflare 가 관리).
+`www` 는 originless A 레코드(`192.0.2.0`, proxied) + Redirect Rule 로 apex 에 301 — 커스텀 도메인은
+호스트가 정확히 일치해야 해서 `www` 를 Worker 가 직접 받지 않는다.
 
 - `public/_headers` — **Cloudflare 기본 `Cache-Control` 은 `public, max-age=0, must-revalidate` 인데
   이러면 htmx preload 가 응답을 캐시에 남기지 못해 무력화된다.** HTML 에 짧은 `max-age` 를 주는 게
