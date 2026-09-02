@@ -1,5 +1,7 @@
+import type { ClassName } from "@/lib/css";
+
 export type Props = {
-  className?: string;
+  className?: ClassName;
 };
 
 export const InstagramIcon = (props: Props) => (
