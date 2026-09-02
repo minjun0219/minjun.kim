@@ -70,6 +70,88 @@ function initAnalytics() {
   document.addEventListener('htmx:after:history:push', capturePageview);
 }
 
+/* ------------------------------------------------------------ 뷰포트 선요청 */
+
+// hx-preload 는 hover/touch 만 다룬다. Next.js <Link> 처럼 뷰포트에 들어온 내부 링크도
+// 미리 받아 HTTP 캐시(HTML max-age=60)를 데워 둔다 — htmx 의 실제 요청이 같은 캐시를 탄다.
+// 잠깐 스쳐 가는 링크는 받지 않고(체류 시간 조건), 같은 URL 은 한 번만 받는다.
+const VIEWPORT_PREFETCH_DWELL_MS = 200;
+const prefetchedUrls = new Set<string>();
+
+type NetworkInformationLike = { saveData?: boolean; effectiveType?: string };
+
+function isPrefetchableLink(anchor: HTMLAnchorElement): boolean {
+  if (anchor.origin !== location.origin) {
+    return false;
+  }
+  if (anchor.target || anchor.hasAttribute('download')) {
+    return false;
+  }
+  // 현재 페이지, 해시 이동, 피드 같은 파일 링크는 제외
+  if (anchor.pathname === location.pathname || /\.[a-z0-9]+$/i.test(anchor.pathname)) {
+    return false;
+  }
+  return !prefetchedUrls.has(anchor.pathname);
+}
+
+async function prefetchPage(pathname: string) {
+  prefetchedUrls.add(pathname);
+  try {
+    // 응답 본문을 끝까지 읽어야 브라우저가 캐시에 확실히 남긴다.
+    const response = await fetch(pathname, { priority: 'low' });
+    await response.arrayBuffer();
+  } catch {
+    // 선요청 실패는 무시한다 — 클릭 시 정상 요청으로 간다.
+    prefetchedUrls.delete(pathname);
+  }
+}
+
+function initViewportPrefetch() {
+  if (!('IntersectionObserver' in window)) {
+    return;
+  }
+  const connection = (navigator as Navigator & { connection?: NetworkInformationLike }).connection;
+  if (connection?.saveData || connection?.effectiveType?.endsWith('2g')) {
+    return;
+  }
+
+  const dwellTimers = new WeakMap<Element, number>();
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const anchor = entry.target as HTMLAnchorElement;
+      const pending = dwellTimers.get(anchor);
+      if (pending) {
+        clearTimeout(pending);
+        dwellTimers.delete(anchor);
+      }
+      if (!entry.isIntersecting) {
+        continue;
+      }
+      const timer = window.setTimeout(() => {
+        dwellTimers.delete(anchor);
+        observer.unobserve(anchor);
+        if (isPrefetchableLink(anchor)) {
+          prefetchPage(anchor.pathname);
+        }
+      }, VIEWPORT_PREFETCH_DWELL_MS);
+      dwellTimers.set(anchor, timer);
+    }
+  });
+
+  const observeLinks = () => {
+    // 스왑으로 떨어져 나간 옛 앵커는 관찰을 끊고 새 본문의 링크를 다시 건다.
+    observer.disconnect();
+    for (const anchor of document.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+      if (isPrefetchableLink(anchor)) {
+        observer.observe(anchor);
+      }
+    }
+  };
+
+  observeLinks();
+  document.addEventListener('htmx:after:swap', observeLinks);
+}
+
 function init() {
   // hx-boost 가 <body> 를 통째로 갈아끼우므로 버튼에 직접 건 리스너는 이동 후 사라진다.
   // document 위임으로 걸어야 네비게이션 뒤에도 계속 동작한다.
@@ -81,6 +163,7 @@ function init() {
   });
 
   initAnalytics();
+  initViewportPrefetch();
 }
 
 // 배포 직후 HTML 캐시와 새 자산 URL 이 섞이면, hx-head 가 head 를 머지하면서

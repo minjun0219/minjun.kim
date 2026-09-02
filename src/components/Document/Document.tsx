@@ -96,8 +96,12 @@ export const Document = ({ meta, pageId, build, children }: Props) => {
         <Style>{globalCss}</Style>
 
         {/* preload 기본 트리거는 mousedown+touchstart 인데, 이 사이트는 Next.js Link 의
-            hover prefetch 를 대체하는 게 목적이라 mouseover 로 되돌린다. */}
-        <meta name="htmx-config" content='{"preload":{"boostEvent":"mouseover"}}' />
+            hover prefetch 를 대체하는 게 목적이라 mouseover 로 되돌린다. 선요청 재사용 기한은
+            기본 5초 대신 HTML Cache-Control 의 max-age=60 에 맞춘다. */}
+        <meta
+          name="htmx-config"
+          content='{"preload":{"boostEvent":"mouseover","boostTimeout":"60s"}}'
+        />
 
         <NoFlashThemeScript />
         {build.vendorScriptSrcs.map((src) => (

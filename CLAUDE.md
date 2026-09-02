@@ -147,7 +147,12 @@ htmx 4 에서 특히 주의할 점:
 - **boost 된 앵커는 자동으로 선요청된다.** 링크마다 preload 속성을 붙이지 않는다. 기본 트리거가
   `mousedown`+`touchstart` 인데, 이 사이트는 Next.js `<Link>` 의 hover prefetch 를 대체하는 게
   목적이라 `<meta name="htmx-config">` 로 `preload.boostEvent` 를 `mouseover` 로 되돌렸다.
-  외부 도메인 링크는 boost 대상이 아니라 자동으로 선요청에서 빠진다.
+  외부 도메인 링크는 boost 대상이 아니라 자동으로 선요청에서 빠진다. 선요청 재사용 기한
+  `preload.boostTimeout` 은 HTML `Cache-Control: max-age=60` 과 맞춰 `60s` 다.
+- **뷰포트 선요청은 hx-preload 에 없다.** Next.js `<Link>` 의 뷰포트 prefetch 는 `src/client/main.ts`
+  의 `initViewportPrefetch()` 가 IntersectionObserver + `fetch(…, { priority: "low" })` 로 HTTP 캐시를
+  데워 대신한다(200ms 체류해야 요청, URL 당 1회, `saveData`/2g 면 끔, `htmx:after:swap` 마다 재관찰).
+  htmx 의 실제 요청이 같은 캐시를 타므로 응답에 `Vary` 가 없어야 한다.
 - **non-2xx 도 기본 스왑된다**(`noSwap: [204, 304]`). htmx 2 에서 필요했던 404 스왑 우회 코드가
   htmx 4 에는 필요 없다.
 
