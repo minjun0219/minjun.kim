@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "minjun-kim-hono",
+  "name": "minjun-kim",
   "compatibility_date": "2026-08-28",
   // Worker 스크립트 없이 정적 자산만 배포한다(`main` 없음).
   // 정적 자산 요청은 Worker 호출로 과금되지 않고, _redirects/_headers 가 그대로 적용된다.
