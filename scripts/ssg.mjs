@@ -150,6 +150,7 @@ async function main() {
       'application/rss+xml': 'xml',
       'application/xml': 'xml',
       'text/plain': 'txt',
+      'text/markdown': 'md',
     },
   });
 

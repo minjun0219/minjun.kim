@@ -21,6 +21,24 @@
 /404
   Cache-Control: public, max-age=60, stale-while-revalidate=86400
 
+# --- LLM 용 Markdown 사본 (src/lib/seo/llms.ts) ---
+# HTML 페이지와 내용이 겹치므로 검색 색인에서 뺀다. llms.txt 자체는 고유한 목차라 색인을 막지 않는다.
+# /posts/*.md 의 Cache-Control 은 위 /posts/* 규칙이 담당한다(겹치는 헤더를 다시 적지 않는다).
+/posts/*.md
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+/resume.md
+  Cache-Control: public, max-age=60, stale-while-revalidate=86400
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+/llms.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+/llms-full.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: noindex
+
 # --- 해시가 붙거나 사실상 불변인 자산 ---
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

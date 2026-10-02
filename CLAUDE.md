@@ -53,6 +53,22 @@ assertions in `scripts/ssg.mjs`).
 **라우팅**은 `src/app.tsx` 의 Hono 앱 하나에 모여 있다. `/posts/:slug` 는 `ssgParams` 로 파라미터를
 공급한다. 피드/사이트맵/robots 도 여기 라우트로 붙어 있고 생성 로직은 `src/lib/seo/*`.
 
+**SEO·LLM 사본** (`src/lib/seo/*`):
+- `structuredData.ts` — 페이지마다 `WebSite`+`Person` 노드에 페이지 노드(`BlogPosting`/`Blog`/
+  `ProfilePage`/`BreadcrumbList`)를 `@id` 로 엮은 JSON-LD `@graph` 하나. `PageMeta.jsonLd` 로 넘기면
+  `Document` 가 `<script type="application/ld+json">` 로 낸다(noindex 페이지는 생략).
+- `llms.ts` — https://llmstxt.org 규약의 `/llms.txt`, `/llms-full.txt`, 그리고 페이지 URL 에 `.md` 를
+  붙인 Markdown 사본(`/posts/<slug>.md`, `/resume.md`). HTML 은 `<link rel="alternate"
+  type="text/markdown">` 로 사본을 가리키고, 사본은 `_headers` 에서 `X-Robots-Tag: noindex` 다.
+  글 사본은 `/posts/:slug` 라우트가 `.md` 로 끝나는 파라미터를 분기해 낸다 — `/posts/:file{.+\.md}`
+  같은 정규식 라우트는 `toSSG` 가 파라미터 수집 요청을 다른 라우트로 흘려 **에러 없이 아무 파일도
+  만들지 않는다.**
+- `sitemap.ts` 의 `lastmod` 는 빌드 시각이 아니라 글 날짜·이력서 `updatedAt` 이다.
+
+**WebMCP** (`src/client/webmcp.ts`): 브라우저 에이전트용 도구(`list_posts`, `get_post`, `get_resume`,
+`open_page`, `set_theme`)를 `document.modelContext`(초안) 또는 `navigator.modelContext`(초기 구현)에
+등록한다. hx-boost 는 문서를 바꾸지 않으므로 한 번만 등록하고, 데이터는 피드와 `.md` 사본을 읽는다.
+
 **URL 형태**: trailing slash 를 쓰지 않는다(`/posts`, `/posts/<slug>`). `toSSG` 가 평평한 `.html`
 파일을 내고, `wrangler.jsonc` 의 `html_handling: "drop-trailing-slash"` 가 이를 고정한다.
 바꾸면 canonical·sitemap·기존 유입 링크가 전부 어긋난다.
