@@ -64,11 +64,15 @@ async function listPosts() {
   });
 }
 
+// 문자열 검사만으로는 막지 못한다. URL 파서는 `\`를 `/`로 읽어 `/\evil.com`을
+// `//evil.com`(다른 출처)으로 해석한다. 실제로 해석한 출처를 비교한다.
 function sitePath(value: unknown): string {
-  if (typeof value !== 'string' || !value.startsWith('/') || value.startsWith('//')) {
-    throw new Error('path 는 "/" 로 시작하는 사이트 내부 경로여야 합니다');
+  const url =
+    typeof value === 'string' && value.startsWith('/') ? new URL(value, location.origin) : null;
+  if (!url || url.origin !== location.origin) {
+    throw new Error('path는 "/"로 시작하는 이 사이트의 내부 경로여야 합니다');
   }
-  return value;
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
