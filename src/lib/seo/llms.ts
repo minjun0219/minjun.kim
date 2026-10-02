@@ -79,7 +79,7 @@ export async function renderLlmsTxt(): Promise<string> {
   const postLines = await Promise.all(
     posts.map(async (post) => {
       const summary = await getExcerpt(post.content, 120);
-      return `- [${post.title}](${SITE_URL}${postMarkdownPath(post.slug)}): ${post.date} — ${summary}`;
+      return `- [${post.title}](${SITE_URL}${postMarkdownPath(post.slug)}): ${post.date}, ${summary}`;
     }),
   );
 
@@ -88,9 +88,9 @@ export async function renderLlmsTxt(): Promise<string> {
     '',
     `> ${AUTHOR_NAME_KO}(${AUTHOR_NAME})의 개인 사이트. ${SITE_DESCRIPTION}`,
     '',
-    `${AUTHOR_NAME_KO}은 ${AUTHOR_JOB_TITLE} 로 일하고 있다. 경력과 사이드 프로젝트는 이력서에,`,
-    '글은 Posts 에 있다. 아래 링크는 모두 각 페이지의 Markdown 사본이며, 전체를 한 번에 읽으려면',
-    `${SITE_URL}/llms-full.txt 를 쓴다. 사이트 본문은 한국어다.`,
+    `${AUTHOR_NAME_KO}은 ${AUTHOR_JOB_TITLE}로 일하고 있다. 경력과 사이드 프로젝트는 이력서에,`,
+    '글은 Posts에 있다. 아래 링크는 모두 각 페이지의 Markdown 사본이다. 전체를 한 번에 읽으려면',
+    `${SITE_URL}/llms-full.txt를 쓴다. 사이트 본문은 한국어다.`,
     '',
     '## 소개',
     '',

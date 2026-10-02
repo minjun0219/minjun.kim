@@ -81,7 +81,7 @@ function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
       name: 'list_posts',
       title: '글 목록',
       description:
-        'minjun.kim 블로그의 글 목록을 최신순으로 돌려준다. 각 항목은 slug, 제목, 작성일, 요약, URL 을 담는다.',
+        'minjun.kim 블로그의 글 목록을 최신순으로 반환한다. 각 항목에는 slug, 제목, 작성일, 요약, URL이 들어 있다.',
       inputSchema: { type: 'object', properties: {} },
       annotations: { readOnlyHint: true },
       execute: async () => ({ posts: await listPosts() }),
@@ -90,7 +90,7 @@ function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
       name: 'get_post',
       title: '글 읽기',
       description:
-        'slug 로 블로그 글 하나의 전문을 Markdown 으로 돌려준다. slug 는 list_posts 결과에서 얻는다.',
+        'slug로 블로그 글 하나의 전문을 Markdown으로 반환한다. slug는 list_posts 결과에서 얻는다.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -101,7 +101,7 @@ function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
       annotations: { readOnlyHint: true },
       execute: async ({ slug }) => {
         if (typeof slug !== 'string' || !SLUG_PATTERN.test(slug)) {
-          throw new Error('slug 는 영소문자, 숫자, - 로만 이뤄져야 합니다');
+          throw new Error('slug는 영소문자, 숫자, -로만 이뤄져야 합니다');
         }
         return { slug, markdown: await fetchText(`/posts/${slug}.md`) };
       },
@@ -110,7 +110,7 @@ function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
       name: 'get_resume',
       title: '이력서 읽기',
       description:
-        '사이트 주인 김민준(프론트엔드 엔지니어)의 이력서를 Markdown 으로 돌려준다. 경력, 사이드 프로젝트, 스킬, 연락처를 담는다.',
+        '사이트 주인 김민준(프론트엔드 엔지니어)의 이력서를 Markdown으로 반환한다. 경력, 사이드 프로젝트, 스킬, 연락처가 들어 있다.',
       inputSchema: { type: 'object', properties: {} },
       annotations: { readOnlyHint: true },
       execute: async () => ({ markdown: await fetchText('/resume.md') }),
@@ -123,7 +123,7 @@ function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
       inputSchema: {
         type: 'object',
         properties: {
-          path: { type: 'string', description: '"/" 로 시작하는 사이트 내부 경로' },
+          path: { type: 'string', description: '"/"로 시작하는 사이트 내부 경로' },
         },
         required: ['path'],
       },
@@ -136,7 +136,7 @@ function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
     {
       name: 'set_theme',
       title: '테마 바꾸기',
-      description: '사이트 색 테마를 바꾼다. system 은 OS 설정을 따른다.',
+      description: '사이트 색 테마를 바꾼다. system은 OS 설정을 따른다.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -146,7 +146,7 @@ function createTools(setTheme: (theme: Theme) => void): ModelContextTool[] {
       },
       execute: async ({ theme }) => {
         if (!THEME_CYCLE.includes(theme as Theme)) {
-          throw new Error(`theme 는 ${THEME_CYCLE.join(', ')} 중 하나여야 합니다`);
+          throw new Error(`theme는 ${THEME_CYCLE.join(', ')} 중 하나여야 합니다`);
         }
         setTheme(theme as Theme);
         return { theme };

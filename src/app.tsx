@@ -74,7 +74,8 @@ export function createApp(build: BuildAssets) {
       page(
         {
           title: '이력서',
-          description: '프론트엔드 엔지니어 김민준의 이력서 — 경력, 사이드 프로젝트, 스킬, 연락처.',
+          description:
+            '프론트엔드 엔지니어 김민준의 이력서입니다. 경력, 사이드 프로젝트, 스킬, 연락처를 담았습니다.',
           path: '/resume',
           markdownPath: RESUME_MARKDOWN_PATH,
           jsonLd: resumeJsonLd({ updatedAt }),
