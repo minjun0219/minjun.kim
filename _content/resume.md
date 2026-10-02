@@ -1,6 +1,6 @@
 ---
 title: "이력서"
-updatedAt: "2026-06-18"
+updatedAt: "2026-10-02"
 ---
 
 # 김민준
@@ -42,6 +42,11 @@ updatedAt: "2026-06-18"
 - 대검찰청 모바일 웹사이트 구축
 
 ## 사이드 프로젝트
+
+### [mdwire](https://mdwire.minjun.dev) [GitHub](https://github.com/minjun0219/mdwire)
+
+- AI 에이전트가 생성한 LLM Markdown 을 Telegram, Slack, GitHub, Notion 등 채널이 받아들이는 문법으로 보정·변환하고, 채널별 길이 제한에 맞춰 마크업이 깨지지 않게 분할해 주는 라이브러리
+- 스트리밍 청크 경계와 CJK 텍스트를 고려한 의존성 없는 Rust 코어를 npm(WASM)·CLI 로 배포하고, 같은 테스트 코퍼스로 검증하는 Go 포트를 함께 유지
 
 ### [ogpeek](https://ogpeek.dev) [GitHub](https://github.com/minjun0219/ogpeek)
 

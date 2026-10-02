@@ -5,6 +5,7 @@ import type { BuildAssets } from '@/lib/build';
 import { Style } from '@/lib/css';
 import type { ImageAsset } from '@/lib/images';
 import { AUTHOR_NAME, LOCALE, type ResolvedMeta, SITE_NAME, SITE_URL } from '@/lib/meta';
+import { serializeJsonLd } from '@/lib/seo/structuredData';
 import { createGlobalCss } from '@/styles/global';
 
 export type Props = {
@@ -49,7 +50,11 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
         <title>{meta.documentTitle}</title>
         <meta name="description" content={meta.description} />
         <link rel="canonical" href={meta.canonical} />
-        {meta.noindex ? <meta name="robots" content="noindex, nofollow" /> : null}
+        {/* 색인 대상 페이지는 검색 결과·Discover 에서 OG 이미지를 큰 미리보기로 쓰도록 허용한다 */}
+        <meta
+          name="robots"
+          content={meta.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
+        />
         {pageId ? <meta name="x-page-id" content={pageId} /> : null}
 
         <meta name="application-name" content={SITE_NAME} />
@@ -78,6 +83,7 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
         <meta name="twitter:title" content={meta.title} />
         <meta name="twitter:description" content={meta.description} />
         <meta name="twitter:image" content={meta.ogImage} />
+        <meta name="twitter:image:alt" content={meta.title} />
 
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
@@ -89,9 +95,19 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
           title={`${SITE_NAME} RSS`}
           href={`${SITE_URL}/posts/feed.xml`}
         />
+        {meta.markdownUrl ? (
+          <link rel="alternate" type="text/markdown" href={meta.markdownUrl} />
+        ) : null}
         {naverVerification ? (
           <meta name="naver-site-verification" content={naverVerification} />
         ) : null}
+
+        {meta.noindex ? null : (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: serializeJsonLd(meta.jsonLd) }}
+          />
+        )}
 
         {/* 700 은 본문 strong·소제목이 있는 글에서만 쓰여 preload 하지 않는다 */}
         <link

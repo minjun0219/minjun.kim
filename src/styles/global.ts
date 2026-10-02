@@ -5,7 +5,7 @@ import { css } from '@/lib/css';
  * 전역 스타일. `:-hono-global` 로 감싸면 hono/css 가 클래스 스코프 없이 그대로 방출한다.
  *
  * 이 템플릿 안에서는 줄바꿈 위치가 동작을 좌우한다 — 직전 문자가 `{ } ; : ,` 가 아닌
- * 줄바꿈이 하나라도 남으면 전역 규칙이 통째로 죽는다(CLAUDE.md "hono/css" 절).
+ * 줄바꿈이 하나라도 남으면 전역 규칙이 통째로 죽는다(AGENTS.md "hono/css" 절).
  * 여러 줄 주석도 제거되지 않으니 설명은 여기 TS 주석에 둔다.
  *
  * 폰트는 next/font 대신 @fontsource/nunito 를 셀프호스팅한다(경로는 빌드가 `fontSrcs` 로 준다).

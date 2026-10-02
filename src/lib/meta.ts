@@ -1,3 +1,4 @@
+import type { JsonLdNode } from './seo/structuredData';
 import {
   AUTHOR_NAME,
   DEFAULT_OG_IMAGE,
@@ -19,6 +20,10 @@ export type PageMeta = {
   noindex?: boolean;
   publishedTime?: string;
   authors?: string[];
+  /** 페이지 고유 JSON-LD 노드. 사이트·저자 노드는 `serializeJsonLd` 가 붙인다. */
+  jsonLd?: JsonLdNode[];
+  /** 같은 내용의 Markdown 사본 경로(llms.txt 규약의 `<url>.md`) */
+  markdownPath?: string;
 };
 
 export type ResolvedMeta = {
@@ -33,6 +38,8 @@ export type ResolvedMeta = {
   noindex: boolean;
   publishedTime?: string;
   authors: string[];
+  jsonLd: JsonLdNode[];
+  markdownUrl?: string;
 };
 
 export function absoluteUrl(path: string): string {
@@ -55,6 +62,8 @@ export function resolveMeta(meta: PageMeta): ResolvedMeta {
     noindex: meta.noindex ?? false,
     publishedTime: meta.publishedTime,
     authors: meta.authors ?? [AUTHOR_NAME],
+    jsonLd: meta.jsonLd ?? [],
+    markdownUrl: meta.markdownPath ? absoluteUrl(meta.markdownPath) : undefined,
   };
 }
 

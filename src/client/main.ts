@@ -1,6 +1,7 @@
 // slim 번들: 코어만. 확장은 켜진 것만 런타임 지연 로드.
 import posthog from 'posthog-js/dist/module.slim';
 import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from '@/lib/theme';
+import { initWebMcp } from './webmcp';
 
 declare global {
   interface Window {
@@ -14,10 +15,13 @@ const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST ?? 'https://us.i.posthog.
 /* ---------------------------------------------------------------- 테마 토글 */
 
 function switchTheme() {
-  const html = document.documentElement;
-  const current = (html.getAttribute('data-theme') as Theme | null) ?? 'system';
+  const current = (document.documentElement.getAttribute('data-theme') as Theme | null) ?? 'system';
   const index = THEME_CYCLE.indexOf(current);
-  const next = THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
+  applyTheme(THEME_CYCLE[(index + 1) % THEME_CYCLE.length]);
+}
+
+function applyTheme(next: Theme) {
+  const html = document.documentElement;
 
   if (next === 'system') {
     html.removeAttribute('data-theme');
@@ -189,6 +193,7 @@ function init() {
 
   initAnalytics();
   initViewportPrefetch();
+  initWebMcp(applyTheme);
 }
 
 // 배포 직후 HTML 캐시와 새 자산 URL 이 섞이면, hx-head 가 head 를 머지하면서
