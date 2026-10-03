@@ -19,9 +19,20 @@ The package manager is **pnpm**; Node version is pinned in `.nvmrc` (24).
 - `pnpm typecheck` — `tsc --noEmit`
 - `pnpm deploy` — `wrangler deploy`
 
+`deploy`/`preview` 는 빌드를 하지 않는다 — `dist/` 에 있는 것을 그대로 올리고 서빙한다.
+
 Linting/formatting is **Biome** (`biome.json`), not ESLint/Prettier. There is no test runner; the
 regression safety net is comparing build output against a known-good build (and the post-build
 assertions in `scripts/ssg.mjs`).
+Biome 는 마크다운을 아예 무시하므로(`!**/*.md`) `_posts`·`_content` 편집은 `pnpm check` 에 걸리지
+않는다 — 콘텐츠 변경의 게이트는 `pnpm build` 뿐이다.
+
+**환경변수는 `.env.local`**(gitignore, 예시는 `.env.local.example`). 두 채널로 갈린다:
+`HOMEPAGE`·`NAVER_SITE_VERIFICATION` 은 `scripts/ssg.mjs` 가 `process.loadEnvFile()` 로 올려
+**렌더 프로세스의 `process.env`** 로 읽고(이미 있는 CI 값은 덮어쓰지 않는다), `VITE_POSTHOG_KEY`·
+`VITE_POSTHOG_HOST` 는 **Vite 가 `import.meta.env`** 로 클라이언트 번들에 박는다. `VITE_` 접두사가
+없으면 브라우저로 나가지 않는다. `HOMEPAGE` 가 비면 에러 없이 기본값으로 떨어져
+sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 
 ## Build pipeline
 
@@ -44,15 +55,28 @@ assertions in `scripts/ssg.mjs`).
 
 ## Architecture
 
-**Content as files.** 모든 콘텐츠는 YAML frontmatter 가 붙은 Markdown 이고 `gray-matter` 로 읽는다:
-- 글: `_posts/*.md` → `/posts/[slug]`
-- 이력서: `_content/resume.md` → `/resume`
+**Content as files.** 본문이 있는 콘텐츠는 YAML frontmatter 가 붙은 Markdown 이고 `gray-matter` 로 읽는다:
+- 글: `_posts/*.md` → `/posts/[slug]` (파일명이 slug)
+- 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `resume`). `getDoc(name)` 이 읽고
+  `containers/MarkdownPage` 가 렌더한다 — 둘의 차이는 마크다운 본문뿐이다.
 
-데이터 접근은 `src/lib/blog/api.ts`(`fast-glob`)와 `src/lib/resume/api.ts` 에 모여 있다. 빌드타임에만
+글 frontmatter 는 `title`·`date`(`YYYY-MM-DD`)·`author{name,email}` 이 필수고 `mediumUrl` 이 선택이다
+(`src/lib/blog/types.ts`). `getPostBySlug` 가 `as Post` 로 무검증 캐스팅하므로 **빠뜨려도 빌드는 통과하고**
+`date` 가 없으면 `Invalid Date` 가 정렬·sitemap·OG 로 조용히 흘러간다.
+
+**다른 곳에 실린 글은 파일이 아니다.** `/posts` 목록은 `src/lib/blog/externalPosts.ts` 의 하드코딩 배열
+`EXTERNAL_POSTS`(제목·날짜·URL·출처)를 내부 글과 날짜 내림차순으로 합친다(`getPostListing`). 외부 글
+추가는 `_posts` 에 파일을 만드는 게 아니라 이 배열을 고치는 일이다.
+
+데이터 접근은 `src/lib/blog/api.ts`(`fast-glob`)와 `src/lib/content/api.ts` 에 모여 있다. 빌드타임에만
 실행되므로 `node:fs` 를 그대로 쓴다 — 런타임 Worker 코드가 아니다.
 
 **라우팅**은 `src/app.tsx` 의 Hono 앱 하나에 모여 있다. `/posts/:slug` 는 `ssgParams` 로 파라미터를
 공급한다. 피드/사이트맵/robots 도 여기 라우트로 붙어 있고 생성 로직은 `src/lib/seo/*`.
+
+**`/resume` 는 사이트 안에서 링크하지 않는다.** 취업 지원 시 URL 을 직접 건네는 용도라
+네비게이션(`SocialLink`)에는 `/about` 만 둔다. 다만 sitemap 에는 남겨 색인은 유지한다 — 진입점을
+없앤 것이지 숨긴 게 아니다.
 
 **SEO·LLM 사본** (`src/lib/seo/*`):
 - `structuredData.ts` — 페이지마다 `WebSite`+`Person` 노드에 페이지 노드(`BlogPosting`/`Blog`/
@@ -64,7 +88,7 @@ assertions in `scripts/ssg.mjs`).
   글 사본은 `/posts/:slug` 라우트가 `.md` 로 끝나는 파라미터를 분기해 낸다 — `/posts/:file{.+\.md}`
   같은 정규식 라우트는 `toSSG` 가 파라미터 수집 요청을 다른 라우트로 흘려 **에러 없이 아무 파일도
   만들지 않는다.**
-- `sitemap.ts` 의 `lastmod` 는 빌드 시각이 아니라 글 날짜·이력서 `updatedAt` 이다.
+- `sitemap.ts` 의 `lastmod` 는 빌드 시각이 아니라 글 날짜·단일 문서(`about`·`resume`) `updatedAt` 이다.
 
 **WebMCP** (`src/client/webmcp.ts`): 브라우저 에이전트용 도구(`list_posts`, `get_post`, `get_resume`,
 `open_page`, `set_theme`)를 `document.modelContext`(초안) 또는 `navigator.modelContext`(초기 구현)에
@@ -76,7 +100,7 @@ assertions in `scripts/ssg.mjs`).
 
 **UI 구조** (path alias `@/*` → `src/*`):
 - `src/components/*` — 프레젠테이션 컴포넌트. 스타일은 같은 파일 안의 `hono/css` 블록
-- `src/containers/*` — 페이지 단위 조합 (Header, Home, Post, Posts, Resume, NotFound)
+- `src/containers/*` — 페이지 단위 조합 (Header, Home, Post, Posts, MarkdownPage, NotFound)
 - `src/lib/*` — 순수 헬퍼와 데이터 접근
 
 **Site constants** 는 전부 `src/lib/siteConfig.ts` 에 있다. 페이지 메타는 `src/lib/meta.ts` 의
@@ -241,3 +265,4 @@ Nunito 는 `@fontsource/nunito` 의 latin 400/700 woff2 를 빌드가 `dist/font
 
 - 코드 리뷰는 **한국어**로.
 - 가독성 우선, 중첩 삼항 연산자 지양.
+- 위 두 줄은 `.github/copilot-instructions.md` 에도 있다(Copilot 리뷰용) — 바꾸면 같이 맞춘다.
