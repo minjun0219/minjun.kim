@@ -3,9 +3,10 @@ import { join } from 'node:path';
 
 import matter from 'gray-matter';
 
-const resumePath = join(process.cwd(), '_content', 'resume.md');
+/** `_content/*.md` — 글이 아닌 단일 문서 페이지(about, resume). 파일명이 곧 경로다. */
+export type DocName = 'about' | 'resume';
 
-export type Resume = {
+export type Doc = {
   title: string;
   updatedAt?: string;
   content: string;
@@ -21,11 +22,11 @@ function formatUpdatedAt(value: unknown): string | undefined {
   return String(value);
 }
 
-export function getResume(): Resume {
-  const fileContents = fs.readFileSync(resumePath, 'utf8');
+export function getDoc(name: DocName): Doc {
+  const fileContents = fs.readFileSync(join(process.cwd(), '_content', `${name}.md`), 'utf8');
   const { data, content } = matter(fileContents);
   return {
-    title: (data.title as string) ?? '이력서',
+    title: (data.title as string) ?? name,
     updatedAt: formatUpdatedAt(data.updatedAt),
     content,
   };

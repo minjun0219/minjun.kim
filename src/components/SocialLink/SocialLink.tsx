@@ -69,7 +69,7 @@ export type Props = {
 export const SocialLink = ({ className }: Props) => (
   <ul className={cx(styles.root, className)}>
     <li>
-      <a href="/resume">Resume</a>
+      <a href="/about">About</a>
     </li>
     <li>
       <a href="/posts">Posts</a>
