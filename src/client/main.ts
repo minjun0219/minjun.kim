@@ -9,11 +9,11 @@ declare global {
   }
 }
 
-const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY;
+const POSTHOG_KEY = import.meta.env.POSTHOG_KEY;
 // 폴백을 두지 않는다. posthog-js 자체 기본값이 `https://us.i.posthog.com` 이라,
 // 호스트를 빠뜨리면 조용히 프록시를 우회한 채로 배포된다 — 아예 안 켜는 쪽이 낫다.
 // 켜 두고 호스트만 빠뜨리는 조합은 `vite.client.config.ts` 가 빌드에서 막는다.
-const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST;
+const POSTHOG_HOST = import.meta.env.POSTHOG_HOST;
 
 /* ---------------------------------------------------------------- 테마 토글 */
 

@@ -29,9 +29,11 @@ Biome 는 마크다운을 아예 무시하므로(`!**/*.md`) `_posts`·`_content
 
 **환경변수는 `.env.local`**(gitignore, 예시는 `.env.local.example`). 두 채널로 갈린다:
 `HOMEPAGE`·`NAVER_SITE_VERIFICATION` 은 `scripts/ssg.mjs` 가 `process.loadEnvFile()` 로 올려
-**렌더 프로세스의 `process.env`** 로 읽고(이미 있는 CI 값은 덮어쓰지 않는다), `VITE_POSTHOG_KEY`·
-`VITE_POSTHOG_HOST` 는 **Vite 가 `import.meta.env`** 로 클라이언트 번들에 박는다. `VITE_` 접두사가
-없으면 브라우저로 나가지 않는다. `HOMEPAGE` 가 비면 에러 없이 기본값으로 떨어져
+**렌더 프로세스의 `process.env`** 로 읽고(이미 있는 CI 값은 덮어쓰지 않는다), `POSTHOG_KEY`·
+`POSTHOG_HOST` 는 **Vite 가 `import.meta.env`** 로 클라이언트 번들에 박는다. 브라우저로 나가는 건
+`envPrefix`(`VITE_`·`POSTHOG_`)로 시작하는 이름뿐이다 — PostHog 이름은 모든 개인 repo 공통이라
+접두사를 붙이지 않는다(hail-mary D-061). 같은 이유로 `POSTHOG_` 로 시작하는 비밀 값은 두지 않는다.
+배포 값은 Workers Builds **프로덕션 트리거의 빌드 변수**에만 있고 프리뷰 트리거는 비어 있다. `HOMEPAGE` 가 비면 에러 없이 기본값으로 떨어져
 sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 
 ## Build pipeline
@@ -53,9 +55,9 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 **`@hono/vite-ssg` 는 쓰지 않는다.** 클라이언트 번들·vendor 복사·이미지·OG 는 어차피 직접 해야
 해서 플러그인을 넣어도 접착제가 줄지 않는다. `toSSG` 를 `scripts/ssg.mjs` 에서 직접 호출한다.
 
-**PostHog 호스트에는 폴백이 없다.** `VITE_POSTHOG_HOST` 는 PostHog **조직 공용** managed reverse proxy
+**PostHog 호스트에는 폴백이 없다.** `POSTHOG_HOST` 는 PostHog **조직 공용** managed reverse proxy
 `https://z.minjun.kim` 이고 개인 프로젝트는 전부 이걸 쓴다 — managed proxy 는 프로젝트가 아니라 조직
-단위 설정이라 **어느 프로젝트로 적재될지는 호스트가 아니라 `VITE_POSTHOG_KEY` 가 정한다**.
+단위 설정이라 **어느 프로젝트로 적재될지는 호스트가 아니라 `POSTHOG_KEY` 가 정한다**.
 키는 있는데 호스트가 비면 `vite.client.config.ts` 가 빌드를 죽인다 — posthog-js 자체 기본값
 `us.i.posthog.com` 으로 조용히 프록시를 우회하는 걸 막는 가드다(코드에 폴백을 두지 않는 이유).
 키가 아예 없으면 관측 도구만 꺼진 채 빌드된다.
