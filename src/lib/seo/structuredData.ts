@@ -89,6 +89,25 @@ export function resumeJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[
   ];
 }
 
+export function aboutJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[] {
+  const url = absoluteUrl('/about');
+  return [
+    {
+      '@type': 'ProfilePage',
+      '@id': `${url}#webpage`,
+      url,
+      name: `${AUTHOR_NAME_KO} 소개`,
+      isPartOf: ref(WEBSITE_ID),
+      mainEntity: ref(PERSON_ID),
+      dateModified: updatedAt,
+    },
+    breadcrumbs([
+      { name: SITE_NAME, path: '/' },
+      { name: 'About', path: '/about' },
+    ]),
+  ];
+}
+
 export function postsJsonLd(
   posts: Array<{ title: string; url: string; date: string }>,
 ): JsonLdNode[] {

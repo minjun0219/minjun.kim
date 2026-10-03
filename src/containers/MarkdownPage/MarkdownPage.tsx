@@ -58,7 +58,7 @@ type Props = {
   updatedAt?: string;
 };
 
-const Resume = ({ html, updatedAt }: Props) => (
+const MarkdownPage = ({ html, updatedAt }: Props) => (
   <Wrapper className={styles.root}>
     <article className={styles.article}>
       <PostContent html={html} className={styles.content} />
@@ -67,4 +67,4 @@ const Resume = ({ html, updatedAt }: Props) => (
   </Wrapper>
 );
 
-export default Resume;
+export default MarkdownPage;

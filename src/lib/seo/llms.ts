@@ -1,7 +1,7 @@
 import { EXTERNAL_POSTS, getAllPosts, getExcerpt, getPostBySlug } from '@/lib/blog';
 import type { Post } from '@/lib/blog/types';
+import { getDoc } from '@/lib/content';
 import type { ImageManifest } from '@/lib/images';
-import { getResume } from '@/lib/resume';
 import {
   AUTHOR_EMAIL,
   AUTHOR_JOB_TITLE,
@@ -66,7 +66,7 @@ export function renderPostMarkdown(slug: string, images: ImageManifest): string 
 
 /** 이력서 본문은 이미 `# 김민준` 으로 시작하므로 출처만 덧붙인다. */
 export function renderResumeMarkdown(): string {
-  const { content, updatedAt } = getResume();
+  const { content, updatedAt } = getDoc('resume');
   const meta = [`> 원문: ${SITE_URL}/resume`];
   if (updatedAt) {
     meta.push(`> 마지막 업데이트: ${updatedAt}`);

@@ -4,15 +4,15 @@ import { ssgParams } from 'hono/ssg';
 import Document, { type Props as DocumentProps } from '@/components/Document';
 import Layout from '@/components/Layout';
 import Home from '@/containers/Home';
+import MarkdownPage from '@/containers/MarkdownPage';
 import NotFound from '@/containers/NotFound';
 import Post from '@/containers/Post';
 import Posts from '@/containers/Posts';
-import Resume from '@/containers/Resume';
 import { getAllPosts, getExcerpt, getPostBySlug, getPostListing } from '@/lib/blog';
 import { renderPostHtml } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
+import { getDoc } from '@/lib/content';
 import { type PageMeta, resolveMeta } from '@/lib/meta';
-import { getResume } from '@/lib/resume';
 import { renderFeed } from '@/lib/seo/feed';
 import {
   postMarkdownPath,
@@ -24,7 +24,13 @@ import {
 } from '@/lib/seo/llms';
 import { renderRobots } from '@/lib/seo/robots';
 import { renderSitemap } from '@/lib/seo/sitemap';
-import { homeJsonLd, postJsonLd, postsJsonLd, resumeJsonLd } from '@/lib/seo/structuredData';
+import {
+  aboutJsonLd,
+  homeJsonLd,
+  postJsonLd,
+  postsJsonLd,
+  resumeJsonLd,
+} from '@/lib/seo/structuredData';
 
 const TEXT_PLAIN = { 'Content-Type': 'text/plain; charset=utf-8' };
 const TEXT_MARKDOWN = { 'Content-Type': 'text/markdown; charset=utf-8' };
@@ -66,8 +72,28 @@ export function createApp(build: BuildAssets) {
     ),
   );
 
+  app.get('/about', async (c) => {
+    const { content, updatedAt } = getDoc('about');
+    const { html } = await renderPostHtml(content, build);
+
+    return c.html(
+      page(
+        {
+          title: 'About',
+          description: '김민준 소개 — 하는 일, 만든 것, 그리고 연락하는 방법.',
+          path: '/about',
+          jsonLd: aboutJsonLd({ updatedAt }),
+        },
+        <Layout>
+          <MarkdownPage html={html} updatedAt={updatedAt} />
+        </Layout>,
+      ),
+    );
+  });
+
+  // 사이트 내 진입점은 없다(취업 지원 시 URL 을 직접 건넨다). 색인은 유지한다.
   app.get('/resume', async (c) => {
-    const { content, updatedAt } = getResume();
+    const { content, updatedAt } = getDoc('resume');
     const { html } = await renderPostHtml(content, build);
 
     return c.html(
@@ -81,7 +107,7 @@ export function createApp(build: BuildAssets) {
           jsonLd: resumeJsonLd({ updatedAt }),
         },
         <Layout>
-          <Resume html={html} updatedAt={updatedAt} />
+          <MarkdownPage html={html} updatedAt={updatedAt} />
         </Layout>,
       ),
     );
