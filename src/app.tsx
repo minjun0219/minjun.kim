@@ -24,7 +24,13 @@ import {
 } from '@/lib/seo/llms';
 import { renderRobots } from '@/lib/seo/robots';
 import { renderSitemap } from '@/lib/seo/sitemap';
-import { homeJsonLd, postJsonLd, postsJsonLd, resumeJsonLd } from '@/lib/seo/structuredData';
+import {
+  aboutJsonLd,
+  homeJsonLd,
+  postJsonLd,
+  postsJsonLd,
+  resumeJsonLd,
+} from '@/lib/seo/structuredData';
 
 const TEXT_PLAIN = { 'Content-Type': 'text/plain; charset=utf-8' };
 const TEXT_MARKDOWN = { 'Content-Type': 'text/markdown; charset=utf-8' };
@@ -76,6 +82,7 @@ export function createApp(build: BuildAssets) {
           title: 'About',
           description: '김민준 소개 — 하는 일, 만든 것, 그리고 연락하는 방법.',
           path: '/about',
+          jsonLd: aboutJsonLd({ updatedAt }),
         },
         <Layout>
           <MarkdownPage html={html} updatedAt={updatedAt} />
