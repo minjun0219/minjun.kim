@@ -53,6 +53,13 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 **`@hono/vite-ssg` 는 쓰지 않는다.** 클라이언트 번들·vendor 복사·이미지·OG 는 어차피 직접 해야
 해서 플러그인을 넣어도 접착제가 줄지 않는다. `toSSG` 를 `scripts/ssg.mjs` 에서 직접 호출한다.
 
+**PostHog 호스트에는 폴백이 없다.** `VITE_POSTHOG_HOST` 는 PostHog **조직 공용** managed reverse proxy
+`https://z.minjun.kim` 이고 개인 프로젝트는 전부 이걸 쓴다 — managed proxy 는 프로젝트가 아니라 조직
+단위 설정이라 **어느 프로젝트로 적재될지는 호스트가 아니라 `VITE_POSTHOG_KEY` 가 정한다**.
+키는 있는데 호스트가 비면 `vite.client.config.ts` 가 빌드를 죽인다 — posthog-js 자체 기본값
+`us.i.posthog.com` 으로 조용히 프록시를 우회하는 걸 막는 가드다(코드에 폴백을 두지 않는 이유).
+키가 아예 없으면 관측 도구만 꺼진 채 빌드된다.
+
 ## Architecture
 
 **Content as files.** 본문이 있는 콘텐츠는 YAML frontmatter 가 붙은 Markdown 이고 `gray-matter` 로 읽는다:
