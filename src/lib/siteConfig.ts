@@ -23,3 +23,11 @@ export const AUTHOR_PROFILES = [
   { name: 'GitHub', url: 'https://github.com/minjun0219' },
   { name: 'LinkedIn', url: 'https://www.linkedin.com/in/minjun0219' },
 ];
+
+/**
+ * 이 도메인의 최상위 경로 중 **다른 Worker 가 서빙하는** 앱. 각 앱 Worker 가 `minjun.kim/<이름>*`
+ * zone route 를 걸고, route 는 이 사이트(Custom Domain = origin)보다 먼저 실행되므로 요청이 여기까지
+ * 오지 않는다. 그래서 이 이름으로 페이지를 만들면 안 되고(배포돼도 보이지 않는다), 이 경로로 가는
+ * 링크는 hx-boost 하면 안 된다 — 다른 앱의 HTML 이 이 사이트 body 에 스왑된다.
+ */
+export const APP_PATHS = ['/mdwire', '/ogpeek'] as const;
