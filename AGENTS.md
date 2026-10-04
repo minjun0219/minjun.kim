@@ -66,6 +66,12 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 - 글: `_posts/*.md` → `/posts/[slug]` (파일명이 slug)
 - 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `resume`). `getDoc(name)` 이 읽고
   `containers/MarkdownPage` 가 렌더한다 — 둘의 차이는 마크다운 본문뿐이다.
+- 노트: `_content/notes/<topic>/<slug>.md` → `/notes/<topic>/<slug>`, 목록은 `/notes`(주제별 묶음).
+  공개 학습 노트(Rust·Go·TS·Node 등)이고 **사람이 골라 넣는다** — 다른 곳에서 자동으로 복사해 오는 경로는
+  두지 않는다. 사이트 안에서 링크하지 않지만 sitemap 에는 들어간다(노트가 0개면 `/notes` 는 noindex).
+  frontmatter 는 `title`·`updatedAt`(`YYYY-MM-DD`) 필수이고 `src/lib/notes/api.ts` 가 검증한다 — 글과 달리
+  빠지면 빌드가 실패한다. `topic`·`slug` 는 URL 이 되므로 소문자·숫자·하이픈만. 이미지는 글과 같은
+  `_posts/images/` 에 두고 `./images/<name>` 으로 참조한다. 새 글을 올리기 전 개인 식별자 점검을 거친다.
 
 글 frontmatter 는 `title`·`date`(`YYYY-MM-DD`)·`author{name,email}` 이 필수고 `mediumUrl` 이 선택이다
 (`src/lib/blog/types.ts`). `getPostBySlug` 가 `as Post` 로 무검증 캐스팅하므로 **빠뜨려도 빌드는 통과하고**
@@ -75,7 +81,7 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 `EXTERNAL_POSTS`(제목·날짜·URL·출처)를 내부 글과 날짜 내림차순으로 합친다(`getPostListing`). 외부 글
 추가는 `_posts` 에 파일을 만드는 게 아니라 이 배열을 고치는 일이다.
 
-데이터 접근은 `src/lib/blog/api.ts`(`fast-glob`)와 `src/lib/content/api.ts` 에 모여 있다. 빌드타임에만
+데이터 접근은 `src/lib/blog/api.ts`(`fast-glob`), `src/lib/content/api.ts`, `src/lib/notes/api.ts` 에 모여 있다. 빌드타임에만
 실행되므로 `node:fs` 를 그대로 쓴다 — 런타임 Worker 코드가 아니다.
 
 **라우팅**은 `src/app.tsx` 의 Hono 앱 하나에 모여 있다. `/posts/:slug` 는 `ssgParams` 로 파라미터를

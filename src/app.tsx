@@ -5,6 +5,7 @@ import Document, { type Props as DocumentProps } from '@/components/Document';
 import Layout from '@/components/Layout';
 import Home from '@/containers/Home';
 import MarkdownPage from '@/containers/MarkdownPage';
+import Notes from '@/containers/Notes';
 import NotFound from '@/containers/NotFound';
 import Post from '@/containers/Post';
 import Posts from '@/containers/Posts';
@@ -13,6 +14,7 @@ import { renderPostHtml } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
 import { getDoc } from '@/lib/content';
 import { type PageMeta, resolveMeta } from '@/lib/meta';
+import { getAllNotes, getNote, notePath } from '@/lib/notes';
 import { renderFeed } from '@/lib/seo/feed';
 import {
   postMarkdownPath,
@@ -27,6 +29,8 @@ import { renderSitemap } from '@/lib/seo/sitemap';
 import {
   aboutJsonLd,
   homeJsonLd,
+  noteJsonLd,
+  notesJsonLd,
   postJsonLd,
   postsJsonLd,
   resumeJsonLd,
@@ -90,6 +94,62 @@ export function createApp(build: BuildAssets) {
       ),
     );
   });
+
+  // 공개 학습 노트. 사이트 내 진입점은 아직 없다 — 주소를 아는 사람만, 색인은 유지한다.
+  app.get('/notes', (c) => {
+    const notes = getAllNotes();
+
+    return c.html(
+      page(
+        {
+          title: 'Notes',
+          description: '김민준의 학습 노트 — 공부하며 정리한 것들.',
+          path: '/notes',
+          // 노트가 하나도 없을 때 빈 목록이 색인되지 않게 한다
+          noindex: notes.length === 0,
+          jsonLd: notesJsonLd(
+            notes.map((note) => ({
+              title: note.title,
+              url: notePath(note),
+              updatedAt: note.updatedAt,
+            })),
+          ),
+        },
+        <Layout>
+          <Notes />
+        </Layout>,
+      ),
+    );
+  });
+
+  app.get(
+    '/notes/:topic/:slug',
+    ssgParams(() => getAllNotes().map(({ topic, slug }) => ({ topic, slug }))),
+    async (c) => {
+      const note = getNote(c.req.param('topic'), c.req.param('slug'));
+      const path = notePath(note);
+      const [{ html, images }, description] = await Promise.all([
+        renderPostHtml(note.content, build),
+        getExcerpt(note.content),
+      ]);
+
+      return c.html(
+        page(
+          {
+            title: note.title,
+            description,
+            path,
+            ogType: 'article',
+            jsonLd: noteJsonLd({ title: note.title, description, path, updatedAt: note.updatedAt }),
+          },
+          <Layout>
+            <Post title={note.title} date={note.updatedAt} html={html} />
+          </Layout>,
+          { preloadImages: images },
+        ),
+      );
+    },
+  );
 
   // 사이트 내 진입점은 없다(취업 지원 시 URL 을 직접 건넨다). 색인은 유지한다.
   app.get('/resume', async (c) => {
