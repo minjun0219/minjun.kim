@@ -36,4 +36,4 @@ export const APP_PATHS = ['/mdwire', '/ogpeek'] as const;
  * 앱(`APP_PATHS`)이 내는 sitemap. 크롤러는 호스트 루트의 robots.txt 만 읽으므로 하위 경로 앱은 자기
  * robots.txt 로 sitemap 을 알릴 수 없다 — 이 사이트의 robots.txt 가 대신 싣는다.
  */
-export const APP_SITEMAPS = ['/mdwire/sitemap.xml'] as const;
+export const APP_SITEMAPS = ['/mdwire/sitemap.xml', '/ogpeek/sitemap.xml'] as const;
