@@ -282,8 +282,13 @@ repo 는 경로·라우팅·같은 origin 에 관한 판단을 이 repo 에 묻�
   앱을 붙이거나 뗄 때 이 사이트의 `wrangler.jsonc` 는 손댈 것이 없다. 앱이 붙기 전 그 경로는 이 사이트의 404 다.
 - 이 사이트에서 앱으로 가는 링크는 **hx-boost 하지 않는다** — boost 되면 다른 앱의 HTML 이 이 사이트 body 에
   스왑된다. 마크다운 링크는 `rehypeAppLinks` 가 `hx-boost="false"` 를 달고, 뷰포트 선요청도 그 링크를 건너뛴다.
-- 옛 호스트(예: `mdwire.minjun.dev`, `ogpeek.dev`)는 이전 뒤에도 병행 서빙한다 — 방식은 앱마다 다르다(mdwire 는
-  존 URL Rewrite, ogpeek 은 Worker 안에서 재작성). 언제 합칠지는 사용자가 PostHog `$host` 트래픽을 보고 정한다.
+- 옛 호스트는 이전 직후 병행 서빙하고, 언제 합칠지는 사용자가 PostHog `$host` 트래픽을 보고 정한다. 지금 상태:
+  - mdwire: `mdwire.minjun.dev` 는 2026-10-04 에 합쳤다. `minjun.dev` 존의 Redirect Rule 둘이 301 로 보낸다
+    (`mdwire-site-old-host-prefixed`: `/mdwire/…` → `https://minjun.kim` + 경로, `mdwire-site-old-host`: 그 외 →
+    `https://minjun.kim/mdwire` + 경로, 쿼리 보존). 병행 서빙에 쓰던 URL Rewrite `mdwire-site-subpath` 는 되돌릴 때
+    쓰려고 꺼 둔 채 남겨 두었다.
+  - ogpeek: `ogpeek.minjun.dev` 는 ogpeek Worker 가 경로를 재작성해 병행 서빙한다. `ogpeek.dev` 도 200 으로
+    응답한다(2026-10-04 확인, 서빙 방식은 ogpeek repo 가 안다).
 
 **발견성**
 - `/projects` 허브가 앱을 소개하고 링크한다. 사이트 안에서는 허브를 링크하지 않고 sitemap 에만 둔다.
