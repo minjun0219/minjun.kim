@@ -13,7 +13,8 @@ ActiveX가 있어야 하던 투자 절차를 웹 표준만으로 동작하게 �
 
 ## 만들고 있는 것
 
-- [ogpeek](https://ogpeek.dev): Open Graph 메타데이터를 파싱하고 명세 위반을 찾아 주는 도구
+- [mdwire](/mdwire/): LLM이 쓴 마크다운을 Telegram, Slack, GitHub, Notion 문법에 맞게 바꾸고 채널별 길이 제한에 맞춰 나눠 주는 라이브러리
+- [ogpeek](/ogpeek/): Open Graph 메타데이터를 파싱하고 명세 위반을 찾아 주는 도구
 - [hotwatermat-ble](https://github.com/minjun0219/hotwatermat-ble): 온수매트 앱 대신 쓰려고 블루투스 통신을 분석해 만든 CLI
 
 ## 연락처
