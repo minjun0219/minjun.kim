@@ -40,7 +40,13 @@ export function renderSitemap(): string {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
-    // 사이트 내 링크는 없지만 이름으로 검색해 찾는 경로는 열어 둔다.
+    // 사이트 내 링크는 없지만 검색으로 찾는 경로는 열어 둔다.
+    {
+      url: `${SITE_URL}/projects`,
+      lastModified: docUpdatedAt('projects'),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
     {
       url: `${SITE_URL}/resume`,
       lastModified: docUpdatedAt('resume'),

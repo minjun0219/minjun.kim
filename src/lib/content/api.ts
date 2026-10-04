@@ -3,8 +3,8 @@ import { join } from 'node:path';
 
 import matter from 'gray-matter';
 
-/** `_content/*.md` — 글이 아닌 단일 문서 페이지(about, resume). 파일명이 곧 경로다. */
-export type DocName = 'about' | 'resume';
+/** `_content/*.md` — 글이 아닌 단일 문서 페이지(about, resume, projects). 파일명이 곧 경로다. */
+export type DocName = 'about' | 'projects' | 'resume';
 
 export type Doc = {
   title: string;
