@@ -85,7 +85,8 @@ export function createApp(build: BuildAssets) {
       page(
         {
           title: 'About',
-          description: '김민준 소개 — 하는 일, 만든 것, 그리고 연락하는 방법.',
+          description:
+            '프론트엔드 엔지니어 김민준을 소개합니다. 하는 일과 만든 것, 연락처를 담았습니다.',
           path: '/about',
           jsonLd: aboutJsonLd({ updatedAt }),
         },
