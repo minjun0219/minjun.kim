@@ -185,6 +185,62 @@ export function postJsonLd(post: {
   ];
 }
 
+export function notesJsonLd(
+  notes: Array<{ title: string; url: string; updatedAt: string }>,
+): JsonLdNode[] {
+  const url = absoluteUrl('/notes');
+  return [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${url}#webpage`,
+      url,
+      name: `${SITE_NAME} Notes`,
+      inLanguage: 'ko-KR',
+      isPartOf: ref(WEBSITE_ID),
+      author: ref(PERSON_ID),
+      hasPart: notes.map((note) => ({
+        '@type': 'TechArticle',
+        headline: note.title,
+        url: absoluteUrl(note.url),
+        dateModified: note.updatedAt,
+      })),
+    },
+    breadcrumbs([
+      { name: SITE_NAME, path: '/' },
+      { name: 'Notes', path: '/notes' },
+    ]),
+  ];
+}
+
+export function noteJsonLd(note: {
+  title: string;
+  description: string;
+  path: string;
+  updatedAt: string;
+}): JsonLdNode[] {
+  const url = absoluteUrl(note.path);
+  return [
+    {
+      '@type': 'TechArticle',
+      '@id': `${url}#article`,
+      url,
+      mainEntityOfPage: url,
+      headline: note.title,
+      description: note.description,
+      dateModified: note.updatedAt,
+      inLanguage: 'ko-KR',
+      author: ref(PERSON_ID),
+      publisher: ref(PERSON_ID),
+      isPartOf: ref(`${SITE_URL}/notes#webpage`),
+    },
+    breadcrumbs([
+      { name: SITE_NAME, path: '/' },
+      { name: 'Notes', path: '/notes' },
+      { name: note.title, path: note.path },
+    ]),
+  ];
+}
+
 /**
  * `<script type="application/ld+json">` 에 그대로 넣을 문자열.
  * `<` 를 이스케이프해 본문 문자열에 `</script>` 가 섞여도 태그가 닫히지 않게 한다.

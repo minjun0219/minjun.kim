@@ -1,5 +1,6 @@
 import { getAllPosts } from '@/lib/blog';
 import { type DocName, getDoc } from '@/lib/content';
+import { getAllNotes, notePath } from '@/lib/notes';
 import { SITE_URL } from '@/lib/siteConfig';
 
 type Entry = {
@@ -15,6 +16,7 @@ type Entry = {
  */
 export function renderSitemap(): string {
   const posts = getAllPosts();
+  const notes = getAllNotes();
   const latestPost = new Date(Math.max(...posts.map((post) => new Date(post.date).getTime())));
   const docUpdatedAt = (name: DocName) => {
     const { updatedAt } = getDoc(name);
@@ -53,6 +55,28 @@ export function renderSitemap(): string {
       changeFrequency: 'monthly',
       priority: 0.4,
     },
+    // 노트가 없으면 /notes 는 noindex 라 sitemap 에서도 뺀다
+    ...(notes.length > 0
+      ? [
+          {
+            url: `${SITE_URL}/notes`,
+            lastModified: new Date(
+              notes
+                .map((note) => note.updatedAt)
+                .sort()
+                .at(-1) as string,
+            ),
+            changeFrequency: 'weekly',
+            priority: 0.5,
+          },
+        ]
+      : []),
+    ...notes.map((note) => ({
+      url: `${SITE_URL}${notePath(note)}`,
+      lastModified: new Date(note.updatedAt),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    })),
     ...posts.map((post) => ({
       url: `${SITE_URL}/posts/${post.slug}`,
       lastModified: new Date(post.date),

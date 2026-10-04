@@ -16,7 +16,7 @@ import { MD_CLASS } from './markdownClassNames';
 const SHIKI_THEME = 'dark-plus';
 
 /** 본문에서 실제로 쓰이는 언어만 번들한다. 그 외는 plaintext 로 떨어뜨린다. */
-const SHIKI_LANGS = ['typescript', 'css', 'bash'] as const;
+const SHIKI_LANGS = ['typescript', 'javascript', 'json', 'css', 'bash', 'rust', 'go'] as const;
 
 const FALLBACK_LANG = 'text';
 
