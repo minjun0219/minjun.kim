@@ -90,7 +90,8 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 실행된다. 같은 이름의 페이지를 만들어도 배포만 되고 보이지 않는다. 목록은 `siteConfig.ts` 의 `APP_PATHS`
 이고, 앱이 늘면 여기에 추가한다. 이 경로로 가는 링크는 hx-boost 하면 다른 앱의 HTML 이 이 사이트 body 에
 스왑되므로, 마크다운 링크는 `rehypeAppLinks` 가 `hx-boost="false"` 를 달고 뷰포트 선요청도 그 링크를 건너뛴다.
-앱이 붙기 전에는 이 경로가 이 사이트의 404 로 떨어지는 게 맞다.
+앱이 붙기 전에는 이 경로가 이 사이트의 404 로 떨어지는 게 맞다. 앱이 sitemap 을 내면 `APP_SITEMAPS` 에 추가한다 —
+크롤러는 호스트 루트의 robots.txt 만 읽어서, 하위 경로 앱의 sitemap 은 이 사이트 robots.txt 로만 알릴 수 있다.
 
 **SEO·LLM 사본** (`src/lib/seo/*`):
 - `structuredData.ts` — 페이지마다 `WebSite`+`Person` 노드에 페이지 노드(`BlogPosting`/`Blog`/
