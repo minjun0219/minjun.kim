@@ -9,6 +9,7 @@ import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 import { GITHUB_ICON_PATH, GITHUB_ICON_VIEWBOX } from '@/components/icons/githubIconPath';
 import type { ImageAsset, ImageManifest } from '@/lib/images';
+import { APP_PATHS, SITE_URL } from '@/lib/siteConfig';
 import { MD_CLASS } from './markdownClassNames';
 
 /** VS Code 기본 다크. 이전 prism-react-renderer `themes.vsDark` 에 가장 가깝다. */
@@ -285,6 +286,31 @@ function rehypeGithubIconLink() {
   };
 }
 
+/** `href` 가 다른 Worker 가 서빙하는 앱 경로(`APP_PATHS`)를 가리키는가. */
+function isAppHref(href: string): boolean {
+  // 쿼리·해시·절대 URL 이 붙어도 같은 판정이 나오도록 pathname 으로 비교한다
+  const url = new URL(href, SITE_URL);
+  if (url.origin !== new URL(SITE_URL).origin) {
+    return false;
+  }
+  return APP_PATHS.some((app) => url.pathname === app || url.pathname.startsWith(`${app}/`));
+}
+
+/**
+ * 앱 경로로 가는 링크는 일반 탐색으로 뺀다. 마크다운은 raw HTML 을 렌더하지 않아 본문에서
+ * `hx-boost="false"` 를 직접 쓸 수 없으므로 여기서 단다.
+ */
+function rehypeAppLinks() {
+  return (tree: HastRoot) => {
+    visit(tree, 'element', (node) => {
+      const href = node.properties?.href;
+      if (node.tagName === 'a' && typeof href === 'string' && isAppHref(href)) {
+        node.properties = { ...node.properties, 'hx-boost': 'false' };
+      }
+    });
+  };
+}
+
 export type RenderedPost = {
   html: string;
   /** 본문이 참조한 글 이미지(문서 순서). `Document` 가 head 에서 preload 한다 */
@@ -312,6 +338,7 @@ export async function renderPostHtml(
     .use(rehypeImages, images, usedImages)
     .use(rehypeWrapImages)
     .use(rehypeGithubIconLink)
+    .use(rehypeAppLinks)
     .use(rehypeStringify)
     .process(markdown);
 

@@ -64,7 +64,7 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 
 **Content as files.** 본문이 있는 콘텐츠는 YAML frontmatter 가 붙은 Markdown 이고 `gray-matter` 로 읽는다:
 - 글: `_posts/*.md` → `/posts/[slug]` (파일명이 slug)
-- 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `resume`). `getDoc(name)` 이 읽고
+- 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `projects`, `resume`). `getDoc(name)` 이 읽고
   `containers/MarkdownPage` 가 렌더한다 — 둘의 차이는 마크다운 본문뿐이다.
 - 노트: `_content/notes/<topic>/<slug>.md` → `/notes/<topic>/<slug>`, 목록은 `/notes`(주제별 묶음).
   공개 학습 노트(Rust·Go·TS·Node 등)이고 **사람이 골라 넣는다** — 다른 곳에서 자동으로 복사해 오는 경로는
@@ -89,7 +89,14 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 
 **`/resume` 는 사이트 안에서 링크하지 않는다.** 취업 지원 시 URL 을 직접 건네는 용도라
 네비게이션(`SocialLink`)에는 `/about` 만 둔다. 다만 sitemap 에는 남겨 색인은 유지한다 — 진입점을
-없앤 것이지 숨긴 게 아니다.
+없앤 것이지 숨긴 게 아니다. `/projects` 도 지금은 같은 취급이다(링크 없음, sitemap 에는 포함).
+
+**`/mdwire`·`/ogpeek` 은 예약 경로다 — 이 이름으로 최상위 페이지를 만들지 않는다.** 각 앱의 Worker 가
+`minjun.kim/<이름>*` zone route 로 서빙하는데, 이 사이트는 Custom Domain(= origin)이라 route 가 항상 먼저
+실행된다. 같은 이름의 페이지를 만들어도 배포만 되고 보이지 않는다. 목록은 `siteConfig.ts` 의 `APP_PATHS`
+이고, 앱이 늘면 여기에 추가한다. 이 경로로 가는 링크는 hx-boost 하면 다른 앱의 HTML 이 이 사이트 body 에
+스왑되므로, 마크다운 링크는 `rehypeAppLinks` 가 `hx-boost="false"` 를 달고 뷰포트 선요청도 그 링크를 건너뛴다.
+앱이 붙기 전에는 이 경로가 이 사이트의 404 로 떨어지는 게 맞다.
 
 **SEO·LLM 사본** (`src/lib/seo/*`):
 - `structuredData.ts` — 페이지마다 `WebSite`+`Person` 노드에 페이지 노드(`BlogPosting`/`Blog`/

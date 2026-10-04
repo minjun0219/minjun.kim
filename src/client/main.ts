@@ -91,7 +91,8 @@ function isPrefetchableLink(anchor: HTMLAnchorElement): boolean {
   if (anchor.origin !== location.origin) {
     return false;
   }
-  if (anchor.target || anchor.hasAttribute('download')) {
+  // hx-boost 에서 뺀 링크(피드, 다른 Worker 가 서빙하는 앱)는 이 사이트 페이지가 아니다
+  if (anchor.target || anchor.hasAttribute('download') || anchor.closest('[hx-boost="false"]')) {
     return false;
   }
   // 현재 페이지, 해시 이동, 피드 같은 파일 링크는 제외
