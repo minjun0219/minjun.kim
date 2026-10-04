@@ -288,8 +288,12 @@ function rehypeGithubIconLink() {
 
 /** `href` 가 다른 Worker 가 서빙하는 앱 경로(`APP_PATHS`)를 가리키는가. */
 function isAppHref(href: string): boolean {
-  const path = href.startsWith(SITE_URL) ? href.slice(SITE_URL.length) : href;
-  return APP_PATHS.some((app) => path === app || path.startsWith(`${app}/`));
+  // 쿼리·해시·절대 URL 이 붙어도 같은 판정이 나오도록 pathname 으로 비교한다
+  const url = new URL(href, SITE_URL);
+  if (url.origin !== new URL(SITE_URL).origin) {
+    return false;
+  }
+  return APP_PATHS.some((app) => url.pathname === app || url.pathname.startsWith(`${app}/`));
 }
 
 /**
