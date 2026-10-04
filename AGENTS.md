@@ -91,13 +91,8 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 네비게이션(`SocialLink`)에는 `/about` 만 둔다. 다만 sitemap 에는 남겨 색인은 유지한다 — 진입점을
 없앤 것이지 숨긴 게 아니다. `/projects` 도 지금은 같은 취급이다(링크 없음, sitemap 에는 포함).
 
-**`/mdwire`·`/ogpeek` 은 예약 경로다 — 이 이름으로 최상위 페이지를 만들지 않는다.** 각 앱의 Worker 가
-`minjun.kim/<이름>*` zone route 로 서빙하는데, 이 사이트는 Custom Domain(= origin)이라 route 가 항상 먼저
-실행된다. 같은 이름의 페이지를 만들어도 배포만 되고 보이지 않는다. 목록은 `siteConfig.ts` 의 `APP_PATHS`
-이고, 앱이 늘면 여기에 추가한다. 이 경로로 가는 링크는 hx-boost 하면 다른 앱의 HTML 이 이 사이트 body 에
-스왑되므로, 마크다운 링크는 `rehypeAppLinks` 가 `hx-boost="false"` 를 달고 뷰포트 선요청도 그 링크를 건너뛴다.
-앱이 붙기 전에는 이 경로가 이 사이트의 404 로 떨어지는 게 맞다. 앱이 sitemap 을 내면 `APP_SITEMAPS` 에 추가한다 —
-크롤러는 호스트 루트의 robots.txt 만 읽어서, 하위 경로 앱의 sitemap 은 이 사이트 robots.txt 로만 알릴 수 있다.
+**`/mdwire`·`/ogpeek` 은 이 사이트 페이지가 아니다** — 다른 Worker 가 서빙하는 프로젝트 사이트다. 규칙은
+아래 「프로젝트 사이트」 절.
 
 **SEO·LLM 사본** (`src/lib/seo/*`):
 - `structuredData.ts` — 페이지마다 `WebSite`+`Person` 노드에 페이지 노드(`BlogPosting`/`Blog`/
@@ -265,6 +260,41 @@ htmx 4 는 공식 업그레이드 가이드와 체커를 패키지에 동봉한�
   **도메인 레벨 리다이렉트는 지원하지 않는다** — `www → apex` 는 Cloudflare Redirect Rule 이 필요하다.
 - `compatibility_date` 는 설치된 `workerd` 버전보다 미래일 수 없다. 미래 날짜면 `wrangler dev` 가
   뜨지 않는다.
+
+## 프로젝트 사이트 (`minjun.kim/<이름>/`)
+
+직접 만든 앱(mdwire, ogpeek, …)은 이 도메인 아래 `/<이름>/` 에 산다. **세부 규칙의 정본은 이 절이다** — 앱
+repo 는 경로·라우팅·같은 origin 에 관한 판단을 이 repo 에 묻는다.
+
+**자리와 주소**
+- 앱 자리는 최상위 `/<이름>/`. 지금 예약된 이름은 `mdwire`·`ogpeek`(`siteConfig.ts` 의 `APP_PATHS`) — 이 사이트에
+  같은 이름으로 페이지를 만들지 않는다(배포돼도 보이지 않는다). 앱이 늘면 `APP_PATHS` 에 먼저 추가한다.
+- 앱 루트의 정식 주소는 **끝 슬래시**(`/mdwire/`, `/ogpeek/`). 그 아래 경로는 앱 프레임워크의 기본 형태를 따른다
+  — 이 사이트의 "trailing slash 없음" 규칙은 이 사이트 페이지에만 적용된다.
+- 슬래시 없는 앱 루트(`/<이름>`)는 정식 주소로 영구 이동이 원칙이다. 플랫폼 기본 동작이 307 이면(Workers
+  assets 의 auto-trailing-slash 등) 그대로 받아들인다.
+
+**라우팅**
+- 앱은 자기 Worker 로 서빙하고 `minjun.kim` 존에 route 를 **둘** 건다: `minjun.kim/<이름>` 과
+  `minjun.kim/<이름>/*`. `minjun.kim/<이름>*` 하나로 걸면 `/<이름>-x` 같은 남의 경로까지 잡는다.
+- 이 사이트는 Custom Domain(= origin)이라 같은 호스트의 route 가 항상 먼저 실행된다
+  ([문서](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/#interaction-with-routes)).
+  앱을 붙이거나 뗄 때 이 사이트의 `wrangler.jsonc` 는 손댈 것이 없다. 앱이 붙기 전 그 경로는 이 사이트의 404 다.
+- 이 사이트에서 앱으로 가는 링크는 **hx-boost 하지 않는다** — boost 되면 다른 앱의 HTML 이 이 사이트 body 에
+  스왑된다. 마크다운 링크는 `rehypeAppLinks` 가 `hx-boost="false"` 를 달고, 뷰포트 선요청도 그 링크를 건너뛴다.
+- 옛 호스트(예: `mdwire.minjun.dev`, `ogpeek.dev`)는 이전 뒤에도 병행 서빙한다 — 방식은 앱마다 다르다(mdwire 는
+  존 URL Rewrite, ogpeek 은 Worker 안에서 재작성). 언제 합칠지는 사용자가 PostHog `$host` 트래픽을 보고 정한다.
+
+**발견성**
+- `/projects` 허브가 앱을 소개하고 링크한다. 사이트 안에서는 허브를 링크하지 않고 sitemap 에만 둔다.
+- 크롤러는 호스트 루트의 robots.txt 만 읽으므로 앱은 자기 robots.txt 로 sitemap 을 알릴 수 없다. 앱 sitemap 은
+  `APP_SITEMAPS` 에 추가해 이 사이트 robots.txt 의 `Sitemap:` 줄로 낸다.
+
+**같은 origin 이라서**
+- 쿠키·localStorage·서비스 워커가 이 사이트와 공유된다. 그래서 **로그인이나 사용자 데이터가 있는 앱은 이
+  도메인에 들이지 않는다**(자기 도메인에 둔다).
+- 앱이 localStorage 를 쓰면 키에 앱 이름 접두사를 붙인다(`ogpeek:…`). 이 사이트는 `theme` 를 쓴다.
+- PostHog 는 같은 프로젝트(키)를 쓰고, 같은 쿠키를 공유해 방문자 식별이 이어진다. 사이트 구분은 `$pathname`.
 
 ## 폰트
 
