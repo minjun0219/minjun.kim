@@ -25,7 +25,14 @@ function toDateString(value: unknown): string | undefined {
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toISOString().slice(0, 10);
   }
-  return typeof value === 'string' && DATE.test(value) ? value : undefined;
+  if (typeof value !== 'string' || !DATE.test(value)) {
+    return undefined;
+  }
+  // 형식만 맞는 가짜 날짜(2026-02-30)는 Date 가 다음 달로 넘겨 버린다 — 되돌려 비교해 거른다
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value
+    ? value
+    : undefined;
 }
 
 /**
