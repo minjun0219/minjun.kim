@@ -28,7 +28,8 @@ Biome 는 마크다운을 아예 무시하므로(`!**/*.md`) `_posts`·`_content
 않는다 — 콘텐츠 변경의 게이트는 `pnpm build` 뿐이다.
 
 **환경변수는 `.env.local`**(gitignore, 예시는 `.env.local.example`). 두 채널로 갈린다:
-`HOMEPAGE`·`NAVER_SITE_VERIFICATION` 은 `scripts/ssg.mjs` 가 `process.loadEnvFile()` 로 올려
+`HOMEPAGE`·`NAVER_SITE_VERIFICATION`·`GA_MEASUREMENT_ID` 는 `scripts/ssg.mjs` 가
+`process.loadEnvFile()` 로 올려
 **렌더 프로세스의 `process.env`** 로 읽고(이미 있는 CI 값은 덮어쓰지 않는다), `VITE_POSTHOG_KEY`·
 `VITE_POSTHOG_HOST` 는 **Vite 가 `import.meta.env`** 로 클라이언트 번들에 박는다. `VITE_` 접두사가
 없으면 브라우저로 나가지 않는다. `HOMEPAGE` 가 비면 에러 없이 기본값으로 떨어져
@@ -59,6 +60,14 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 키는 있는데 호스트가 비면 `vite.client.config.ts` 가 빌드를 죽인다 — posthog-js 자체 기본값
 `us.i.posthog.com` 으로 조용히 프록시를 우회하는 걸 막는 가드다(코드에 폴백을 두지 않는 이유).
 키가 아예 없으면 관측 도구만 꺼진 채 빌드된다.
+
+**GA4 는 클라이언트 번들이 아니라 `<head>` 의 gtag.js 다.** `GA_MEASUREMENT_ID`(렌더 채널)가 있으면
+`components/GoogleAnalytics` 가 Google 설치 코드를 그대로 낸다 — 없으면 꺼지고, `G-…` 형식이 아니면
+빌드가 죽는다. hx-boost 이동의 page_view 는 코드에서 쏘지 않고 GA4 향상된 측정의 "브라우저 기록 이벤트
+기반 페이지 변경"(기본 켜짐)에 맡긴다. hx-head 가 응답 head 를 `pushState` **전에** 머지하므로 그
+시점의 `document.title` 은 이미 새 페이지 것이다. 이 경로는 `send_page_view: false` 로 꺼지지 않아
+수동 page_view 를 더하면 두 번 집계된다 — 직접 쏘려면 GA 관리 화면에서 그 옵션부터 끈다. 뒤로/앞으로
+가기는 htmx 가 URL 을 먼저 바꾸고 본문을 다시 받으므로 `popstate` 시점의 제목은 아직 이전 페이지 것이다.
 
 ## Architecture
 

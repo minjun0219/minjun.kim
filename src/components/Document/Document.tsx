@@ -1,4 +1,5 @@
 import type { Child } from 'hono/jsx';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 import NoFlashThemeScript from '@/components/NoFlashThemeScript';
 import { imageSizes, imageSrcset } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
@@ -139,6 +140,7 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
         />
 
         <NoFlashThemeScript />
+        <GoogleAnalytics />
         {build.vendorScriptSrcs.map((src) => (
           <script key={src} src={src} defer />
         ))}
