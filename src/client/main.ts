@@ -1,4 +1,6 @@
-// slim 번들: 코어만. 확장은 켜진 것만 런타임 지연 로드.
+// slim 번들: 코어만. 확장(예외·Web Vitals·자동 수집·녹화 등)은 하나도 들어 있지 않아서
+// 옵션이나 프로젝트 설정으로 켜도 동작하지 않는다. 넣으려면 `__extensionClasses` 로 직접 넘겨야
+// 하는데, `dist/extension-bundles` 는 트리 셰이킹이 안 돼 확장 하나만 가져와도 전부 딸려 온다.
 import posthog from 'posthog-js/dist/module.slim';
 import { THEME_CYCLE, THEME_STORAGE_KEY, type Theme } from '@/lib/theme';
 import { initWebMcp } from './webmcp';
@@ -57,7 +59,6 @@ function initAnalytics() {
     // hx-boost 는 pushState 이동이라 자동 pageview 가 잡히지 않는다. 아래에서 직접 쏜다.
     capture_pageview: false,
     capture_pageleave: true,
-    capture_exceptions: true,
     autocapture: false,
     disable_session_recording: true,
     disable_surveys: true,
