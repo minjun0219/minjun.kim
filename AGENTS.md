@@ -61,6 +61,13 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 `us.i.posthog.com` 으로 조용히 프록시를 우회하는 걸 막는 가드다(코드에 폴백을 두지 않는 이유).
 키가 아예 없으면 관측 도구만 꺼진 채 빌드된다.
 
+**PostHog 는 slim 번들이라 코어만 있다.** 수집하는 건 `$pageview`(hx-boost 이동마다 직접)·`$pageleave`·
+`not_found`(404 페이지) 셋뿐이다. 예외·Web Vitals·자동 수집·녹화 같은 확장은 번들에 없으므로 init 옵션이나
+PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되지 않는다**. 넣으려면 `__extensionClasses` 로
+넘겨야 하는데, `posthog-js/dist/extension-bundles` 는 트리 셰이킹이 안 돼 확장 하나만 가져와도 클라이언트
+번들이 gzip 37KB 에서 70KB 로 거의 두 배가 된다. 크롤러는 코드에서 거르지 않고 PostHog 프로젝트의
+"내부·테스트 사용자 제외" 필터(UA 봇, 상하이 시간대에 중국 밖 IP, 800×600 헤드리스 화면 등)로 뺀다.
+
 **GA4 는 클라이언트 번들이 아니라 `<head>` 의 gtag.js 다.** `GA_MEASUREMENT_ID`(렌더 채널)가 있으면
 `components/GoogleAnalytics` 가 Google 설치 코드를 그대로 낸다 — 없으면 꺼지고, `G-…` 형식이 아니면
 빌드가 죽는다. hx-boost 이동의 page_view 는 코드에서 쏘지 않고 GA4 향상된 측정의 "브라우저 기록 이벤트
