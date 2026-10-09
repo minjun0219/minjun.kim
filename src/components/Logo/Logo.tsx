@@ -13,7 +13,7 @@ const styles = {
       display: none;
     }
   `,
-  // 글자가 아니라 나눔스퀘어라운드 윤곽을 뽑은 SVG 다(`scripts/logo-svg.py`). 높이·기준선을 글꼴 지표에
+  // 글자가 아니라 나눔스퀘어라운드 윤곽을 뽑은 SVG 다(`scripts/logo-svg.mjs`). 높이·기준선을 글꼴 지표에
   // 맞춰 영문 로고처럼 줄에 앉는다.
   hangul: css`
     display: none;

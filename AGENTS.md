@@ -339,8 +339,8 @@ Nunito). OG 이미지도 같은 패키지의 OTF 를 쓴다.
 **로고는 한글날(매년 10월 9일, 한국 시간)에만 한글(`김.민준`)이다.** 빌드 날짜로 정하면 매년 그날 배포해야
 하므로 HTML 에 두 로고를 다 싣고, `components/HangulDayScript` 가 pre-paint 로 방문 시각을 보고 `<html
 data-hangul-day>` 를 붙인다(JS 가 꺼져 있으면 영문 로고, 열어 둔 탭은 한국 시간 자정마다 다시 계산). 한글
-로고는 글자가 아니라 inline SVG 다 — 나눔스퀘어라운드 Regular 의 글리프 윤곽을 `scripts/logo-svg.py`
-(fonttools)로 뽑아 `components/Logo/hangulMark.ts` 에 커밋했다. 1년에 하루 쓰는 로고 때문에 폰트 파일·
+로고는 글자가 아니라 inline SVG 다 — 나눔스퀘어라운드 Regular 의 글리프 윤곽을 `scripts/logo-svg.mjs`
+(opentype.js)로 뽑아 `components/Logo/hangulMark.ts` 에 커밋했다. 1년에 하루 쓰는 로고 때문에 폰트 파일·
 @font-face·preload 를 두지 않으려는 것이고(페이지마다 brotli 약 0.8KB), 색은 `fill: currentColor` 로 영문
 로고와 같은 색·강조색을 따른다. **로고 글자를 바꾸면 스크립트로 다시 뽑아 커밋한다.**
 
