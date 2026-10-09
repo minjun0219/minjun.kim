@@ -118,6 +118,14 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
           href={build.fontSrcs.nunitoRegular}
           crossOrigin="anonymous"
         />
+        {/* 로고는 모든 페이지 첫 화면에 있다. 4KB 미만이라 미리 받아 swap 으로 글꼴이 바뀌는 순간을 줄인다 */}
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={build.fontSrcs.logoHangul}
+          crossOrigin="anonymous"
+        />
         {/* hono/css 가 렌더 중 등록한 스타일을 이 자리에 splice 한다. child 는 정확히 하나여야 한다. */}
         <Style>{createGlobalCss(build.fontSrcs)}</Style>
         {preloadImages.map((image) => (
