@@ -144,8 +144,7 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
         />
 
         <NoFlashThemeScript />
-        {/* 한글날에만 로고 폰트를 preload 한다(스크립트가 직접 넣는다) */}
-        <HangulDayScript fontSrc={build.fontSrcs.logoHangul} />
+        <HangulDayScript />
         <GoogleAnalytics />
         {build.vendorScriptSrcs.map((src) => (
           <script key={src} src={src} defer />

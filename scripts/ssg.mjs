@@ -1,6 +1,5 @@
-import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import fsPromises, { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import fsPromises, { cp, mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { toSSG } from 'hono/ssg';
 
@@ -84,11 +83,9 @@ async function findClientEntry() {
 }
 
 /**
- * Nunito woff2 를 @fontsource/nunito 에서, Pretendard 가변 dynamic subset 을 pretendard 에서, 로고 한글
- * 서브셋을 `src/assets/fonts/` 에서 dist/fonts/ 로 복사한다. vendor 와 같은 이유로 경로에 버전을
- * 박는다 — `/fonts/*` 가 immutable 이라 이름이 고정이면 폰트를 갱신해도 브라우저가 옛 파일을 1년간
- * 붙든다. 로고 서브셋은 패키지 버전이 없으니(`scripts/logo-font.py` 가 만들어 커밋한다) 글 이미지처럼
- * 내용 해시를 박는다.
+ * Nunito woff2 를 @fontsource/nunito 에서, Pretendard 가변 dynamic subset 을 pretendard 에서 dist/fonts/
+ * 로 복사한다. vendor 와 같은 이유로 경로에 패키지 버전을 박는다 — `/fonts/*` 가 immutable 이라 이름이
+ * 고정이면 폰트를 갱신해도 브라우저가 옛 파일을 1년간 붙든다.
  */
 async function copyFonts() {
   const pkg = 'node_modules/@fontsource/nunito';
@@ -114,14 +111,9 @@ async function copyFonts() {
   });
   await cp(join(pretendardFrom, pretendardCss), join(pretendardTo, pretendardCss));
 
-  const logo = await readFile('src/assets/fonts/logo-hangul.woff2');
-  const logoTo = `logo-hangul-${createHash('sha256').update(logo).digest('hex').slice(0, 8)}.woff2`;
-  await writeFile(join(OUT_DIR, 'fonts', logoTo), logo);
-
   return {
     nunitoRegular: await copy(400),
     nunitoBold: await copy(700),
-    logoHangul: `/fonts/${logoTo}`,
     pretendardStylesheet: `/fonts/pretendard-${pretendardVersion}/${pretendardCss}`,
   };
 }

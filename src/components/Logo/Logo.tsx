@@ -1,7 +1,9 @@
 import TopHeading from '@/components/TopHeading';
 import { type ClassName, css } from '@/lib/css';
+import { HANGUL_MARK } from './hangulMark';
 
 const styles = {
+  // 한글 로고의 SVG 는 `fill: currentColor` 를 물려받으므로 color 만으로 path 도 강조색이 된다
   dot: css`
     color: var(--primary-color);
   `,
@@ -11,11 +13,13 @@ const styles = {
       display: none;
     }
   `,
-  // "Minjun Logo" 는 이 로고 글자만 담은 서브셋이다. 글자를 바꾸면 `scripts/logo-font.py` 로 폰트를
-  // 다시 만든다 — 빠진 글자는 에러 없이 다음 폰트(한글은 시스템 폰트)로 떨어진다.
+  // 글자가 아니라 나눔스퀘어라운드 윤곽을 뽑은 SVG 다(`scripts/logo-svg.mjs`). 높이·기준선을 글꼴 지표에
+  // 맞춰 영문 로고처럼 줄에 앉는다.
   hangul: css`
     display: none;
-    font-family: "Minjun Logo", Nunito, "Nunito Fallback", sans-serif;
+    height: ${HANGUL_MARK.height};
+    vertical-align: ${HANGUL_MARK.verticalAlign};
+    fill: currentColor;
 
     :root[data-hangul-day] & {
       display: inline;
@@ -34,9 +38,16 @@ const Logo = ({ className, link }: Props) => {
       <span className={styles.latin}>
         minjun<span className={styles.dot}>.</span>kim
       </span>
-      <span className={styles.hangul}>
-        김<span className={styles.dot}>.</span>민준
-      </span>
+      <svg
+        className={styles.hangul}
+        viewBox={HANGUL_MARK.viewBox}
+        role="img"
+        aria-label={HANGUL_MARK.label}
+      >
+        {HANGUL_MARK.glyphs.map(({ d, dot }) => (
+          <path key={d} d={d} className={dot ? styles.dot : undefined} />
+        ))}
+      </svg>
     </>
   );
   return <TopHeading className={className}>{link ? <a href="/">{title}</a> : title}</TopHeading>;
