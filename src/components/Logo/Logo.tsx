@@ -9,7 +9,7 @@ type Props = {
 const Logo = ({ className, link }: Props) => {
   const title = (
     <>
-      minjun<span>.</span>kim
+      민준<span>.</span>김
     </>
   );
   return <TopHeading className={className}>{link ? <a href="/">{title}</a> : title}</TopHeading>;
