@@ -7,10 +7,15 @@ import type { ImageManifest } from '@/lib/images';
  * 실제 경로는 `scripts/ssg.mjs` 만 안다. 전역 가변 상태 대신 `createApp(build)` 인자로
  * 흘려보내 렌더가 빌드 순서에 의존하지 않게 한다.
  */
-/** 셀프호스팅 Nunito woff2 경로. 파일명에 @fontsource 버전이 박힌다 (`/fonts/*` 는 immutable) */
+/** 셀프호스팅 폰트 경로. 경로에 패키지 버전이 박힌다 (`/fonts/*` 는 immutable) */
 export type FontSrcs = {
   nunitoRegular: string;
   nunitoBold: string;
+  /**
+   * Pretendard 가변 dynamic subset 의 @font-face 스타일시트(`/fonts/pretendard-<version>/…css`).
+   * 이 사이트가 `<link rel="stylesheet">` 로 거는 유일한 파일이다
+   */
+  pretendardStylesheet: string;
 };
 
 export type BuildAssets = {

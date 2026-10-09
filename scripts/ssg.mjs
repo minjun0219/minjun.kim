@@ -27,8 +27,11 @@ const VENDOR_SOURCES = [
  * `<Style>` 누락·전역 블록 안의 개행·스트리밍 청크 같은 상황에서 hono/css 는 에러 대신
  * `<script>document.querySelector('#hono-css')…</script>` 폴백을 내거나 전역 규칙을
  * 통째로 버린다. 브라우저에선 스타일이 "대체로" 먹어 보이니 여기서 문자열로 단언한다.
+ *
+ * 이 사이트 스타일은 전부 hono/css 인라인이라 `<link rel="stylesheet">` 는 `allowedStylesheets`
+ * (Pretendard @font-face 스타일시트)만 허용한다.
  */
-async function assertInlineStyles(dir) {
+async function assertInlineStyles(dir, allowedStylesheets) {
   const problems = [];
   for (const file of await listHtmlFiles(dir)) {
     const html = await readFile(file, 'utf8');
@@ -40,14 +43,15 @@ async function assertInlineStyles(dir) {
     if (styles[0].includes('\n')) {
       problems.push(`${file}: 인라인 스타일에 개행 — 전역 블록이 깨졌다`);
     }
-    for (const bad of [
-      ':-hono-global',
-      "#hono-css')",
-      '<link rel="stylesheet"',
-      'undefined</style>',
-    ]) {
+    for (const bad of [':-hono-global', "#hono-css')", 'undefined</style>']) {
       if (html.includes(bad)) {
         problems.push(`${file}: "${bad}" 발견`);
+      }
+    }
+    for (const [link] of html.matchAll(/<link rel="stylesheet"[^>]*>/g)) {
+      const href = link.match(/href="([^"]*)"/)?.[1];
+      if (!allowedStylesheets.includes(href)) {
+        problems.push(`${file}: 허용 목록 밖의 스타일시트 ${href}`);
       }
     }
   }
@@ -79,9 +83,9 @@ async function findClientEntry() {
 }
 
 /**
- * Nunito woff2 를 @fontsource/nunito 에서 dist/fonts/ 로 복사한다.
- * vendor 와 같은 이유로 파일명에 패키지 버전을 박는다 — `/fonts/*` 가 immutable 이라
- * 이름이 고정이면 폰트를 갱신해도 브라우저가 옛 파일을 1년간 붙든다.
+ * Nunito woff2 를 @fontsource/nunito 에서, Pretendard 가변 dynamic subset 을 pretendard 에서 dist/fonts/
+ * 로 복사한다. vendor 와 같은 이유로 경로에 패키지 버전을 박는다 — `/fonts/*` 가 immutable 이라 이름이
+ * 고정이면 폰트를 갱신해도 브라우저가 옛 파일을 1년간 붙든다.
  */
 async function copyFonts() {
   const pkg = 'node_modules/@fontsource/nunito';
@@ -92,7 +96,26 @@ async function copyFonts() {
     await cp(join(pkg, 'files', `nunito-latin-${weight}-normal.woff2`), join(OUT_DIR, 'fonts', to));
     return `/fonts/${to}`;
   };
-  return { nunitoRegular: await copy(400), nunitoBold: await copy(700) };
+
+  // CSS 가 글자 묶음을 `./woff2-dynamic-subset/…` 상대 경로로 가리키므로 폴더 구조째 옮긴다
+  const pretendard = 'node_modules/pretendard';
+  const pretendardVersion = JSON.parse(
+    await readFile(join(pretendard, 'package.json'), 'utf8'),
+  ).version;
+  const pretendardFrom = join(pretendard, 'dist/web/variable');
+  const pretendardTo = join(OUT_DIR, 'fonts', `pretendard-${pretendardVersion}`);
+  const pretendardCss = 'pretendardvariable-dynamic-subset.css';
+  const pretendardSubsets = 'woff2-dynamic-subset';
+  await cp(join(pretendardFrom, pretendardSubsets), join(pretendardTo, pretendardSubsets), {
+    recursive: true,
+  });
+  await cp(join(pretendardFrom, pretendardCss), join(pretendardTo, pretendardCss));
+
+  return {
+    nunitoRegular: await copy(400),
+    nunitoBold: await copy(700),
+    pretendardStylesheet: `/fonts/pretendard-${pretendardVersion}/${pretendardCss}`,
+  };
 }
 
 async function main() {
@@ -160,7 +183,7 @@ async function main() {
     process.exit(1);
   }
   console.log(`정적 페이지 ${result.files.length}개 생성`);
-  await assertInlineStyles(OUT_DIR);
+  await assertInlineStyles(OUT_DIR, [fontSrcs.pretendardStylesheet]);
 
   const { generateOgImages } = await import(`../${SSR_DIR}/og.js`);
   const ogImages = await generateOgImages(OUT_DIR);
