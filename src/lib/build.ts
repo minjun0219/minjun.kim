@@ -7,10 +7,12 @@ import type { ImageManifest } from '@/lib/images';
  * 실제 경로는 `scripts/ssg.mjs` 만 안다. 전역 가변 상태 대신 `createApp(build)` 인자로
  * 흘려보내 렌더가 빌드 순서에 의존하지 않게 한다.
  */
-/** 셀프호스팅 Nunito woff2 경로. 파일명에 @fontsource 버전이 박힌다 (`/fonts/*` 는 immutable) */
+/** 셀프호스팅 woff2 경로. 파일명에 버전이나 내용 해시가 박힌다 (`/fonts/*` 는 immutable) */
 export type FontSrcs = {
   nunitoRegular: string;
   nunitoBold: string;
+  /** 로고 한글 서브셋(나눔스퀘어라운드). `scripts/logo-font.py` 가 만든다 */
+  logoHangul: string;
 };
 
 export type BuildAssets = {
