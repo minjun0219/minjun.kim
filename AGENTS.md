@@ -44,7 +44,7 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 2. `vite build -c vite.client.config.ts` — 브라우저로 나가는 유일한 자체 번들
    (`src/client/main.ts`: 테마 토글, htmx 훅, PostHog). `dist-client/` 로 나간다.
 3. `node scripts/ssg.mjs` — `dist/` 를 비우고 `public/` 복사 → 글 이미지 webp 변환 → 클라이언트
-   자산·htmx vendor·폰트(Nunito·로고 한글 서브셋) 복사 → **`createApp(build)`** → Hono `toSSG` →
+   자산·htmx vendor·폰트(Nunito·Pretendard·로고 한글 서브셋) 복사 → **`createApp(build)`** → Hono `toSSG` →
    인라인 스타일 단언 → OG 이미지.
 
 **앱은 팩토리다.** `src/app.tsx` 의 `createApp(build: BuildAssets)` 가 빌드 산출물 경로(클라이언트
@@ -144,7 +144,8 @@ pre-paint 로 `localStorage` 를 읽어 `<html data-theme>` 을 세팅하고, �
 
 ## 스타일 — hono/css
 
-CSS 파일이 없다. 모든 스타일은 `hono/css`(`src/lib/css.ts` 로 재수출) 로 TSX 안에 두고, 렌더 시
+CSS 파일이 없다(예외는 본문 폰트 Pretendard 의 @font-face 스타일시트 하나 — 아래 「폰트」). 모든 스타일은
+`hono/css`(`src/lib/css.ts` 로 재수출) 로 TSX 안에 두고, 렌더 시
 `<head>` 의 `<style id="hono-css">` 한 개에 인라인된다. 전역 규칙은 `src/styles/global.ts` 의
 `:-hono-global { … }` 블록이고 `Document` 가 `<Style>{globalCss}</Style>` 로 싣는다.
 
@@ -180,8 +181,9 @@ hono 4.13 소스·실행으로 확인한 규칙 — 어기면 대부분 **에러
 - 스타일 등록은 hono/jsx 가 그 값을 렌더할 때만 일어난다. **마크다운 raw HTML 에 해시 클래스명을
   복사해도 등록되지 않는다** — 아래 `MD_CLASS` 방식으로 푼다.
 - 이 규칙들은 `scripts/ssg.mjs` 의 `assertInlineStyles()` 가 빌드에서 단언한다(HTML 마다 `<style
-  id="hono-css">` 정확히 1개, 개행 없음, `:-hono-global`/`#hono-css')`/`<link rel="stylesheet"`/
-  `undefined</style>` 0건). 실패하면 빌드가 죽는다 — 우회하지 말고 원인을 고친다.
+  id="hono-css">` 정확히 1개, 개행 없음, `:-hono-global`/`#hono-css')`/`undefined</style>` 0건,
+  `<link rel="stylesheet">` 는 Pretendard 스타일시트만). 실패하면 빌드가 죽는다 — 우회하지 말고
+  원인을 고친다.
 
 트레이드오프로 CSS 도구체인이 없다: Biome 는 템플릿 문자열 안의 CSS 를 보지 않고, `@media` 안의
 `var()` 같은 무효 CSS 도 빌드가 잡지 못한다. 브라우저에서 확인해야 한다.
@@ -325,11 +327,20 @@ Nunito 는 `@fontsource/nunito` 의 latin 400/700 woff2 를 빌드가 `dist/font
 `ascent-override` 등 Nunito 지표를 씌운 것)** 이 next/font 의 `adjustFontFallback` 을 대신한다 — 이게
 없으면 `font-display: swap` 순간에 글꼴 폭이 달라져 흔들린다. 지표 계산식은 그 파일 주석에.
 
+**본문 한글은 Pretendard 다.** npm `pretendard` 의 공식 variable dynamic subset(CSS 1개 + 글자 묶음 woff2
+92개)을 빌드가 `dist/fonts/pretendard-<version>/` 으로 폴더째 복사하고(CSS 가 묶음을 상대 경로로 가리킨다),
+`Document` 가 그 CSS 를 `<link rel="stylesheet">` 로 건다(`BuildAssets.fontSrcs.pretendardStylesheet`). 이
+사이트가 거는 유일한 스타일시트라 `assertInlineStyles` 는 이것만 허용한다. 브라우저는 페이지에 쓰인 글자가
+든 묶음만 받는다(글 1편 첫 방문 약 230-350KB, 굵기 45-920 을 한 벌로). 인라인하지 않은 이유는 @font-face
+규칙만 55KB 라 HTML 마다 그만큼 붙어서다 — 별도 파일은 `/fonts/*` immutable 캐시를 탄다. 본문
+(`--font-family-base`)은 영문까지 Pretendard 이고, 나머지 UI 는 영문 Nunito·한글 Pretendard 다(로고 영문은
+Nunito). OG 이미지도 같은 패키지의 OTF 를 쓴다.
+
 **로고는 한글날(매년 10월 9일, 한국 시간)에만 한글(`김.민준`)이다.** 빌드 날짜로 정하면 매년 그날 배포해야
 하므로 HTML 에 두 로고를 다 싣고, `components/HangulDayScript` 가 pre-paint 로 방문 시각을 보고 `<html
-data-hangul-day>` 를 붙인다(JS 가 꺼져 있으면 영문 로고). 한글 로고는 나눔스퀘어라운드 서브셋으로 그린다 —
-로고 글자만 남긴 woff2(4KB 미만)를 `scripts/logo-font.py`(fonttools)로 만들어
-`src/assets/fonts/logo-hangul.woff2` 에 커밋하고, 빌드가 내용 해시를 붙여 복사한다
+data-hangul-day>` 를 붙인다(JS 가 꺼져 있으면 영문 로고, 열어 둔 탭은 한국 시간 자정마다 다시 계산). 한글
+로고는 나눔스퀘어라운드 서브셋으로 그린다 — 로고 글자만 남긴 woff2(4KB 미만)를 `scripts/logo-font.py`
+(fonttools)로 만들어 `src/assets/fonts/logo-hangul.woff2` 에 커밋하고, 빌드가 내용 해시를 붙여 복사한다
 (`BuildAssets.fontSrcs.logoHangul`). preload 는 그 스크립트가 한글날에만 넣는다. 빌드에서 만들지 않는
 이유는 원본 TTF 를 받을 공식 npm 패키지를 찾지 못했고, 아래 이름 변경에 fonttools 가 필요해서다.
 **로고 글자를 바꾸면 폰트를 다시 만들어 커밋한다** — 안 하면 빠진 글자만 에러 없이 시스템 한글 폰트로
