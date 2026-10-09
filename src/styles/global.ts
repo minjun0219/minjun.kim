@@ -9,7 +9,8 @@ import { css } from '@/lib/css';
  * 여러 줄 주석도 제거되지 않으니 설명은 여기 TS 주석에 둔다.
  *
  * 폰트는 next/font 대신 @fontsource/nunito 를 셀프호스팅한다(경로는 빌드가 `fontSrcs` 로 준다).
- * latin 서브셋만 쓰며 한글은 시스템 폰트로 떨어진다.
+ * latin 서브셋만 쓰며 한글은 Pretendard 로 떨어진다. Pretendard 의 @font-face 는 `Document` 가 거는
+ * 외부 스타일시트(`PRETENDARD_STYLESHEET`)에 있다 — 본문(`--font-family-base`)은 영문까지 Pretendard 다.
  *
  * "Nunito Fallback" 은 next/font 의 `adjustFontFallback` 을 재현한 것이다. Nunito 가 오기 전
  * Arial 을 Nunito 의 폭·행간에 맞춰 보여 줘서 swap 순간의 글꼴 변화와 레이아웃 이동을 줄인다.
@@ -64,8 +65,8 @@ export const createGlobalCss = (fonts: FontSrcs) => css`:-hono-global {
     --code-title-color: #f7fff7;
     --code-highlight-color: rgba(0, 0, 0, 0.3);
     --font-family-base:
-      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-      Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     --font-family-code: Menlo, Monaco, "Courier New", monospace;
     --transition-duration: 250ms;
     --page-margin: 16px;
@@ -100,7 +101,7 @@ export const createGlobalCss = (fonts: FontSrcs) => css`:-hono-global {
   body {
     -webkit-text-size-adjust: none;
     background: var(--background-color);
-    font-family: Nunito, "Nunito Fallback", sans-serif;
+    font-family: Nunito, "Nunito Fallback", "Pretendard Variable", sans-serif;
     font-size: 0.8em;
     color: var(--text-color);
     transition-property: color, background;

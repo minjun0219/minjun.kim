@@ -144,7 +144,8 @@ pre-paint 로 `localStorage` 를 읽어 `<html data-theme>` 을 세팅하고, �
 
 ## 스타일 — hono/css
 
-CSS 파일이 없다. 모든 스타일은 `hono/css`(`src/lib/css.ts` 로 재수출) 로 TSX 안에 두고, 렌더 시
+CSS 파일이 없다(예외는 본문 폰트 Pretendard 의 외부 @font-face 스타일시트 하나 — 아래 「폰트」). 모든 스타일은
+`hono/css`(`src/lib/css.ts` 로 재수출) 로 TSX 안에 두고, 렌더 시
 `<head>` 의 `<style id="hono-css">` 한 개에 인라인된다. 전역 규칙은 `src/styles/global.ts` 의
 `:-hono-global { … }` 블록이고 `Document` 가 `<Style>{globalCss}</Style>` 로 싣는다.
 
@@ -180,8 +181,9 @@ hono 4.13 소스·실행으로 확인한 규칙 — 어기면 대부분 **에러
 - 스타일 등록은 hono/jsx 가 그 값을 렌더할 때만 일어난다. **마크다운 raw HTML 에 해시 클래스명을
   복사해도 등록되지 않는다** — 아래 `MD_CLASS` 방식으로 푼다.
 - 이 규칙들은 `scripts/ssg.mjs` 의 `assertInlineStyles()` 가 빌드에서 단언한다(HTML 마다 `<style
-  id="hono-css">` 정확히 1개, 개행 없음, `:-hono-global`/`#hono-css')`/`<link rel="stylesheet"`/
-  `undefined</style>` 0건). 실패하면 빌드가 죽는다 — 우회하지 말고 원인을 고친다.
+  id="hono-css">` 정확히 1개, 개행 없음, `:-hono-global`/`#hono-css')`/`undefined</style>` 0건,
+  `<link rel="stylesheet">` 는 `ALLOWED_STYLESHEETS` 에 있는 것만). 실패하면 빌드가 죽는다 — 우회하지 말고
+  원인을 고친다.
 
 트레이드오프로 CSS 도구체인이 없다: Biome 는 템플릿 문자열 안의 CSS 를 보지 않고, `@media` 안의
 `var()` 같은 무효 CSS 도 빌드가 잡지 못한다. 브라우저에서 확인해야 한다.
@@ -324,6 +326,15 @@ Nunito 는 `@fontsource/nunito` 의 latin 400/700 woff2 를 빌드가 `dist/font
 `src/styles/global.ts` 의 `createGlobalCss(fonts)` 에 있고, **`"Nunito Fallback"`(Arial 에 `size-adjust`/
 `ascent-override` 등 Nunito 지표를 씌운 것)** 이 next/font 의 `adjustFontFallback` 을 대신한다 — 이게
 없으면 `font-display: swap` 순간에 글꼴 폭이 달라져 흔들린다. 지표 계산식은 그 파일 주석에.
+
+**본문 한글은 Pretendard 다.** 개인 정적 자산 호스트 `s.minjun.dev`(별도 repo)가 서빙하는 공식 variable
+dynamic subset(`siteConfig.ts` 의 `PRETENDARD_STYLESHEET`)을 `<link rel="stylesheet">` 로 건다. 이 사이트의
+유일한 외부 스타일시트라 `scripts/ssg.mjs` 의 `ALLOWED_STYLESHEETS` 와 URL 이 같아야 빌드가 통과한다. 글자
+묶음 92개의 @font-face 라 브라우저는 페이지에 쓰인 글자가 든 묶음만 받는다(글 1편 첫 방문 약 230-350KB,
+굵기 45-920 을 한 벌로). 인라인하지 않은 이유는 규칙만 55KB 라 HTML 마다 그만큼 붙어서다. 본문
+(`--font-family-base`)은 영문까지 Pretendard 이고, 나머지 UI 는 영문 Nunito·한글 Pretendard 다(로고 영문은
+Nunito). 호스트의 CORS 는 `minjun.kim`·localhost 만 허용하므로 다른 origin(Cloudflare 미리보기 URL 등)에서는
+시스템 폰트로 보인다. 렌더를 막는 스타일시트라 호스트가 느려지면 첫 화면도 같이 늦어진다.
 
 **로고는 한글날(매년 10월 9일, 한국 시간)에만 한글(`김.민준`)이다.** 빌드 날짜로 정하면 매년 그날 배포해야
 하므로 HTML 에 두 로고를 다 싣고, `components/HangulDayScript` 가 pre-paint 로 방문 시각을 보고 `<html

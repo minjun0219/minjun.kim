@@ -23,6 +23,14 @@ const VENDOR_SOURCES = [
 ];
 
 /**
+ * `<link rel="stylesheet">` 로 걸어도 되는 스타일시트. 이 사이트 스타일은 전부 hono/css 인라인이고,
+ * 예외는 정적 자산 호스트의 Pretendard @font-face 뿐이다(`src/lib/siteConfig.ts` 의 `PRETENDARD_STYLESHEET`).
+ */
+const ALLOWED_STYLESHEETS = [
+  'https://s.minjun.dev/pretendard/variable/pretendardvariable-dynamic-subset.css',
+];
+
+/**
  * hono/css 가 조용히 실패하는 모드를 빌드에서 잡는다.
  *
  * `<Style>` 누락·전역 블록 안의 개행·스트리밍 청크 같은 상황에서 hono/css 는 에러 대신
@@ -41,14 +49,15 @@ async function assertInlineStyles(dir) {
     if (styles[0].includes('\n')) {
       problems.push(`${file}: 인라인 스타일에 개행 — 전역 블록이 깨졌다`);
     }
-    for (const bad of [
-      ':-hono-global',
-      "#hono-css')",
-      '<link rel="stylesheet"',
-      'undefined</style>',
-    ]) {
+    for (const bad of [':-hono-global', "#hono-css')", 'undefined</style>']) {
       if (html.includes(bad)) {
         problems.push(`${file}: "${bad}" 발견`);
+      }
+    }
+    for (const [link] of html.matchAll(/<link rel="stylesheet"[^>]*>/g)) {
+      const href = link.match(/href="([^"]*)"/)?.[1];
+      if (!ALLOWED_STYLESHEETS.includes(href)) {
+        problems.push(`${file}: 허용 목록 밖의 스타일시트 ${href}`);
       }
     }
   }
