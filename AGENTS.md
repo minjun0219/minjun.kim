@@ -44,7 +44,7 @@ sitemap·canonical·RSS·OG 의 절대 URL 이 통째로 어긋난다.
 2. `vite build -c vite.client.config.ts` — 브라우저로 나가는 유일한 자체 번들
    (`src/client/main.ts`: 테마 토글, htmx 훅, PostHog). `dist-client/` 로 나간다.
 3. `node scripts/ssg.mjs` — `dist/` 를 비우고 `public/` 복사 → 글 이미지 webp 변환 → 클라이언트
-   자산·htmx vendor·폰트(Nunito·로고 한글 서브셋) 복사 → **`createApp(build)`** → Hono `toSSG` →
+   자산·htmx vendor·Nunito 폰트(`@fontsource/nunito`) 복사 → **`createApp(build)`** → Hono `toSSG` →
    인라인 스타일 단언 → OG 이미지.
 
 **앱은 팩토리다.** `src/app.tsx` 의 `createApp(build: BuildAssets)` 가 빌드 산출물 경로(클라이언트
@@ -328,13 +328,10 @@ Nunito 는 `@fontsource/nunito` 의 latin 400/700 woff2 를 빌드가 `dist/font
 **로고는 한글날(매년 10월 9일, 한국 시간)에만 한글(`김.민준`)이다.** 빌드 날짜로 정하면 매년 그날 배포해야
 하므로 HTML 에 두 로고를 다 싣고, `components/HangulDayScript` 가 pre-paint 로 방문 시각을 보고 `<html
 data-hangul-day>` 를 붙인다(JS 가 꺼져 있으면 영문 로고, 열어 둔 탭은 한국 시간 자정마다 다시 계산). 한글
-로고는 나눔스퀘어라운드 서브셋으로 그린다 — 로고 글자만 남긴 woff2(4KB 미만)를 `scripts/logo-font.py`
-(fonttools)로 만들어 `src/assets/fonts/logo-hangul.woff2` 에 커밋하고, 빌드가 내용 해시를 붙여 복사한다
-(`BuildAssets.fontSrcs.logoHangul`). preload 는 그 스크립트가 한글날에만 넣는다. 빌드에서 만들지 않는
-이유는 원본 TTF 를 받을 공식 npm 패키지를 찾지 못했고, 아래 이름 변경에 fonttools 가 필요해서다.
-**로고 글자를 바꾸면 폰트를 다시 만들어 커밋한다** — 안 하면 빠진 글자만 에러 없이 시스템 한글 폰트로
-떨어진다. 서브셋은 OFL 상 수정본이라 원래 글꼴 이름(Reserved Font Name)을 쓰지 않도록 패밀리 이름을
-`Minjun Logo` 로 바꿨다.
+로고는 글자가 아니라 inline SVG 다 — 나눔스퀘어라운드 Regular 의 글리프 윤곽을 `scripts/logo-svg.py`
+(fonttools)로 뽑아 `components/Logo/hangulMark.ts` 에 커밋했다. 1년에 하루 쓰는 로고 때문에 폰트 파일·
+@font-face·preload 를 두지 않으려는 것이고(페이지마다 brotli 약 0.8KB), 색은 `fill: currentColor` 로 영문
+로고와 같은 색·강조색을 따른다. **로고 글자를 바꾸면 스크립트로 다시 뽑아 커밋한다.**
 
 ## OG 이미지
 

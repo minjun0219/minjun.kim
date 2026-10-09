@@ -17,9 +17,6 @@ import { css } from '@/lib/css';
  * xWidthAvg 452) 와 Arial(2048, 1854, -434, 67, 913) 에서 next/font 와 같은 식으로 계산했다:
  * size-adjust = (452/1000)/(913/2048), ascent/descent/line-gap-override = 값/(1000*size-adjust).
  *
- * "Minjun Logo" 는 로고(`components/Logo`) 글자만 남긴 나눔스퀘어라운드 서브셋이다. 다른 글자가 없어
- * 로고에만 쓴다 — 만드는 법과 이름을 바꾼 이유는 `scripts/logo-font.py`.
- *
  * 템플릿 안의 `${}` 는 폰트 URL 평문 문자열뿐이다 — css 값·개행이 들어가는 보간은 금지.
  */
 export const createGlobalCss = (fonts: FontSrcs) => css`:-hono-global {
@@ -37,14 +34,6 @@ export const createGlobalCss = (fonts: FontSrcs) => css`:-hono-global {
     font-weight: 700;
     font-display: swap;
     src: url("${fonts.nunitoBold}") format("woff2");
-  }
-
-  @font-face {
-    font-family: "Minjun Logo";
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url("${fonts.logoHangul}") format("woff2");
   }
 
   @font-face {
