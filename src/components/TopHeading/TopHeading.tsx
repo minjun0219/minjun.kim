@@ -7,10 +7,6 @@ const styles = {
     font-size: 3em;
     font-weight: normal;
 
-    & span {
-      color: var(--primary-color);
-    }
-
     & a {
       text-decoration: none;
       color: inherit;

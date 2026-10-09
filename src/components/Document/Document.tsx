@@ -1,5 +1,6 @@
 import type { Child } from 'hono/jsx';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import HangulDayScript from '@/components/HangulDayScript';
 import NoFlashThemeScript from '@/components/NoFlashThemeScript';
 import { imageSizes, imageSrcset } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
@@ -118,14 +119,6 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
           href={build.fontSrcs.nunitoRegular}
           crossOrigin="anonymous"
         />
-        {/* 로고는 모든 페이지 첫 화면에 있다. 4KB 미만이라 미리 받아 swap 으로 글꼴이 바뀌는 순간을 줄인다 */}
-        <link
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          href={build.fontSrcs.logoHangul}
-          crossOrigin="anonymous"
-        />
         {/* hono/css 가 렌더 중 등록한 스타일을 이 자리에 splice 한다. child 는 정확히 하나여야 한다. */}
         <Style>{createGlobalCss(build.fontSrcs)}</Style>
         {preloadImages.map((image) => (
@@ -148,6 +141,8 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
         />
 
         <NoFlashThemeScript />
+        {/* 한글날에만 로고 폰트를 preload 한다(스크립트가 직접 넣는다) */}
+        <HangulDayScript fontSrc={build.fontSrcs.logoHangul} />
         <GoogleAnalytics />
         {build.vendorScriptSrcs.map((src) => (
           <script key={src} src={src} defer />
