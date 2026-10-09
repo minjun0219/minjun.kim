@@ -8,7 +8,6 @@ import { Style } from '@/lib/css';
 import type { ImageAsset } from '@/lib/images';
 import { AUTHOR_NAME, LOCALE, type ResolvedMeta, SITE_NAME, SITE_URL } from '@/lib/meta';
 import { serializeJsonLd } from '@/lib/seo/structuredData';
-import { PRETENDARD_STYLESHEET, STATIC_ORIGIN } from '@/lib/siteConfig';
 import { createGlobalCss } from '@/styles/global';
 
 export type Props = {
@@ -112,10 +111,9 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
           />
         )}
 
-        {/* Pretendard 는 글자 묶음 92개의 @font-face(55KB)라 인라인하지 않고 정적 자산 호스트의 CSS 를
-            그대로 건다. 브라우저는 페이지에 쓰인 글자가 든 묶음만 받는다. 이 사이트의 유일한 외부 스타일시트다. */}
-        <link rel="preconnect" href={STATIC_ORIGIN} crossOrigin="anonymous" />
-        <link rel="stylesheet" href={PRETENDARD_STYLESHEET} />
+        {/* Pretendard 는 글자 묶음 92개의 @font-face(55KB)라 인라인하지 않고 패키지의 CSS 를 그대로 건다.
+            브라우저는 페이지에 쓰인 글자가 든 묶음만 받는다. 이 사이트가 거는 유일한 스타일시트다. */}
+        <link rel="stylesheet" href={build.fontSrcs.pretendardStylesheet} />
         {/* 700 은 본문 strong·소제목이 있는 글에서만 쓰여 preload 하지 않는다 */}
         <link
           rel="preload"

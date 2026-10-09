@@ -13,18 +13,6 @@ export const LOCALE = 'ko_KR';
 
 export const DEFAULT_OG_IMAGE = '/og.png';
 
-/**
- * 개인 정적 자산 호스트(별도 repo). CORS 를 minjun.kim 과 localhost 에만 열어 두었다 — 다른 origin
- * (Cloudflare 미리보기 URL 등)에서는 폰트가 막혀 시스템 폰트로 보인다.
- */
-export const STATIC_ORIGIN = 'https://s.minjun.dev';
-
-/**
- * 본문 한글 폰트 Pretendard 의 공식 dynamic subset(가변 굵기). `scripts/ssg.mjs` 의 `ALLOWED_STYLESHEETS`
- * 에도 같은 URL 이 있어야 빌드가 통과한다.
- */
-export const PRETENDARD_STYLESHEET = `${STATIC_ORIGIN}/pretendard/variable/pretendardvariable-dynamic-subset.css`;
-
 /** 구조화 데이터(JSON-LD)·llms.txt 에 쓰는 실명 표기 */
 export const AUTHOR_NAME_KO = '김민준';
 

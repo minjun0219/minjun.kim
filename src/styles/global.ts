@@ -10,7 +10,7 @@ import { css } from '@/lib/css';
  *
  * 폰트는 next/font 대신 @fontsource/nunito 를 셀프호스팅한다(경로는 빌드가 `fontSrcs` 로 준다).
  * latin 서브셋만 쓰며 한글은 Pretendard 로 떨어진다. Pretendard 의 @font-face 는 `Document` 가 거는
- * 외부 스타일시트(`PRETENDARD_STYLESHEET`)에 있다 — 본문(`--font-family-base`)은 영문까지 Pretendard 다.
+ * 패키지 스타일시트(`fontSrcs.pretendardStylesheet`)에 있다 — 본문(`--font-family-base`)은 영문까지 Pretendard 다.
  *
  * "Nunito Fallback" 은 next/font 의 `adjustFontFallback` 을 재현한 것이다. Nunito 가 오기 전
  * Arial 을 Nunito 의 폭·행간에 맞춰 보여 줘서 swap 순간의 글꼴 변화와 레이아웃 이동을 줄인다.
