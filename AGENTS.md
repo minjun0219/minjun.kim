@@ -327,9 +327,9 @@ Nunito 는 `@fontsource/nunito` 의 latin 400/700 woff2 를 빌드가 `dist/font
 
 **로고는 한글날(매년 10월 9일, 한국 시간)에만 한글(`김.민준`)이다.** 빌드 날짜로 정하면 매년 그날 배포해야
 하므로 HTML 에 두 로고를 다 싣고, `components/HangulDayScript` 가 pre-paint 로 방문 시각을 보고 `<html
-data-hangul-day>` 를 붙인다(JS 가 꺼져 있으면 영문 로고). 한글 로고는 나눔스퀘어라운드 서브셋으로 그린다 —
-로고 글자만 남긴 woff2(4KB 미만)를 `scripts/logo-font.py`(fonttools)로 만들어
-`src/assets/fonts/logo-hangul.woff2` 에 커밋하고, 빌드가 내용 해시를 붙여 복사한다
+data-hangul-day>` 를 붙인다(JS 가 꺼져 있으면 영문 로고, 열어 둔 탭은 한국 시간 자정마다 다시 계산). 한글
+로고는 나눔스퀘어라운드 서브셋으로 그린다 — 로고 글자만 남긴 woff2(4KB 미만)를 `scripts/logo-font.py`
+(fonttools)로 만들어 `src/assets/fonts/logo-hangul.woff2` 에 커밋하고, 빌드가 내용 해시를 붙여 복사한다
 (`BuildAssets.fontSrcs.logoHangul`). preload 는 그 스크립트가 한글날에만 넣는다. 빌드에서 만들지 않는
 이유는 원본 TTF 를 받을 공식 npm 패키지를 찾지 못했고, 아래 이름 변경에 fonttools 가 필요해서다.
 **로고 글자를 바꾸면 폰트를 다시 만들어 커밋한다** — 안 하면 빠진 글자만 에러 없이 시스템 한글 폰트로
