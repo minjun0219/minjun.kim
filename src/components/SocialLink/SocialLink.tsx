@@ -74,10 +74,17 @@ export const SocialLink = ({ className, lang = 'ko' }: Props) => (
       <a href={ABOUT_PATHS[lang]}>About</a>
     </li>
     <li>
-      {/* 글은 한국어만 있다. 영어 홈에서 가면 언어가 바뀌므로 boost 하지 않는다(`@/lib/i18n`). */}
-      <a href="/posts" hx-boost={lang === 'ko' ? undefined : 'false'}>
-        Posts
-      </a>
+      {lang === 'ko' ? (
+        <a href="/posts">Posts</a>
+      ) : (
+        <>
+          {/* 글은 한국어만 있다. 그렇게 표시하고, 언어가 바뀌므로 boost 하지 않는다(`@/lib/i18n`). */}
+          <a href="/posts" hreflang="ko" hx-boost="false">
+            Posts
+          </a>{' '}
+          <span>(Korean only)</span>
+        </>
+      )}
     </li>
     <li>
       <a href="https://github.com/minjun0219">Github</a>
