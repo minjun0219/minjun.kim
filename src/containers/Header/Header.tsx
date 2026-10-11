@@ -6,7 +6,7 @@ import SunIcon from '@/components/icons/SunIcon';
 import Logo from '@/components/Logo';
 import Wrapper from '@/components/Wrapper';
 import { css, cx } from '@/lib/css';
-import { HOME_PATHS, LANGUAGE_NAMES, type Lang, otherLang, type Translations } from '@/lib/i18n';
+import { HOME_PATHS, type Lang } from '@/lib/i18n';
 
 const interactive = css`
   color: var(--text-secondary-color);
@@ -27,11 +27,6 @@ const styles = {
     justify-content: space-between;
     height: 50px;
   `,
-  // 글자 링크(언어 전환)와 아이콘의 세로 중앙을 맞춘다 — inline 이면 글자가 기준선에 앉아 아이콘보다 낮다
-  actions: css`
-    display: flex;
-    align-items: center;
-  `,
   // cx 는 선언을 뒤가 이기게 병합하므로 TopHeading 의 color/font-size 를 !important 없이 덮는다.
   logo: cx(
     interactive,
@@ -48,14 +43,6 @@ const styles = {
       padding: 10px;
       cursor: pointer;
       outline: none;
-    `,
-  ),
-  lang: cx(
-    interactive,
-    css`
-      padding: 10px;
-      font-size: 0.9em;
-      text-decoration: none;
     `,
   ),
   icon: css`
@@ -88,29 +75,14 @@ const styles = {
 
 export type Props = {
   lang?: Lang;
-  /** 번역이 있는 페이지면 다른 언어판으로 가는 링크를 단다 */
-  translations?: Translations;
 };
 
-export const Header = ({ lang = 'ko', translations }: Props) => {
-  const other = otherLang(lang);
+export const Header = ({ lang = 'ko' }: Props) => {
   return (
     <header>
       <Wrapper className={styles.container}>
         <Logo href={HOME_PATHS[lang]} className={styles.logo} />
-        <div className={styles.actions}>
-          {/* 언어가 바뀌면 `<html lang>` 을 다시 받아야 해서 boost 하지 않는다(`@/lib/i18n`) */}
-          {translations ? (
-            <a
-              href={translations[other]}
-              hreflang={other}
-              lang={other}
-              hx-boost="false"
-              className={styles.lang}
-            >
-              {LANGUAGE_NAMES[other]}
-            </a>
-          ) : null}
+        <div>
           {/* 토글 동작은 src/client/main.ts 가 document 위임으로 처리한다.
               hx-boost 가 body 를 통째로 교체하므로 요소에 직접 건 리스너는 살아남지 못한다. */}
           <button type="button" className={styles.mode} data-theme-toggle aria-label="toggle theme">

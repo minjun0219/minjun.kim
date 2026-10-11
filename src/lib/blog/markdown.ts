@@ -8,6 +8,7 @@ import { createHighlighter, type Highlighter } from 'shiki';
 import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 import { GITHUB_ICON_PATH, GITHUB_ICON_VIEWBOX } from '@/components/icons/githubIconPath';
+import { type Lang, pathLang } from '@/lib/i18n';
 import type { ImageAsset, ImageManifest } from '@/lib/images';
 import { APP_PATHS, SITE_URL } from '@/lib/siteConfig';
 import { MD_CLASS } from './markdownClassNames';
@@ -311,6 +312,33 @@ function rehypeAppLinks() {
   };
 }
 
+/**
+ * 다른 언어 페이지로 가는 링크도 일반 탐색으로 뺀다 — boost 이동은 `<html lang>` 을 바꾸지 않는다
+ * (`@/lib/i18n`). 앱 경로는 이 사이트 페이지가 아니라 언어를 따지지 않는다(`rehypeAppLinks` 가 맡는다).
+ */
+function rehypeLanguageLinks(lang: Lang) {
+  return (tree: HastRoot) => {
+    visit(tree, 'element', (node) => {
+      const href = node.properties?.href;
+      if (node.tagName !== 'a' || typeof href !== 'string' || isAppHref(href)) {
+        return;
+      }
+      // `#…`·상대 경로는 이 페이지 기준이라 언어가 바뀌지 않는다(루트 기준으로 풀면 한국어로 잘못 판정된다)
+      if (!href.startsWith('/') && !URL.canParse(href)) {
+        return;
+      }
+      const url = new URL(href, SITE_URL);
+      if (url.origin !== new URL(SITE_URL).origin) {
+        return;
+      }
+      const target = pathLang(url.pathname);
+      if (target !== lang) {
+        node.properties = { ...node.properties, hreflang: target, 'hx-boost': 'false' };
+      }
+    });
+  };
+}
+
 export type RenderedPost = {
   html: string;
   /** 본문이 참조한 글 이미지(문서 순서). `Document` 가 head 에서 preload 한다 */
@@ -327,6 +355,8 @@ export type RenderedPost = {
 export async function renderPostHtml(
   markdown: string,
   { images }: { images: ImageManifest },
+  /** 이 본문이 실리는 페이지의 언어 */
+  lang: Lang = 'ko',
 ): Promise<RenderedPost> {
   const usedImages: ImageAsset[] = [];
   const file = await unified()
@@ -339,6 +369,7 @@ export async function renderPostHtml(
     .use(rehypeWrapImages)
     .use(rehypeGithubIconLink)
     .use(rehypeAppLinks)
+    .use(rehypeLanguageLinks, lang)
     .use(rehypeStringify)
     .process(markdown);
 

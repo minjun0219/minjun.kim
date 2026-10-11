@@ -1,5 +1,5 @@
 import { type ClassName, css, cx } from '@/lib/css';
-import { ABOUT_PATHS, HOME_PATHS, LANGUAGE_NAMES, type Lang, otherLang } from '@/lib/i18n';
+import { ABOUT_PATHS, type Lang } from '@/lib/i18n';
 
 const styles = {
   root: css`
@@ -68,37 +68,29 @@ export type Props = {
   lang?: Lang;
 };
 
-export const SocialLink = ({ className, lang = 'ko' }: Props) => {
-  const other = otherLang(lang);
-  return (
-    <ul className={cx(styles.root, className)}>
-      <li>
-        <a href={ABOUT_PATHS[lang]}>About</a>
-      </li>
-      <li>
-        {/* 글은 한국어만 있다. 영어 홈에서 가면 언어가 바뀌므로 boost 하지 않는다(`@/lib/i18n`). */}
-        <a href="/posts" hx-boost={lang === 'ko' ? undefined : 'false'}>
-          Posts
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/minjun0219">Github</a>
-      </li>
-      <li>
-        <a href="https://www.linkedin.com/in/minjun0219">Linkedin</a>
-      </li>
-      <li>
-        <a href="mailto:hi@minjun.kim">
-          Mail to<span>hi@minjun.kim</span>
-        </a>
-      </li>
-      <li>
-        <a href={HOME_PATHS[other]} hreflang={other} lang={other} hx-boost="false">
-          {LANGUAGE_NAMES[other]}
-        </a>
-      </li>
-    </ul>
-  );
-};
+export const SocialLink = ({ className, lang = 'ko' }: Props) => (
+  <ul className={cx(styles.root, className)}>
+    <li>
+      <a href={ABOUT_PATHS[lang]}>About</a>
+    </li>
+    <li>
+      {/* 글은 한국어만 있다. 영어 홈에서 가면 언어가 바뀌므로 boost 하지 않는다(`@/lib/i18n`). */}
+      <a href="/posts" hx-boost={lang === 'ko' ? undefined : 'false'}>
+        Posts
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/minjun0219">Github</a>
+    </li>
+    <li>
+      <a href="https://www.linkedin.com/in/minjun0219">Linkedin</a>
+    </li>
+    <li>
+      <a href="mailto:hi@minjun.kim">
+        Mail to<span>hi@minjun.kim</span>
+      </a>
+    </li>
+  </ul>
+);
 
 export default SocialLink;

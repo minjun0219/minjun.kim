@@ -5,6 +5,8 @@ updatedAt: "2026-10-11"
 
 # Minjun Kim
 
+[한국어](/about)
+
 ## What I'm building
 
 - [mdwire](/mdwire/): A library that converts LLM-generated Markdown into Telegram, Slack, GitHub, and Notion formats, and splits it to fit each channel's length limit

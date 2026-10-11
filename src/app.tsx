@@ -85,7 +85,7 @@ export function createApp(build: BuildAssets) {
 
   async function aboutPage(lang: Lang) {
     const { content, updatedAt } = getDoc('about', lang);
-    const { html } = await renderPostHtml(content, build);
+    const { html } = await renderPostHtml(content, build, lang);
 
     return page(
       {
@@ -96,7 +96,7 @@ export function createApp(build: BuildAssets) {
         translations: ABOUT_PATHS,
         jsonLd: aboutJsonLd({ updatedAt, lang }),
       },
-      <Layout lang={lang} translations={ABOUT_PATHS}>
+      <Layout lang={lang}>
         <MarkdownPage html={html} updatedAt={updatedAt} lang={lang} />
       </Layout>,
     );

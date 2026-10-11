@@ -2,7 +2,7 @@ import type { Child } from 'hono/jsx';
 import Footer from '@/components/Footer';
 import Header from '@/containers/Header';
 import { type ClassName, css, cx } from '@/lib/css';
-import type { Lang, Translations } from '@/lib/i18n';
+import type { Lang } from '@/lib/i18n';
 
 const styles = {
   root: css`
@@ -13,14 +13,13 @@ const styles = {
 export type Props = {
   className?: ClassName;
   lang?: Lang;
-  translations?: Translations;
   children: Child;
 };
 
-export const Layout = ({ className, lang, translations, children }: Props) => {
+export const Layout = ({ className, lang, children }: Props) => {
   return (
     <div className={cx(styles.root, className)}>
-      <Header lang={lang} translations={translations} />
+      <Header lang={lang} />
       {children}
       <Footer />
     </div>
