@@ -1,5 +1,6 @@
 import Wrapper from '@/components/Wrapper';
 import { css } from '@/lib/css';
+import { HOME_PATHS, type Lang } from '@/lib/i18n';
 
 const styles = {
   container: css`
@@ -46,13 +47,26 @@ const styles = {
   `,
 };
 
-const NotFound = () => (
+const TEXT: Record<Lang, { title: string; description: string; home: string }> = {
+  ko: {
+    title: '페이지를 찾을 수 없습니다',
+    description: '요청하신 페이지가 이동되었거나 더 이상 존재하지 않습니다.',
+    home: '← 홈으로 돌아가기',
+  },
+  en: {
+    title: 'Page not found',
+    description: 'The page you requested has moved or no longer exists.',
+    home: '← Back to home',
+  },
+};
+
+const NotFound = ({ lang = 'ko' }: { lang?: Lang }) => (
   <Wrapper className={styles.container}>
     <p className={styles.code}>404</p>
-    <h1 className={styles.title}>페이지를 찾을 수 없습니다</h1>
-    <p className={styles.description}>요청하신 페이지가 이동되었거나 더 이상 존재하지 않습니다.</p>
-    <a href="/" className={styles.home}>
-      ← 홈으로 돌아가기
+    <h1 className={styles.title}>{TEXT[lang].title}</h1>
+    <p className={styles.description}>{TEXT[lang].description}</p>
+    <a href={HOME_PATHS[lang]} className={styles.home}>
+      {TEXT[lang].home}
     </a>
   </Wrapper>
 );

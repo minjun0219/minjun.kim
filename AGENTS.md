@@ -119,7 +119,9 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
   boost 이동으로는 `<html lang>` 이 첫 페이지 값으로 남는다. 마크다운 본문은 `rehypeLanguageLinks` 가 링크
   경로의 언어(`pathLang`: `/en` 아래면 영어)를 페이지 언어(`renderPostHtml` 의 `lang`)와 비교해 자동으로 달고,
   컴포넌트 링크(영어 홈의 `Posts`)는 직접 단다.
-- `/en/*` 의 없는 경로는 가장 가까운 `404.html` 규칙에 따라 한국어 `/404` 가 나간다(영어 404 없음).
+- 404 도 언어별이다. Workers 는 없는 경로에 가장 가까운 `404.html` 을 내므로 `/en/*` 은 `/en/404`(영어),
+  나머지는 `/404` 가 나간다. 둘 다 `x-page-id` 가 `not-found` 라 PostHog `not_found` 는 그대로 잡힌다.
+- 영어 페이지가 `description` 을 넘기지 않으면 `SITE_DESCRIPTION_EN` 이 기본값이다(`resolveMeta`).
 - `_headers` 의 HTML 캐시 규칙에 `/en`·`/en/*` 이 따로 있다. 영어 페이지를 늘려도 여기는 손댈 필요 없다.
 
 **`/mdwire`·`/ogpeek` 은 이 사이트 페이지가 아니다** — 다른 Worker 가 서빙하는 프로젝트 사이트다. 규칙은

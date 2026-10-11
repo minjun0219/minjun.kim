@@ -1,6 +1,18 @@
 import { type Lang, OG_LOCALES, type Translations } from './i18n';
 import type { JsonLdNode } from './seo/structuredData';
-import { AUTHOR_NAME, DEFAULT_OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from './siteConfig';
+import {
+  AUTHOR_NAME,
+  DEFAULT_OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_DESCRIPTION_EN,
+  SITE_NAME,
+  SITE_URL,
+} from './siteConfig';
+
+const DEFAULT_DESCRIPTIONS: Record<Lang, string> = {
+  ko: SITE_DESCRIPTION,
+  en: SITE_DESCRIPTION_EN,
+};
 
 export type PageMeta = {
   /** 페이지 제목. 없으면 사이트명만 쓴다(홈). */
@@ -71,7 +83,7 @@ export function resolveMeta(meta: PageMeta): ResolvedMeta {
   return {
     documentTitle: meta.title ? `${meta.title} | ${SITE_NAME}` : SITE_NAME,
     title,
-    description: meta.description ?? SITE_DESCRIPTION,
+    description: meta.description ?? DEFAULT_DESCRIPTIONS[lang],
     canonical: absoluteUrl(meta.path),
     lang,
     ogLocale: OG_LOCALES[lang],

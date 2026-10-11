@@ -37,14 +37,15 @@ import {
   projectsJsonLd,
   resumeJsonLd,
 } from '@/lib/seo/structuredData';
-import { SITE_DESCRIPTION } from '@/lib/siteConfig';
 
 const TEXT_PLAIN = { 'Content-Type': 'text/plain; charset=utf-8' };
 const TEXT_MARKDOWN = { 'Content-Type': 'text/markdown; charset=utf-8' };
 
-const HOME_DESCRIPTIONS: Record<Lang, string> = {
-  ko: SITE_DESCRIPTION,
-  en: 'Personal site of Minjun Kim, a frontend engineer.',
+const NOT_FOUND_PATHS: Record<Lang, string> = { ko: '/404', en: '/en/404' };
+
+const NOT_FOUND_TITLES: Record<Lang, string> = {
+  ko: '페이지를 찾을 수 없습니다 (404)',
+  en: 'Page not found (404)',
 };
 
 const ABOUT_DESCRIPTIONS: Record<Lang, string> = {
@@ -76,7 +77,6 @@ export function createApp(build: BuildAssets) {
         path: HOME_PATHS[lang],
         lang,
         translations: HOME_PATHS,
-        description: HOME_DESCRIPTIONS[lang],
         jsonLd: homeJsonLd(lang),
       },
       <Home lang={lang} />,
@@ -285,22 +285,26 @@ export function createApp(build: BuildAssets) {
     },
   );
 
-  // Workers 의 `not_found_handling: "404-page"` 가 이 파일을 찾아 404 로 내려준다.
-  app.get('/404', (c) =>
-    c.html(
-      page(
-        {
-          title: '페이지를 찾을 수 없습니다 (404)',
-          path: '/404',
-          noindex: true,
-        },
-        <Layout>
-          <NotFound />
-        </Layout>,
-        { pageId: 'not-found' },
-      ),
-    ),
-  );
+  // Workers 의 `not_found_handling: "404-page"` 가 없는 경로에서 가장 가까운 404.html 을 찾아
+  // 404 로 내려준다 — `/en/*` 은 `/en/404`, 나머지는 `/404`.
+  function notFoundPage(lang: Lang) {
+    return page(
+      {
+        title: NOT_FOUND_TITLES[lang],
+        path: NOT_FOUND_PATHS[lang],
+        lang,
+        noindex: true,
+      },
+      <Layout lang={lang}>
+        <NotFound lang={lang} />
+      </Layout>,
+      { pageId: 'not-found' },
+    );
+  }
+
+  app.get('/404', (c) => c.html(notFoundPage('ko')));
+
+  app.get('/en/404', (c) => c.html(notFoundPage('en')));
 
   app.get('/sitemap.xml', (c) =>
     c.body(renderSitemap(), 200, { 'Content-Type': 'application/xml' }),
