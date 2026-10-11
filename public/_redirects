@@ -1,3 +1,7 @@
+# /projects 는 about 에 합쳤다. 사이트 밖에서 걸린 링크를 살린다.
+/projects /about 301
+/projects/ /about 301
+
 # 옛 퍼머링크 → 복원된 글.
 # Next.js 의 `/:prefix(wp|blog)?/archives/:id(40|706)` 같은 정규식 제약과 선택적
 # 세그먼트를 Cloudflare 는 지원하지 않아 접두사 3종을 명시적으로 펼쳤다.

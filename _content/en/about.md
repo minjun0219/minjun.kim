@@ -7,8 +7,8 @@ updatedAt: "2026-10-12"
 
 ## What I'm building
 
-- [mdwire](/mdwire/): A library that converts LLM-generated Markdown into Telegram, Slack, GitHub, and Notion formats, and splits it to fit each channel's length limit
-- [ogpeek](/ogpeek/): A tool that parses Open Graph metadata and finds spec violations
+- [mdwire](/mdwire/): A library that converts LLM-generated Markdown into Telegram, Slack, GitHub, and Notion formats, and splits it to fit each channel's length limit without breaking the markup
+- [ogpeek](/ogpeek/): A tool that parses Open Graph metadata from a single URL and finds spec violations such as title length issues, missing images, and mismatched URLs
 - [hotwatermat-ble](https://github.com/minjun0219/hotwatermat-ble): A CLI I built by analyzing the Bluetooth communication of my water-heated mattress pad, so I can control it without its app
 
 ## Contact

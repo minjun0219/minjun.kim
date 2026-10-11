@@ -123,25 +123,6 @@ export function aboutJsonLd({
   ];
 }
 
-export function projectsJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[] {
-  const url = absoluteUrl('/projects');
-  return [
-    {
-      '@type': 'CollectionPage',
-      '@id': `${url}#webpage`,
-      url,
-      name: `${AUTHOR_NAME_KO}이 만든 것들`,
-      isPartOf: ref(WEBSITE_ID),
-      author: ref(PERSON_ID),
-      dateModified: updatedAt,
-    },
-    breadcrumbs([
-      { name: SITE_NAME, path: '/' },
-      { name: 'Projects', path: '/projects' },
-    ]),
-  ];
-}
-
 export function postsJsonLd(
   posts: Array<{ title: string; url: string; date: string }>,
 ): JsonLdNode[] {

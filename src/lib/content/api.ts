@@ -5,10 +5,10 @@ import matter from 'gray-matter';
 import type { Lang } from '@/lib/i18n';
 
 /**
- * `_content/*.md` — 글이 아닌 단일 문서 페이지(about, resume, projects). 파일명이 곧 경로다.
+ * `_content/*.md` — 글이 아닌 단일 문서 페이지(about, resume). 파일명이 곧 경로다.
  * 영어판은 `_content/en/<name>.md` 다(지금은 about 만 있다).
  */
-export type DocName = 'about' | 'projects' | 'resume';
+export type DocName = 'about' | 'resume';
 
 export type Doc = {
   title: string;

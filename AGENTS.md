@@ -80,7 +80,7 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 
 **Content as files.** 본문이 있는 콘텐츠는 YAML frontmatter 가 붙은 Markdown 이고 `gray-matter` 로 읽는다:
 - 글: `_posts/*.md` → `/posts/[slug]` (파일명이 slug)
-- 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `projects`, `resume`). `getDoc(name)` 이 읽고
+- 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `resume`). `getDoc(name)` 이 읽고
   `containers/MarkdownPage` 가 렌더한다 — 둘의 차이는 마크다운 본문뿐이다. 영어판은
   `_content/en/<name>.md` → `/en/<name>` 이고 `getDoc(name, 'en')` 으로 읽는다(지금은 `about` 만).
 - 노트: `_content/notes/<topic>/<slug>.md` → `/notes/<topic>/<slug>`, 목록은 `/notes`(주제별 묶음).
@@ -106,7 +106,7 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 
 **`/resume` 는 사이트 안에서 링크하지 않는다.** 취업 지원 시 URL 을 직접 건네는 용도라
 네비게이션(`SocialLink`)에는 `/about` 만 둔다. 다만 sitemap 에는 남겨 색인은 유지한다 — 진입점을
-없앤 것이지 숨긴 게 아니다. `/projects` 도 지금은 같은 취급이다(링크 없음, sitemap 에는 포함).
+없앤 것이지 숨긴 게 아니다. 옛 `/projects` 는 about 과 겹쳐 합쳤다 — `_redirects` 가 `/about` 으로 301 한다.
 
 **영어판은 홈과 about 만 있다** (`/en`, `/en/about`). 해외에서 처음 들어오는 사람(리크루터·개발자)을 위한
 입구라 글·이력서는 번역하지 않는다. 언어별 값과 경로 쌍은 `src/lib/i18n.ts` 에 있다.
@@ -326,7 +326,8 @@ repo 는 경로·라우팅·같은 origin 에 관한 판단을 이 repo 에 묻�
     응답한다(2026-10-04 확인, 서빙 방식은 ogpeek repo 가 안다).
 
 **발견성**
-- `/projects` 허브가 앱을 소개하고 링크한다. 사이트 안에서는 허브를 링크하지 않고 sitemap 에만 둔다.
+- about(`/about`, `/en/about`)의 「만들고 있는 것」이 앱을 소개하고 링크한다(한국어 about 은 각 앱의 한국어판으로).
+  옛 허브 `/projects` 는 about 으로 301 이다.
 - 크롤러는 호스트 루트의 robots.txt 만 읽으므로 앱은 자기 robots.txt 로 sitemap 을 알릴 수 없다. 앱 sitemap 은
   `APP_SITEMAPS` 에 추가해 이 사이트 robots.txt 의 `Sitemap:` 줄로 낸다.
 

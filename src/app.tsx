@@ -34,7 +34,6 @@ import {
   notesJsonLd,
   postJsonLd,
   postsJsonLd,
-  projectsJsonLd,
   resumeJsonLd,
 } from '@/lib/seo/structuredData';
 
@@ -127,26 +126,6 @@ export function createApp(build: BuildAssets) {
   app.get('/about', async (c) => c.html(await aboutPage('ko')));
 
   app.get('/en/about', async (c) => c.html(await aboutPage('en')));
-
-  // 사이트 내 진입점은 아직 없다. 색인은 유지한다. 링크한 앱은 다른 Worker 가 서빙한다(`APP_PATHS`).
-  app.get('/projects', async (c) => {
-    const { content, updatedAt } = getDoc('projects');
-    const { html } = await renderPostHtml(content, build);
-
-    return c.html(
-      page(
-        {
-          title: 'Projects',
-          description: '김민준이 만들어 운영하는 도구들 — mdwire, ogpeek.',
-          path: '/projects',
-          jsonLd: projectsJsonLd({ updatedAt }),
-        },
-        <Layout>
-          <MarkdownPage html={html} updatedAt={updatedAt} />
-        </Layout>,
-      ),
-    );
-  });
 
   // 공개 학습 노트. 사이트 내 진입점은 아직 없다 — 주소를 아는 사람만, 색인은 유지한다.
   app.get('/notes', (c) => {
