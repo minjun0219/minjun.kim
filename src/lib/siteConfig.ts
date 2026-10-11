@@ -9,8 +9,6 @@ export const AUTHOR_NAME = 'Minjun Kim';
 
 export const AUTHOR_EMAIL = 'hi@minjun.kim';
 
-export const LOCALE = 'ko_KR';
-
 export const DEFAULT_OG_IMAGE = '/og.png';
 
 /** 구조화 데이터(JSON-LD)·llms.txt 에 쓰는 실명 표기 */

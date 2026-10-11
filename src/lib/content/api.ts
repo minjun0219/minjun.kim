@@ -2,8 +2,12 @@ import fs from 'node:fs';
 import { join } from 'node:path';
 
 import matter from 'gray-matter';
+import type { Lang } from '@/lib/i18n';
 
-/** `_content/*.md` — 글이 아닌 단일 문서 페이지(about, resume, projects). 파일명이 곧 경로다. */
+/**
+ * `_content/*.md` — 글이 아닌 단일 문서 페이지(about, resume, projects). 파일명이 곧 경로다.
+ * 영어판은 `_content/en/<name>.md` 다(지금은 about 만 있다).
+ */
 export type DocName = 'about' | 'projects' | 'resume';
 
 export type Doc = {
@@ -22,8 +26,9 @@ function formatUpdatedAt(value: unknown): string | undefined {
   return String(value);
 }
 
-export function getDoc(name: DocName): Doc {
-  const fileContents = fs.readFileSync(join(process.cwd(), '_content', `${name}.md`), 'utf8');
+export function getDoc(name: DocName, lang: Lang = 'ko'): Doc {
+  const directory = lang === 'ko' ? '_content' : join('_content', lang);
+  const fileContents = fs.readFileSync(join(process.cwd(), directory, `${name}.md`), 'utf8');
   const { data, content } = matter(fileContents);
   return {
     title: (data.title as string) ?? name,

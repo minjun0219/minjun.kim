@@ -6,7 +6,7 @@ import { imageSizes, imageSrcset } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
 import { Style } from '@/lib/css';
 import type { ImageAsset } from '@/lib/images';
-import { AUTHOR_NAME, LOCALE, type ResolvedMeta, SITE_NAME, SITE_URL } from '@/lib/meta';
+import { AUTHOR_NAME, type ResolvedMeta, SITE_NAME, SITE_URL } from '@/lib/meta';
 import { serializeJsonLd } from '@/lib/seo/structuredData';
 import { createGlobalCss } from '@/styles/global';
 
@@ -45,13 +45,16 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
   const naverVerification = process.env.NAVER_SITE_VERIFICATION;
 
   return (
-    <html lang="ko">
+    <html lang={meta.lang}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{meta.documentTitle}</title>
         <meta name="description" content={meta.description} />
         <link rel="canonical" href={meta.canonical} />
+        {meta.alternates.map(({ hreflang, href }) => (
+          <link key={hreflang} rel="alternate" hreflang={hreflang} href={href} />
+        ))}
         {/* 색인 대상 페이지는 검색 결과·Discover 에서 OG 이미지를 큰 미리보기로 쓰도록 허용한다 */}
         <meta
           name="robots"
@@ -65,7 +68,10 @@ export const Document = ({ meta, pageId, build, preloadImages = [], children }: 
         <meta name="publisher" content={AUTHOR_NAME} />
 
         <meta property="og:type" content={meta.ogType} />
-        <meta property="og:locale" content={LOCALE} />
+        <meta property="og:locale" content={meta.ogLocale} />
+        {meta.ogLocaleAlternates.map((locale) => (
+          <meta key={locale} property="og:locale:alternate" content={locale} />
+        ))}
         <meta property="og:site_name" content={SITE_NAME} />
         <meta property="og:url" content={meta.canonical} />
         <meta property="og:title" content={meta.title} />

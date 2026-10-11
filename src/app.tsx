@@ -13,6 +13,7 @@ import { getAllPosts, getExcerpt, getPostBySlug, getPostListing } from '@/lib/bl
 import { renderPostHtml } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
 import { getDoc } from '@/lib/content';
+import { ABOUT_PATHS, HOME_PATHS, type Lang } from '@/lib/i18n';
 import { type PageMeta, resolveMeta } from '@/lib/meta';
 import { getAllNotes, getNote, notePath } from '@/lib/notes';
 import { renderFeed } from '@/lib/seo/feed';
@@ -36,9 +37,20 @@ import {
   projectsJsonLd,
   resumeJsonLd,
 } from '@/lib/seo/structuredData';
+import { SITE_DESCRIPTION } from '@/lib/siteConfig';
 
 const TEXT_PLAIN = { 'Content-Type': 'text/plain; charset=utf-8' };
 const TEXT_MARKDOWN = { 'Content-Type': 'text/markdown; charset=utf-8' };
+
+const HOME_DESCRIPTIONS: Record<Lang, string> = {
+  ko: SITE_DESCRIPTION,
+  en: 'Personal site of Minjun Kim, a frontend engineer.',
+};
+
+const ABOUT_DESCRIPTIONS: Record<Lang, string> = {
+  ko: '프론트엔드 엔지니어 김민준이 만들고 있는 것과 연락처를 담았습니다.',
+  en: 'What frontend engineer Minjun Kim is building, and how to reach him.',
+};
 
 /**
  * 라우트 정의. `scripts/ssg.mjs` 가 빌드 산출물 경로를 넣어 만든 뒤 `toSSG` 로
@@ -57,7 +69,42 @@ export function createApp(build: BuildAssets) {
     );
   }
 
-  app.get('/', (c) => c.html(page({ path: '/', jsonLd: homeJsonLd() }, <Home />)));
+  // 영어판은 홈과 about 만 있다(`@/lib/i18n`). 두 언어가 같은 함수로 그려져 구성이 어긋나지 않는다.
+  function homePage(lang: Lang) {
+    return page(
+      {
+        path: HOME_PATHS[lang],
+        lang,
+        translations: HOME_PATHS,
+        description: HOME_DESCRIPTIONS[lang],
+        jsonLd: homeJsonLd(lang),
+      },
+      <Home lang={lang} />,
+    );
+  }
+
+  async function aboutPage(lang: Lang) {
+    const { content, updatedAt } = getDoc('about', lang);
+    const { html } = await renderPostHtml(content, build);
+
+    return page(
+      {
+        title: 'About',
+        description: ABOUT_DESCRIPTIONS[lang],
+        path: ABOUT_PATHS[lang],
+        lang,
+        translations: ABOUT_PATHS,
+        jsonLd: aboutJsonLd({ updatedAt, lang }),
+      },
+      <Layout lang={lang} translations={ABOUT_PATHS}>
+        <MarkdownPage html={html} updatedAt={updatedAt} lang={lang} />
+      </Layout>,
+    );
+  }
+
+  app.get('/', (c) => c.html(homePage('ko')));
+
+  app.get('/en', (c) => c.html(homePage('en')));
 
   app.get('/posts', (c) =>
     c.html(
@@ -77,24 +124,9 @@ export function createApp(build: BuildAssets) {
     ),
   );
 
-  app.get('/about', async (c) => {
-    const { content, updatedAt } = getDoc('about');
-    const { html } = await renderPostHtml(content, build);
+  app.get('/about', async (c) => c.html(await aboutPage('ko')));
 
-    return c.html(
-      page(
-        {
-          title: 'About',
-          description: '프론트엔드 엔지니어 김민준이 만들고 있는 것과 연락처를 담았습니다.',
-          path: '/about',
-          jsonLd: aboutJsonLd({ updatedAt }),
-        },
-        <Layout>
-          <MarkdownPage html={html} updatedAt={updatedAt} />
-        </Layout>,
-      ),
-    );
-  });
+  app.get('/en/about', async (c) => c.html(await aboutPage('en')));
 
   // 사이트 내 진입점은 아직 없다. 색인은 유지한다. 링크한 앱은 다른 Worker 가 서빙한다(`APP_PATHS`).
   app.get('/projects', async (c) => {

@@ -81,7 +81,8 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 **Content as files.** 본문이 있는 콘텐츠는 YAML frontmatter 가 붙은 Markdown 이고 `gray-matter` 로 읽는다:
 - 글: `_posts/*.md` → `/posts/[slug]` (파일명이 slug)
 - 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `projects`, `resume`). `getDoc(name)` 이 읽고
-  `containers/MarkdownPage` 가 렌더한다 — 둘의 차이는 마크다운 본문뿐이다.
+  `containers/MarkdownPage` 가 렌더한다 — 둘의 차이는 마크다운 본문뿐이다. 영어판은
+  `_content/en/<name>.md` → `/en/<name>` 이고 `getDoc(name, 'en')` 으로 읽는다(지금은 `about` 만).
 - 노트: `_content/notes/<topic>/<slug>.md` → `/notes/<topic>/<slug>`, 목록은 `/notes`(주제별 묶음).
   공개 학습 노트(Rust·Go·TS·Node 등)이고 **사람이 골라 넣는다** — 다른 곳에서 자동으로 복사해 오는 경로는
   두지 않는다. 사이트 안에서 링크하지 않지만 sitemap 에는 들어간다(노트가 0개면 `/notes` 는 noindex).
@@ -106,6 +107,17 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 **`/resume` 는 사이트 안에서 링크하지 않는다.** 취업 지원 시 URL 을 직접 건네는 용도라
 네비게이션(`SocialLink`)에는 `/about` 만 둔다. 다만 sitemap 에는 남겨 색인은 유지한다 — 진입점을
 없앤 것이지 숨긴 게 아니다. `/projects` 도 지금은 같은 취급이다(링크 없음, sitemap 에는 포함).
+
+**영어판은 홈과 about 만 있다** (`/en`, `/en/about`). 해외에서 처음 들어오는 사람(리크루터·개발자)을 위한
+입구라 글·이력서는 번역하지 않는다. 언어별 값과 경로 쌍은 `src/lib/i18n.ts` 에 있다.
+- 한국어는 기존 경로 그대로, 영어만 `/en` 접두사다. 기존 경로를 `/ko/…` 로 옮기지 않는다(canonical·유입 링크).
+- 번역이 있는 페이지는 `PageMeta.lang`·`translations` 를 넘긴다. `Document` 가 `<html lang>`·`og:locale`·
+  hreflang(`ko`·`en`·`x-default`=한국어)을 낸다. `Accept-Language` 자동 리다이렉트는 두지 않는다 — assets-only
+  라 Worker 가 없고, 검색엔진이 다른 언어판을 못 보게 된다.
+- **언어가 바뀌는 링크는 `hx-boost="false"`** 다(언어 전환, 영어 홈의 `Posts`). hx-boost 는 body 내용만,
+  hx-head 는 head 자식만 바꾸므로 boost 이동으로는 `<html lang>` 이 첫 페이지 값으로 남는다.
+- `/en/*` 의 없는 경로는 가장 가까운 `404.html` 규칙에 따라 한국어 `/404` 가 나간다(영어 404 없음).
+- `_headers` 의 HTML 캐시 규칙에 `/en`·`/en/*` 이 따로 있다. 영어 페이지를 늘려도 여기는 손댈 필요 없다.
 
 **`/mdwire`·`/ogpeek` 은 이 사이트 페이지가 아니다** — 다른 Worker 가 서빙하는 프로젝트 사이트다. 규칙은
 아래 「프로젝트 사이트」 절.
@@ -135,7 +147,7 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 - `src/containers/*` — 페이지 단위 조합 (Header, Home, Post, Posts, MarkdownPage, NotFound)
 - `src/lib/*` — 순수 헬퍼와 데이터 접근
 
-**Site constants** 는 전부 `src/lib/siteConfig.ts` 에 있다. 페이지 메타는 `src/lib/meta.ts` 의
+**Site constants** 는 전부 `src/lib/siteConfig.ts` 에 있다(언어별 값은 `src/lib/i18n.ts`). 페이지 메타는 `src/lib/meta.ts` 의
 `resolveMeta()` 가 기본값을 채우고 `src/components/Document` 가 `<head>` 를 그린다.
 
 **Theming.** `system`/`light`/`dark` 3단 순환 (`src/lib/theme.ts`). `NoFlashThemeScript` 가
