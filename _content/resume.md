@@ -1,6 +1,6 @@
 ---
 title: "이력서"
-updatedAt: "2026-10-02"
+updatedAt: "2026-10-12"
 ---
 
 # 김민준
@@ -43,12 +43,12 @@ updatedAt: "2026-10-02"
 
 ## 사이드 프로젝트
 
-### [mdwire](https://mdwire.minjun.dev) [GitHub](https://github.com/minjun0219/mdwire)
+### [mdwire](https://minjun.kim/mdwire/ko/) [GitHub](https://github.com/minjun0219/mdwire)
 
 - AI 에이전트가 생성한 LLM Markdown을 Telegram, Slack, GitHub, Notion 등 각 채널이 받아들이는 문법으로 고치고 채널별 길이 제한에 맞춰 마크업이 깨지지 않게 분할해 주는 라이브러리
 - 스트리밍 청크 경계와 CJK 텍스트를 고려한 의존성 없는 Rust 코어를 npm(WASM)과 CLI로 배포하고, 같은 테스트 케이스로 검증하는 Go 구현을 함께 유지
 
-### [ogpeek](https://ogpeek.dev) [GitHub](https://github.com/minjun0219/ogpeek)
+### [ogpeek](https://minjun.kim/ogpeek/ko) [GitHub](https://github.com/minjun0219/ogpeek)
 
 - URL 입력만으로 Open Graph 메타데이터를 파싱하고 OGP 명세 위반 사항(제목 길이, 이미지 누락, URL 불일치 등 12가지 규칙)을 자동 검증해주는 도구
 
