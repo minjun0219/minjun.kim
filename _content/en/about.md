@@ -1,6 +1,6 @@
 ---
 title: "About"
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-12"
 ---
 
 # Minjun Kim
