@@ -82,7 +82,7 @@ export const SocialLink = ({ className, lang = 'ko' }: Props) => (
           <a href="/posts" hreflang="ko" hx-boost="false">
             Posts
           </a>{' '}
-          <span>(Korean only)</span>
+          <span>(in Korean)</span>
         </>
       )}
     </li>
