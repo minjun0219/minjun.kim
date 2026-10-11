@@ -4,7 +4,8 @@
  *
  * hx-boost 는 body 내용만 바꾸고 hx-head 는 head 자식만 머지하므로 `<html lang>` 은 이동 후에도
  * 첫 페이지 값으로 남는다. 그래서 **언어가 바뀌는 링크는 `hx-boost="false"`** 로 전체 로드한다 —
- * 마크다운 본문은 `rehypeLanguageLinks` 가 `pathLang` 으로 판정해 달고, 컴포넌트는 직접 단다.
+ * 마크다운 본문은 `rehypeLanguageLinks` 가 `pathLang` 으로 판정해 달고, 컴포넌트(푸터의 언어 전환,
+ * 영어 홈의 Posts)는 직접 단다.
  */
 export type Lang = 'ko' | 'en';
 
@@ -20,6 +21,13 @@ export const OG_LOCALES: Record<Lang, string> = { ko: 'ko_KR', en: 'en_US' };
 
 /** JSON-LD `inLanguage` */
 export const LANGUAGE_TAGS: Record<Lang, string> = { ko: 'ko-KR', en: 'en-US' };
+
+/** 언어 전환 링크의 문구 — 그 언어 자체로 쓴 이름 */
+export const LANGUAGE_NAMES: Record<Lang, string> = { ko: '한국어', en: 'English' };
+
+export function otherLang(lang: Lang): Lang {
+  return lang === 'ko' ? 'en' : 'ko';
+}
 
 /** 사이트 내부 경로의 언어 — `/en` 아래면 영어, 나머지는 한국어 */
 export function pathLang(pathname: string): Lang {

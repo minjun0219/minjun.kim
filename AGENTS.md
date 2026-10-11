@@ -114,7 +114,7 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 - 번역이 있는 페이지는 `PageMeta.lang`·`translations` 를 넘긴다. `Document` 가 `<html lang>`·`og:locale`·
   hreflang(`ko`·`en`·`x-default`=한국어)을 낸다. `Accept-Language` 자동 리다이렉트는 두지 않는다 — assets-only
   라 Worker 가 없고, 검색엔진이 다른 언어판을 못 보게 된다.
-- 언어 전환 링크는 about 본문의 이름 아래에 **마크다운으로** 둔다(`[English](/en/about)`). 홈에는 두지 않는다.
+- 언어 전환 링크는 번역이 있는 페이지의 **푸터**에 흐린 글씨로 둔다(`Layout` 의 `translations`). 홈에는 두지 않는다.
 - **언어가 바뀌는 링크는 `hx-boost="false"`** 다. hx-boost 는 body 내용만, hx-head 는 head 자식만 바꾸므로
   boost 이동으로는 `<html lang>` 이 첫 페이지 값으로 남는다. 마크다운 본문은 `rehypeLanguageLinks` 가 링크
   경로의 언어(`pathLang`: `/en` 아래면 영어)를 페이지 언어(`renderPostHtml` 의 `lang`)와 비교해 자동으로 달고,

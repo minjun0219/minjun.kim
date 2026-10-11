@@ -96,7 +96,7 @@ export function createApp(build: BuildAssets) {
         translations: ABOUT_PATHS,
         jsonLd: aboutJsonLd({ updatedAt, lang }),
       },
-      <Layout lang={lang}>
+      <Layout lang={lang} translations={ABOUT_PATHS}>
         <MarkdownPage html={html} updatedAt={updatedAt} lang={lang} />
       </Layout>,
     );

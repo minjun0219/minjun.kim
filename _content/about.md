@@ -5,8 +5,6 @@ updatedAt: "2026-10-12"
 
 # 김민준
 
-[English](/en/about)
-
 ## 만들고 있는 것
 
 - [mdwire](/mdwire/ko/): LLM이 쓴 마크다운을 Telegram, Slack, GitHub, Notion 문법에 맞게 바꾸고 채널별 길이 제한에 맞춰 나눠 주는 라이브러리
