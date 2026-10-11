@@ -49,7 +49,7 @@ const HOME_DESCRIPTIONS: Record<Lang, string> = {
 
 const ABOUT_DESCRIPTIONS: Record<Lang, string> = {
   ko: '프론트엔드 엔지니어 김민준이 만들고 있는 것과 연락처를 담았습니다.',
-  en: 'What frontend engineer Minjun Kim is building, and how to reach him.',
+  en: 'What frontend engineer Minjun Kim is building, and how to get in touch.',
 };
 
 /**
