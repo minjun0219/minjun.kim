@@ -1,6 +1,7 @@
 import PostContent from '@/components/PostContent';
 import Wrapper from '@/components/Wrapper';
 import { css } from '@/lib/css';
+import type { Lang } from '@/lib/i18n';
 
 const styles = {
   root: css`
@@ -53,16 +54,23 @@ const styles = {
   `,
 };
 
+const UPDATED_AT_LABELS: Record<Lang, string> = { ko: '마지막 업데이트', en: 'Last updated' };
+
 type Props = {
   html: string;
   updatedAt?: string;
+  lang?: Lang;
 };
 
-const MarkdownPage = ({ html, updatedAt }: Props) => (
+const MarkdownPage = ({ html, updatedAt, lang = 'ko' }: Props) => (
   <Wrapper className={styles.root}>
     <article className={styles.article}>
       <PostContent html={html} className={styles.content} />
-      {updatedAt ? <p className={styles.updatedAt}>마지막 업데이트: {updatedAt}</p> : null}
+      {updatedAt ? (
+        <p className={styles.updatedAt}>
+          {UPDATED_AT_LABELS[lang]}: {updatedAt}
+        </p>
+      ) : null}
     </article>
   </Wrapper>
 );

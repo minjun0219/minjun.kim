@@ -13,6 +13,7 @@ import { getAllPosts, getExcerpt, getPostBySlug, getPostListing } from '@/lib/bl
 import { renderPostHtml } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
 import { getDoc } from '@/lib/content';
+import { ABOUT_PATHS, HOME_PATHS, type Lang } from '@/lib/i18n';
 import { type PageMeta, resolveMeta } from '@/lib/meta';
 import { getAllNotes, getNote, notePath } from '@/lib/notes';
 import { renderFeed } from '@/lib/seo/feed';
@@ -33,12 +34,23 @@ import {
   notesJsonLd,
   postJsonLd,
   postsJsonLd,
-  projectsJsonLd,
   resumeJsonLd,
 } from '@/lib/seo/structuredData';
 
 const TEXT_PLAIN = { 'Content-Type': 'text/plain; charset=utf-8' };
 const TEXT_MARKDOWN = { 'Content-Type': 'text/markdown; charset=utf-8' };
+
+const NOT_FOUND_PATHS: Record<Lang, string> = { ko: '/404', en: '/en/404' };
+
+const NOT_FOUND_TITLES: Record<Lang, string> = {
+  ko: '페이지를 찾을 수 없습니다 (404)',
+  en: 'Page not found (404)',
+};
+
+const ABOUT_DESCRIPTIONS: Record<Lang, string> = {
+  ko: '프론트엔드 엔지니어 김민준이 만들고 있는 것과 연락처를 담았습니다.',
+  en: 'What frontend engineer Minjun Kim is building, and how to get in touch.',
+};
 
 /**
  * 라우트 정의. `scripts/ssg.mjs` 가 빌드 산출물 경로를 넣어 만든 뒤 `toSSG` 로
@@ -57,7 +69,41 @@ export function createApp(build: BuildAssets) {
     );
   }
 
-  app.get('/', (c) => c.html(page({ path: '/', jsonLd: homeJsonLd() }, <Home />)));
+  // 영어판은 홈과 about 만 있다(`@/lib/i18n`). 두 언어가 같은 함수로 그려져 구성이 어긋나지 않는다.
+  function homePage(lang: Lang) {
+    return page(
+      {
+        path: HOME_PATHS[lang],
+        lang,
+        translations: HOME_PATHS,
+        jsonLd: homeJsonLd(lang),
+      },
+      <Home lang={lang} />,
+    );
+  }
+
+  async function aboutPage(lang: Lang) {
+    const { content, updatedAt } = getDoc('about', lang);
+    const { html } = await renderPostHtml(content, build, lang);
+
+    return page(
+      {
+        title: 'About',
+        description: ABOUT_DESCRIPTIONS[lang],
+        path: ABOUT_PATHS[lang],
+        lang,
+        translations: ABOUT_PATHS,
+        jsonLd: aboutJsonLd({ updatedAt, lang }),
+      },
+      <Layout lang={lang} translations={ABOUT_PATHS}>
+        <MarkdownPage html={html} updatedAt={updatedAt} lang={lang} />
+      </Layout>,
+    );
+  }
+
+  app.get('/', (c) => c.html(homePage('ko')));
+
+  app.get('/en', (c) => c.html(homePage('en')));
 
   app.get('/posts', (c) =>
     c.html(
@@ -77,44 +123,9 @@ export function createApp(build: BuildAssets) {
     ),
   );
 
-  app.get('/about', async (c) => {
-    const { content, updatedAt } = getDoc('about');
-    const { html } = await renderPostHtml(content, build);
+  app.get('/about', async (c) => c.html(await aboutPage('ko')));
 
-    return c.html(
-      page(
-        {
-          title: 'About',
-          description: '프론트엔드 엔지니어 김민준이 만들고 있는 것과 연락처를 담았습니다.',
-          path: '/about',
-          jsonLd: aboutJsonLd({ updatedAt }),
-        },
-        <Layout>
-          <MarkdownPage html={html} updatedAt={updatedAt} />
-        </Layout>,
-      ),
-    );
-  });
-
-  // 사이트 내 진입점은 아직 없다. 색인은 유지한다. 링크한 앱은 다른 Worker 가 서빙한다(`APP_PATHS`).
-  app.get('/projects', async (c) => {
-    const { content, updatedAt } = getDoc('projects');
-    const { html } = await renderPostHtml(content, build);
-
-    return c.html(
-      page(
-        {
-          title: 'Projects',
-          description: '김민준이 만들어 운영하는 도구들 — mdwire, ogpeek.',
-          path: '/projects',
-          jsonLd: projectsJsonLd({ updatedAt }),
-        },
-        <Layout>
-          <MarkdownPage html={html} updatedAt={updatedAt} />
-        </Layout>,
-      ),
-    );
-  });
+  app.get('/en/about', async (c) => c.html(await aboutPage('en')));
 
   // 공개 학습 노트. 사이트 내 진입점은 아직 없다 — 주소를 아는 사람만, 색인은 유지한다.
   app.get('/notes', (c) => {
@@ -253,22 +264,26 @@ export function createApp(build: BuildAssets) {
     },
   );
 
-  // Workers 의 `not_found_handling: "404-page"` 가 이 파일을 찾아 404 로 내려준다.
-  app.get('/404', (c) =>
-    c.html(
-      page(
-        {
-          title: '페이지를 찾을 수 없습니다 (404)',
-          path: '/404',
-          noindex: true,
-        },
-        <Layout>
-          <NotFound />
-        </Layout>,
-        { pageId: 'not-found' },
-      ),
-    ),
-  );
+  // Workers 의 `not_found_handling: "404-page"` 가 없는 경로에서 가장 가까운 404.html 을 찾아
+  // 404 로 내려준다 — `/en/*` 은 `/en/404`, 나머지는 `/404`.
+  function notFoundPage(lang: Lang) {
+    return page(
+      {
+        title: NOT_FOUND_TITLES[lang],
+        path: NOT_FOUND_PATHS[lang],
+        lang,
+        noindex: true,
+      },
+      <Layout lang={lang}>
+        <NotFound lang={lang} />
+      </Layout>,
+      { pageId: 'not-found' },
+    );
+  }
+
+  app.get('/404', (c) => c.html(notFoundPage('ko')));
+
+  app.get('/en/404', (c) => c.html(notFoundPage('en')));
 
   app.get('/sitemap.xml', (c) =>
     c.body(renderSitemap(), 200, { 'Content-Type': 'application/xml' }),

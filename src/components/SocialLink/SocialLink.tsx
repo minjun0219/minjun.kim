@@ -1,4 +1,5 @@
 import { type ClassName, css, cx } from '@/lib/css';
+import { ABOUT_PATHS, type Lang } from '@/lib/i18n';
 
 const styles = {
   root: css`
@@ -64,15 +65,26 @@ const styles = {
 
 export type Props = {
   className?: ClassName;
+  lang?: Lang;
 };
 
-export const SocialLink = ({ className }: Props) => (
+export const SocialLink = ({ className, lang = 'ko' }: Props) => (
   <ul className={cx(styles.root, className)}>
     <li>
-      <a href="/about">About</a>
+      <a href={ABOUT_PATHS[lang]}>About</a>
     </li>
     <li>
-      <a href="/posts">Posts</a>
+      {lang === 'ko' ? (
+        <a href="/posts">Posts</a>
+      ) : (
+        <>
+          {/* 글은 한국어만 있다. 그렇게 표시하고, 언어가 바뀌므로 boost 하지 않는다(`@/lib/i18n`). */}
+          <a href="/posts" hreflang="ko" hx-boost="false">
+            Posts
+          </a>{' '}
+          <span>(in Korean)</span>
+        </>
+      )}
     </li>
     <li>
       <a href="https://github.com/minjun0219">Github</a>

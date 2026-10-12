@@ -1,3 +1,4 @@
+import { ABOUT_PATHS, HOME_PATHS, LANGUAGE_TAGS, type Lang } from '@/lib/i18n';
 import { absoluteUrl } from '@/lib/meta';
 import {
   AUTHOR_EMAIL,
@@ -57,13 +58,15 @@ function breadcrumbs(crumbs: Crumb[]): JsonLdNode {
   };
 }
 
-export function homeJsonLd(): JsonLdNode[] {
+export function homeJsonLd(lang: Lang = 'ko'): JsonLdNode[] {
+  const url = absoluteUrl(HOME_PATHS[lang]);
   return [
     {
       '@type': 'ProfilePage',
-      '@id': `${SITE_URL}/#webpage`,
-      url: `${SITE_URL}/`,
+      '@id': `${url}#webpage`,
+      url,
       name: SITE_NAME,
+      inLanguage: LANGUAGE_TAGS[lang],
       isPartOf: ref(WEBSITE_ID),
       mainEntity: ref(PERSON_ID),
     },
@@ -89,40 +92,33 @@ export function resumeJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[
   ];
 }
 
-export function aboutJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[] {
-  const url = absoluteUrl('/about');
+const ABOUT_NAMES: Record<Lang, string> = {
+  ko: `${AUTHOR_NAME_KO} 소개`,
+  en: `About ${AUTHOR_NAME}`,
+};
+
+export function aboutJsonLd({
+  updatedAt,
+  lang = 'ko',
+}: {
+  updatedAt?: string;
+  lang?: Lang;
+}): JsonLdNode[] {
+  const url = absoluteUrl(ABOUT_PATHS[lang]);
   return [
     {
       '@type': 'ProfilePage',
       '@id': `${url}#webpage`,
       url,
-      name: `${AUTHOR_NAME_KO} 소개`,
+      name: ABOUT_NAMES[lang],
+      inLanguage: LANGUAGE_TAGS[lang],
       isPartOf: ref(WEBSITE_ID),
       mainEntity: ref(PERSON_ID),
       dateModified: updatedAt,
     },
     breadcrumbs([
-      { name: SITE_NAME, path: '/' },
-      { name: 'About', path: '/about' },
-    ]),
-  ];
-}
-
-export function projectsJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[] {
-  const url = absoluteUrl('/projects');
-  return [
-    {
-      '@type': 'CollectionPage',
-      '@id': `${url}#webpage`,
-      url,
-      name: `${AUTHOR_NAME_KO}이 만든 것들`,
-      isPartOf: ref(WEBSITE_ID),
-      author: ref(PERSON_ID),
-      dateModified: updatedAt,
-    },
-    breadcrumbs([
-      { name: SITE_NAME, path: '/' },
-      { name: 'Projects', path: '/projects' },
+      { name: SITE_NAME, path: HOME_PATHS[lang] },
+      { name: 'About', path: ABOUT_PATHS[lang] },
     ]),
   ];
 }

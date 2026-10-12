@@ -6,6 +6,7 @@ import SunIcon from '@/components/icons/SunIcon';
 import Logo from '@/components/Logo';
 import Wrapper from '@/components/Wrapper';
 import { css, cx } from '@/lib/css';
+import { HOME_PATHS, type Lang } from '@/lib/i18n';
 
 const interactive = css`
   color: var(--text-secondary-color);
@@ -72,11 +73,15 @@ const styles = {
   `,
 };
 
-export const Header = () => {
+export type Props = {
+  lang?: Lang;
+};
+
+export const Header = ({ lang = 'ko' }: Props) => {
   return (
     <header>
       <Wrapper className={styles.container}>
-        <Logo link className={styles.logo} />
+        <Logo href={HOME_PATHS[lang]} className={styles.logo} />
         <div>
           {/* 토글 동작은 src/client/main.ts 가 document 위임으로 처리한다.
               hx-boost 가 body 를 통째로 교체하므로 요소에 직접 건 리스너는 살아남지 못한다. */}

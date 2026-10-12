@@ -1,5 +1,6 @@
 import { getAllPosts } from '@/lib/blog';
 import { type DocName, getDoc } from '@/lib/content';
+import type { Lang } from '@/lib/i18n';
 import { getAllNotes, notePath } from '@/lib/notes';
 import { SITE_URL } from '@/lib/siteConfig';
 
@@ -18,8 +19,8 @@ export function renderSitemap(): string {
   const posts = getAllPosts();
   const notes = getAllNotes();
   const latestPost = new Date(Math.max(...posts.map((post) => new Date(post.date).getTime())));
-  const docUpdatedAt = (name: DocName) => {
-    const { updatedAt } = getDoc(name);
+  const docUpdatedAt = (name: DocName, lang: Lang = 'ko') => {
+    const { updatedAt } = getDoc(name, lang);
     return updatedAt ? new Date(updatedAt) : latestPost;
   };
 
@@ -42,12 +43,18 @@ export function renderSitemap(): string {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
-    // 사이트 내 링크는 없지만 검색으로 찾는 경로는 열어 둔다.
+    // 영어판. 언어 대응(hreflang)은 각 HTML 의 `<link rel="alternate">` 가 알린다.
     {
-      url: `${SITE_URL}/projects`,
-      lastModified: docUpdatedAt('projects'),
+      url: `${SITE_URL}/en`,
+      lastModified: latestPost,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/en/about`,
+      lastModified: docUpdatedAt('about', 'en'),
       changeFrequency: 'monthly',
-      priority: 0.5,
+      priority: 0.6,
     },
     {
       url: `${SITE_URL}/resume`,

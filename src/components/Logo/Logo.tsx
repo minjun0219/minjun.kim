@@ -29,10 +29,11 @@ const styles = {
 
 type Props = {
   className?: ClassName;
-  link?: boolean;
+  /** 있으면 로고를 그 경로로 가는 링크로 감싼다 */
+  href?: string;
 };
 
-const Logo = ({ className, link }: Props) => {
+const Logo = ({ className, href }: Props) => {
   const title = (
     <>
       <span className={styles.latin}>
@@ -50,7 +51,7 @@ const Logo = ({ className, link }: Props) => {
       </svg>
     </>
   );
-  return <TopHeading className={className}>{link ? <a href="/">{title}</a> : title}</TopHeading>;
+  return <TopHeading className={className}>{href ? <a href={href}>{title}</a> : title}</TopHeading>;
 };
 
 export default Logo;
