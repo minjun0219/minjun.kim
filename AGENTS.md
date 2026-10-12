@@ -327,6 +327,7 @@ repo 는 경로·라우팅·같은 origin 에 관한 판단을 이 repo 에 묻�
 
 **발견성**
 - about(`/about`, `/en/about`)의 「만들고 있는 것」이 앱을 소개하고 링크한다(한국어 about 은 각 앱의 한국어판으로).
+  콘텐츠에서 앱으로 가는 링크는 `https://minjun.kim/<이름>/…` 절대 주소로 쓴다(이력서 포함).
   옛 허브 `/projects` 는 about 으로 301 이다.
 - 크롤러는 호스트 루트의 robots.txt 만 읽으므로 앱은 자기 robots.txt 로 sitemap 을 알릴 수 없다. 앱 sitemap 은
   `APP_SITEMAPS` 에 추가해 이 사이트 robots.txt 의 `Sitemap:` 줄로 낸다.
