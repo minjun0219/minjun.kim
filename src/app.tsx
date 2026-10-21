@@ -18,8 +18,10 @@ import { type PageMeta, resolveMeta } from '@/lib/meta';
 import { getAllNotes, getNote, notePath } from '@/lib/notes';
 import { renderFeed } from '@/lib/seo/feed';
 import {
+  ABOUT_MARKDOWN_PATHS,
   postMarkdownPath,
   RESUME_MARKDOWN_PATH,
+  renderAboutMarkdown,
   renderLlmsFullTxt,
   renderLlmsTxt,
   renderPostMarkdown,
@@ -93,6 +95,7 @@ export function createApp(build: BuildAssets) {
         path: ABOUT_PATHS[lang],
         lang,
         translations: ABOUT_PATHS,
+        markdownPath: ABOUT_MARKDOWN_PATHS[lang],
         jsonLd: aboutJsonLd({ updatedAt, lang }),
       },
       <Layout lang={lang} translations={ABOUT_PATHS}>
@@ -126,6 +129,10 @@ export function createApp(build: BuildAssets) {
   app.get('/about', async (c) => c.html(await aboutPage('ko')));
 
   app.get('/en/about', async (c) => c.html(await aboutPage('en')));
+
+  app.get(ABOUT_MARKDOWN_PATHS.ko, (c) => c.body(renderAboutMarkdown('ko'), 200, TEXT_MARKDOWN));
+
+  app.get(ABOUT_MARKDOWN_PATHS.en, (c) => c.body(renderAboutMarkdown('en'), 200, TEXT_MARKDOWN));
 
   // 공개 학습 노트. 사이트 내 진입점은 아직 없다 — 주소를 아는 사람만, 색인은 유지한다.
   app.get('/notes', (c) => {

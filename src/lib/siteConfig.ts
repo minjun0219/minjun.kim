@@ -38,3 +38,21 @@ export const APP_PATHS = ['/mdwire', '/ogpeek'] as const;
  * robots.txt 로 sitemap 을 알릴 수 없다 — 이 사이트의 robots.txt 가 대신 싣는다.
  */
 export const APP_SITEMAPS = ['/mdwire/sitemap.xml', '/ogpeek/sitemap.xml'] as const;
+
+/**
+ * 앱(`APP_PATHS`)의 llms.txt. llms.txt 규약은 사이트 루트의 `/llms.txt` 를 기준으로 하므로, 하위 경로 앱의
+ * llms.txt 는 이 사이트 llms.txt 의 「프로젝트」 절이 링크한다. `summary` 는 그 줄의 설명이다.
+ */
+export const APP_LLMS = [
+  {
+    name: 'mdwire',
+    path: '/mdwire/llms.txt',
+    summary:
+      'LLM이 쓴 마크다운을 Telegram, Slack, GitHub, Notion 문법에 맞게 바꾸고 채널별 길이 제한에 맞춰 나누는 라이브러리',
+  },
+  {
+    name: 'ogpeek',
+    path: '/ogpeek/llms.txt',
+    summary: 'URL 하나로 Open Graph 메타데이터를 파싱하고 명세 위반을 찾는 도구',
+  },
+] as const;

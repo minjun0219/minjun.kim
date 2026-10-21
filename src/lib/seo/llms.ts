@@ -1,8 +1,10 @@
 import { EXTERNAL_POSTS, getAllPosts, getExcerpt, getPostBySlug } from '@/lib/blog';
 import type { Post } from '@/lib/blog/types';
-import { getDoc } from '@/lib/content';
+import { type DocName, getDoc } from '@/lib/content';
+import { ABOUT_PATHS, type Lang, type Translations } from '@/lib/i18n';
 import type { ImageManifest } from '@/lib/images';
 import {
+  APP_LLMS,
   AUTHOR_EMAIL,
   AUTHOR_JOB_TITLE,
   AUTHOR_NAME,
@@ -47,6 +49,18 @@ export function postMarkdownPath(slug: string): string {
 
 export const RESUME_MARKDOWN_PATH = '/resume.md';
 
+/** about 은 영어판이 있어 사본도 언어마다 둔다 */
+export const ABOUT_MARKDOWN_PATHS: Translations = {
+  ko: `${ABOUT_PATHS.ko}.md`,
+  en: `${ABOUT_PATHS.en}.md`,
+};
+
+/** 단일 문서 사본 끝에 붙이는 출처 줄의 이름 */
+const DOC_SOURCE_LABELS: Record<Lang, { source: string; updatedAt: string }> = {
+  ko: { source: '원문', updatedAt: '마지막 업데이트' },
+  en: { source: 'Source', updatedAt: 'Last updated' },
+};
+
 function renderPostDocument(post: Post, images: ImageManifest): string {
   const lines = [
     `# ${post.title}`,
@@ -64,14 +78,23 @@ export function renderPostMarkdown(slug: string, images: ImageManifest): string 
   return renderPostDocument(getPostBySlug(slug), images);
 }
 
-/** 이력서 본문은 이미 `# 김민준` 으로 시작하므로 출처만 덧붙인다. */
-export function renderResumeMarkdown(): string {
-  const { content, updatedAt } = getDoc('resume');
-  const meta = [`> 원문: ${SITE_URL}/resume`];
+/** 단일 문서 본문은 이미 `# 김민준` 처럼 이름으로 시작하므로 출처만 덧붙인다. */
+function renderDocMarkdown(name: DocName, path: string, lang: Lang = 'ko'): string {
+  const { content, updatedAt } = getDoc(name, lang);
+  const labels = DOC_SOURCE_LABELS[lang];
+  const meta = [`> ${labels.source}: ${SITE_URL}${path}`];
   if (updatedAt) {
-    meta.push(`> 마지막 업데이트: ${updatedAt}`);
+    meta.push(`> ${labels.updatedAt}: ${updatedAt}`);
   }
   return [content.trim(), '', ...meta, ''].join('\n');
+}
+
+export function renderResumeMarkdown(): string {
+  return renderDocMarkdown('resume', '/resume');
+}
+
+export function renderAboutMarkdown(lang: Lang): string {
+  return renderDocMarkdown('about', ABOUT_PATHS[lang], lang);
 }
 
 export async function renderLlmsTxt(): Promise<string> {
@@ -88,15 +111,21 @@ export async function renderLlmsTxt(): Promise<string> {
     '',
     `> ${AUTHOR_NAME_KO}(${AUTHOR_NAME})의 개인 사이트. ${SITE_DESCRIPTION}`,
     '',
-    `${AUTHOR_NAME_KO}은 ${AUTHOR_JOB_TITLE}로 일하고 있다. 경력과 사이드 프로젝트는 이력서에,`,
-    '글은 Posts에 있다. 아래 링크는 모두 각 페이지의 Markdown 사본이다. 전체를 한 번에 읽으려면',
+    `${AUTHOR_NAME_KO}은 ${AUTHOR_JOB_TITLE}로 일하고 있다. 만들고 있는 것은 About에,`,
+    '경력과 사이드 프로젝트는 이력서에, 글은 Posts에 있다. 이 사이트의 페이지는 Markdown 사본으로 링크한다.',
+    '프로젝트는 같은 도메인 아래의 다른 사이트라서 각 사이트의 llms.txt로 링크한다. 전체를 한 번에 읽으려면',
     `${SITE_URL}/llms-full.txt를 쓴다. 사이트 본문은 한국어다.`,
     '',
     '## 소개',
     '',
+    `- [About](${SITE_URL}${ABOUT_MARKDOWN_PATHS.ko}): 만들고 있는 것, 연락처`,
     `- [이력서](${SITE_URL}${RESUME_MARKDOWN_PATH}): 경력, 사이드 프로젝트, 스킬, 연락처`,
     ...AUTHOR_PROFILES.map(({ name, url }) => `- [${name}](${url}): 외부 프로필`),
     `- [Email](mailto:${AUTHOR_EMAIL}): 연락처`,
+    '',
+    '## 프로젝트',
+    '',
+    ...APP_LLMS.map(({ name, path, summary }) => `- [${name}](${SITE_URL}${path}): ${summary}`),
     '',
     '## Posts',
     '',
@@ -104,6 +133,7 @@ export async function renderLlmsTxt(): Promise<string> {
     '',
     '## Optional',
     '',
+    `- [About (English)](${SITE_URL}${ABOUT_MARKDOWN_PATHS.en}): About 영어판`,
     ...EXTERNAL_POSTS.map((post) => `- [${post.title}](${post.url}): ${post.date}, ${post.source}`),
     `- [RSS](${SITE_URL}/posts/feed.xml): 글 피드`,
     '',
