@@ -132,8 +132,8 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
   `ProfilePage`/`BreadcrumbList`)를 `@id` 로 엮은 JSON-LD `@graph` 하나. `PageMeta.jsonLd` 로 넘기면
   `Document` 가 `<script type="application/ld+json">` 로 낸다(noindex 페이지는 생략).
 - `llms.ts` — https://llmstxt.org 규약의 `/llms.txt`, `/llms-full.txt`, 그리고 페이지 URL 에 `.md` 를
-  붙인 Markdown 사본(`/posts/<slug>.md`, `/resume.md`). HTML 은 `<link rel="alternate"
-  type="text/markdown">` 로 사본을 가리키고, 사본은 `_headers` 에서 `X-Robots-Tag: noindex` 다.
+  붙인 Markdown 사본(`/posts/<slug>.md`, `/resume.md`, `/about.md`, `/en/about.md`). HTML 은
+  `<link rel="alternate" type="text/markdown">` 로 사본을 가리키고, 사본은 `_headers` 에서 `X-Robots-Tag: noindex` 다.
   글 사본은 `/posts/:slug` 라우트가 `.md` 로 끝나는 파라미터를 분기해 낸다 — `/posts/:file{.+\.md}`
   같은 정규식 라우트는 `toSSG` 가 파라미터 수집 요청을 다른 라우트로 흘려 **에러 없이 아무 파일도
   만들지 않는다.**
@@ -331,6 +331,8 @@ repo 는 경로·라우팅·같은 origin 에 관한 판단을 이 repo 에 묻�
   옛 허브 `/projects` 는 about 으로 301 이다.
 - 크롤러는 호스트 루트의 robots.txt 만 읽으므로 앱은 자기 robots.txt 로 sitemap 을 알릴 수 없다. 앱 sitemap 은
   `APP_SITEMAPS` 에 추가해 이 사이트 robots.txt 의 `Sitemap:` 줄로 낸다.
+- llms.txt 도 사이트 루트의 `/llms.txt` 가 기준이라, 앱 llms.txt 는 `APP_LLMS` 에 추가해 이 사이트 llms.txt 의
+  「프로젝트」 절에서 링크한다.
 
 **같은 origin 이라서**
 - 쿠키·localStorage·서비스 워커가 이 사이트와 공유된다. 그래서 **로그인이나 사용자 데이터가 있는 앱은 이
