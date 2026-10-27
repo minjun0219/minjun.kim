@@ -51,8 +51,11 @@
   Cache-Control: public, max-age=60, stale-while-revalidate=86400
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex
-# /en/about.md 의 Cache-Control 은 위 /en/* 규칙이 담당한다.
+# /en/about.md, /en/partyline.md 의 Cache-Control 은 위 /en/* 규칙이 담당한다.
 /en/about.md
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+/en/partyline.md
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex
 /llms.txt

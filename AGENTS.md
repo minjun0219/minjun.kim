@@ -82,7 +82,7 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 - 글: `_posts/*.md` → `/posts/[slug]` (파일명이 slug)
 - 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `resume`, `partyline`). `getDoc(name)` 이 읽고
   `containers/MarkdownPage` 가 렌더한다 — 문서끼리의 차이는 마크다운 본문뿐이다. 영어판은
-  `_content/en/<name>.md` → `/en/<name>` 이고 `getDoc(name, 'en')` 으로 읽는다(지금은 `about` 만).
+  `_content/en/<name>.md` → `/en/<name>` 이고 `getDoc(name, 'en')` 으로 읽는다(지금은 `about`·`partyline`).
 - 노트: `_content/notes/<topic>/<slug>.md` → `/notes/<topic>/<slug>`, 목록은 `/notes`(주제별 묶음).
   공개 학습 노트(Rust·Go·TS·Node 등)이고 **사람이 골라 넣는다** — 다른 곳에서 자동으로 복사해 오는 경로는
   두지 않는다. 사이트 안에서 링크하지 않지만 sitemap 에는 들어간다(노트가 0개면 `/notes` 는 noindex).
@@ -108,8 +108,8 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 네비게이션(`SocialLink`)에는 `/about` 만 둔다. 다만 sitemap 에는 남겨 색인은 유지한다 — 진입점을
 없앤 것이지 숨긴 게 아니다. 옛 `/projects` 는 about 과 겹쳐 합쳤다 — `_redirects` 가 `/about` 으로 301 한다.
 
-**영어판은 홈과 about 만 있다** (`/en`, `/en/about`). 해외에서 처음 들어오는 사람(리크루터·개발자)을 위한
-입구라 글·이력서는 번역하지 않는다. 언어별 값과 경로 쌍은 `src/lib/i18n.ts` 에 있다.
+**영어판은 홈과 about, partyline 만 있다** (`/en`, `/en/about`, `/en/partyline`). 해외에서 처음 들어오는
+사람(리크루터·개발자)을 위한 입구이고 partyline 은 영어가 정본인 프로젝트라 둔다. 글·이력서는 번역하지 않는다. 언어별 값과 경로 쌍은 `src/lib/i18n.ts` 에 있다.
 - 한국어는 기존 경로 그대로, 영어만 `/en` 접두사다. 기존 경로를 `/ko/…` 로 옮기지 않는다(canonical·유입 링크).
 - 번역이 있는 페이지는 `PageMeta.lang`·`translations` 를 넘긴다. `Document` 가 `<html lang>`·`og:locale`·
   hreflang(`ko`·`en`·`x-default`=한국어)을 낸다. `Accept-Language` 자동 리다이렉트는 두지 않는다 — assets-only
@@ -132,7 +132,7 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
   `ProfilePage`/`BreadcrumbList`)를 `@id` 로 엮은 JSON-LD `@graph` 하나. `PageMeta.jsonLd` 로 넘기면
   `Document` 가 `<script type="application/ld+json">` 로 낸다(noindex 페이지는 생략).
 - `llms.ts` — https://llmstxt.org 규약의 `/llms.txt`, `/llms-full.txt`, 그리고 페이지 URL 에 `.md` 를
-  붙인 Markdown 사본(`/posts/<slug>.md`, `/resume.md`, `/about.md`, `/en/about.md`). HTML 은
+  붙인 Markdown 사본(`/posts/<slug>.md`, `/resume.md`, `/about.md`, `/en/about.md`, `/partyline.md`, `/en/partyline.md`). HTML 은
   `<link rel="alternate" type="text/markdown">` 로 사본을 가리키고, 사본은 `_headers` 에서 `X-Robots-Tag: noindex` 다.
   글 사본은 `/posts/:slug` 라우트가 `.md` 로 끝나는 파라미터를 분기해 낸다 — `/posts/:file{.+\.md}`
   같은 정규식 라우트는 `toSSG` 가 파라미터 수집 요청을 다른 라우트로 흘려 **에러 없이 아무 파일도
