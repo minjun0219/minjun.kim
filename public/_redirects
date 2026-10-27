@@ -2,6 +2,11 @@
 /projects /about 301
 /projects/ /about 301
 
+# 옛 partyline 릴레이 호스트(partyline.minjun.dev)의 Redirect Rule 이 경로를 붙여
+# /partyline/<경로> 로 보낸다. 릴레이의 /llms.txt 는 Markdown 사본으로, 나머지(/join 등)는 소개 페이지로 모은다.
+/partyline/llms.txt /partyline.md 301
+/partyline/* /partyline 301
+
 # 옛 퍼머링크 → 복원된 글.
 # Next.js 의 `/:prefix(wp|blog)?/archives/:id(40|706)` 같은 정규식 제약과 선택적
 # 세그먼트를 Cloudflare 는 지원하지 않아 접두사 3종을 명시적으로 펼쳤다.
