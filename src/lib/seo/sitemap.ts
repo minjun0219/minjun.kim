@@ -57,6 +57,12 @@ export function renderSitemap(): string {
       priority: 0.6,
     },
     {
+      url: `${SITE_URL}/partyline`,
+      lastModified: docUpdatedAt('partyline'),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
       url: `${SITE_URL}/resume`,
       lastModified: docUpdatedAt('resume'),
       changeFrequency: 'monthly',

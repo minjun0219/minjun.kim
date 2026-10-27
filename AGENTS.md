@@ -80,8 +80,8 @@ PostHog 프로젝트 설정으로 켜도 **에러 없이 아무것도 수집되�
 
 **Content as files.** 본문이 있는 콘텐츠는 YAML frontmatter 가 붙은 Markdown 이고 `gray-matter` 로 읽는다:
 - 글: `_posts/*.md` → `/posts/[slug]` (파일명이 slug)
-- 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `resume`). `getDoc(name)` 이 읽고
-  `containers/MarkdownPage` 가 렌더한다 — 둘의 차이는 마크다운 본문뿐이다. 영어판은
+- 단일 문서: `_content/<name>.md` → `/<name>` (`about`, `resume`, `partyline`). `getDoc(name)` 이 읽고
+  `containers/MarkdownPage` 가 렌더한다 — 문서끼리의 차이는 마크다운 본문뿐이다. 영어판은
   `_content/en/<name>.md` → `/en/<name>` 이고 `getDoc(name, 'en')` 으로 읽는다(지금은 `about` 만).
 - 노트: `_content/notes/<topic>/<slug>.md` → `/notes/<topic>/<slug>`, 목록은 `/notes`(주제별 묶음).
   공개 학습 노트(Rust·Go·TS·Node 등)이고 **사람이 골라 넣는다** — 다른 곳에서 자동으로 복사해 오는 경로는

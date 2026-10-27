@@ -92,6 +92,25 @@ export function resumeJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[
   ];
 }
 
+export function partylineJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[] {
+  const url = absoluteUrl('/partyline');
+  return [
+    {
+      '@type': 'WebPage',
+      '@id': `${url}#webpage`,
+      url,
+      name: 'Partyline',
+      isPartOf: ref(WEBSITE_ID),
+      author: ref(PERSON_ID),
+      dateModified: updatedAt,
+    },
+    breadcrumbs([
+      { name: SITE_NAME, path: '/' },
+      { name: 'Partyline', path: '/partyline' },
+    ]),
+  ];
+}
+
 const ABOUT_NAMES: Record<Lang, string> = {
   ko: `${AUTHOR_NAME_KO} 소개`,
   en: `About ${AUTHOR_NAME}`,
