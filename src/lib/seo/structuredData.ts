@@ -1,4 +1,4 @@
-import { ABOUT_PATHS, HOME_PATHS, LANGUAGE_TAGS, type Lang } from '@/lib/i18n';
+import { ABOUT_PATHS, HOME_PATHS, LANGUAGE_TAGS, type Lang, PARTYLINE_PATHS } from '@/lib/i18n';
 import { absoluteUrl } from '@/lib/meta';
 import {
   AUTHOR_EMAIL,
@@ -92,21 +92,28 @@ export function resumeJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[
   ];
 }
 
-export function partylineJsonLd({ updatedAt }: { updatedAt?: string }): JsonLdNode[] {
-  const url = absoluteUrl('/partyline');
+export function partylineJsonLd({
+  updatedAt,
+  lang = 'ko',
+}: {
+  updatedAt?: string;
+  lang?: Lang;
+}): JsonLdNode[] {
+  const url = absoluteUrl(PARTYLINE_PATHS[lang]);
   return [
     {
       '@type': 'WebPage',
       '@id': `${url}#webpage`,
       url,
       name: 'Partyline',
+      inLanguage: LANGUAGE_TAGS[lang],
       isPartOf: ref(WEBSITE_ID),
       author: ref(PERSON_ID),
       dateModified: updatedAt,
     },
     breadcrumbs([
-      { name: SITE_NAME, path: '/' },
-      { name: 'Partyline', path: '/partyline' },
+      { name: SITE_NAME, path: HOME_PATHS[lang] },
+      { name: 'Partyline', path: PARTYLINE_PATHS[lang] },
     ]),
   ];
 }

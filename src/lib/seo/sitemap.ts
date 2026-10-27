@@ -63,6 +63,12 @@ export function renderSitemap(): string {
       priority: 0.5,
     },
     {
+      url: `${SITE_URL}/en/partyline`,
+      lastModified: docUpdatedAt('partyline', 'en'),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
       url: `${SITE_URL}/resume`,
       lastModified: docUpdatedAt('resume'),
       changeFrequency: 'monthly',

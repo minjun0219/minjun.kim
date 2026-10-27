@@ -13,13 +13,13 @@ import { getAllPosts, getExcerpt, getPostBySlug, getPostListing } from '@/lib/bl
 import { renderPostHtml } from '@/lib/blog/markdown';
 import type { BuildAssets } from '@/lib/build';
 import { getDoc } from '@/lib/content';
-import { ABOUT_PATHS, HOME_PATHS, type Lang } from '@/lib/i18n';
+import { ABOUT_PATHS, HOME_PATHS, type Lang, PARTYLINE_PATHS } from '@/lib/i18n';
 import { type PageMeta, resolveMeta } from '@/lib/meta';
 import { getAllNotes, getNote, notePath } from '@/lib/notes';
 import { renderFeed } from '@/lib/seo/feed';
 import {
   ABOUT_MARKDOWN_PATHS,
-  PARTYLINE_MARKDOWN_PATH,
+  PARTYLINE_MARKDOWN_PATHS,
   postMarkdownPath,
   RESUME_MARKDOWN_PATH,
   renderAboutMarkdown,
@@ -52,6 +52,11 @@ const NOT_FOUND_TITLES: Record<Lang, string> = {
   en: 'Page not found (404)',
 };
 
+const PARTYLINE_DESCRIPTIONS: Record<Lang, string> = {
+  ko: '서로 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜 Partyline 소개와 Cloudflare 릴레이 배포 안내입니다.',
+  en: 'Partyline, a protocol for AI coding sessions on different machines to message each other, and how to deploy your own relay on Cloudflare.',
+};
+
 const ABOUT_DESCRIPTIONS: Record<Lang, string> = {
   ko: '프론트엔드 엔지니어 김민준이 만들고 있는 것과 연락처를 담았습니다.',
   en: 'What frontend engineer Minjun Kim is building, and how to get in touch.',
@@ -74,7 +79,7 @@ export function createApp(build: BuildAssets) {
     );
   }
 
-  // 영어판은 홈과 about 만 있다(`@/lib/i18n`). 두 언어가 같은 함수로 그려져 구성이 어긋나지 않는다.
+  // 영어판은 홈과 about, partyline 만 있다(`@/lib/i18n`). 두 언어가 같은 함수로 그려져 구성이 어긋나지 않는다.
   function homePage(lang: Lang) {
     return page(
       {
@@ -102,6 +107,26 @@ export function createApp(build: BuildAssets) {
         jsonLd: aboutJsonLd({ updatedAt, lang }),
       },
       <Layout lang={lang} translations={ABOUT_PATHS}>
+        <MarkdownPage html={html} updatedAt={updatedAt} lang={lang} />
+      </Layout>,
+    );
+  }
+
+  async function partylinePage(lang: Lang) {
+    const { content, updatedAt } = getDoc('partyline', lang);
+    const { html } = await renderPostHtml(content, build, lang);
+
+    return page(
+      {
+        title: 'Partyline',
+        description: PARTYLINE_DESCRIPTIONS[lang],
+        path: PARTYLINE_PATHS[lang],
+        lang,
+        translations: PARTYLINE_PATHS,
+        markdownPath: PARTYLINE_MARKDOWN_PATHS[lang],
+        jsonLd: partylineJsonLd({ updatedAt, lang }),
+      },
+      <Layout lang={lang} translations={PARTYLINE_PATHS}>
         <MarkdownPage html={html} updatedAt={updatedAt} lang={lang} />
       </Layout>,
     );
@@ -218,28 +243,17 @@ export function createApp(build: BuildAssets) {
   app.get(RESUME_MARKDOWN_PATH, (c) => c.body(renderResumeMarkdown(), 200, TEXT_MARKDOWN));
 
   // 직접 만든 프로토콜의 소개와 릴레이 배포 안내. 앱이 아니라 문서 한 장이라 APP_PATHS 에 두지 않는다.
-  app.get('/partyline', async (c) => {
-    const { content, updatedAt } = getDoc('partyline');
-    const { html } = await renderPostHtml(content, build);
+  app.get('/partyline', async (c) => c.html(await partylinePage('ko')));
 
-    return c.html(
-      page(
-        {
-          title: 'Partyline',
-          description:
-            '서로 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜 Partyline 소개와 Cloudflare 릴레이 배포 안내입니다.',
-          path: '/partyline',
-          markdownPath: PARTYLINE_MARKDOWN_PATH,
-          jsonLd: partylineJsonLd({ updatedAt }),
-        },
-        <Layout>
-          <MarkdownPage html={html} updatedAt={updatedAt} />
-        </Layout>,
-      ),
-    );
-  });
+  app.get('/en/partyline', async (c) => c.html(await partylinePage('en')));
 
-  app.get(PARTYLINE_MARKDOWN_PATH, (c) => c.body(renderPartylineMarkdown(), 200, TEXT_MARKDOWN));
+  app.get(PARTYLINE_MARKDOWN_PATHS.ko, (c) =>
+    c.body(renderPartylineMarkdown('ko'), 200, TEXT_MARKDOWN),
+  );
+
+  app.get(PARTYLINE_MARKDOWN_PATHS.en, (c) =>
+    c.body(renderPartylineMarkdown('en'), 200, TEXT_MARKDOWN),
+  );
 
   // `/posts/:slug` 보다 먼저 등록해야 피드가 slug 로 잡히지 않는다.
   app.get('/posts/feed.xml', async (c) => {

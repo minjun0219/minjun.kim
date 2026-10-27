@@ -1,7 +1,7 @@
 import { EXTERNAL_POSTS, getAllPosts, getExcerpt, getPostBySlug } from '@/lib/blog';
 import type { Post } from '@/lib/blog/types';
 import { type DocName, getDoc } from '@/lib/content';
-import { ABOUT_PATHS, type Lang, type Translations } from '@/lib/i18n';
+import { ABOUT_PATHS, type Lang, PARTYLINE_PATHS, type Translations } from '@/lib/i18n';
 import type { ImageManifest } from '@/lib/images';
 import {
   APP_LLMS,
@@ -49,7 +49,10 @@ export function postMarkdownPath(slug: string): string {
 
 export const RESUME_MARKDOWN_PATH = '/resume.md';
 
-export const PARTYLINE_MARKDOWN_PATH = '/partyline.md';
+export const PARTYLINE_MARKDOWN_PATHS: Translations = {
+  ko: `${PARTYLINE_PATHS.ko}.md`,
+  en: `${PARTYLINE_PATHS.en}.md`,
+};
 
 /** about 은 영어판이 있어 사본도 언어마다 둔다 */
 export const ABOUT_MARKDOWN_PATHS: Translations = {
@@ -95,8 +98,8 @@ export function renderResumeMarkdown(): string {
   return renderDocMarkdown('resume', '/resume');
 }
 
-export function renderPartylineMarkdown(): string {
-  return renderDocMarkdown('partyline', '/partyline');
+export function renderPartylineMarkdown(lang: Lang): string {
+  return renderDocMarkdown('partyline', PARTYLINE_PATHS[lang], lang);
 }
 
 export function renderAboutMarkdown(lang: Lang): string {
@@ -132,7 +135,7 @@ export async function renderLlmsTxt(): Promise<string> {
     '## 프로젝트',
     '',
     ...APP_LLMS.map(({ name, path, summary }) => `- [${name}](${SITE_URL}${path}): ${summary}`),
-    `- [Partyline](${SITE_URL}${PARTYLINE_MARKDOWN_PATH}): 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜, 직접 띄우는 Cloudflare 릴레이 배포 안내`,
+    `- [Partyline](${SITE_URL}${PARTYLINE_MARKDOWN_PATHS.ko}): 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜, 직접 띄우는 Cloudflare 릴레이 배포 안내`,
     '',
     '## Posts',
     '',
