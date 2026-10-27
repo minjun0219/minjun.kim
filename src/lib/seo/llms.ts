@@ -135,7 +135,7 @@ export async function renderLlmsTxt(): Promise<string> {
     '## 프로젝트',
     '',
     ...APP_LLMS.map(({ name, path, summary }) => `- [${name}](${SITE_URL}${path}): ${summary}`),
-    `- [Partyline](${SITE_URL}${PARTYLINE_MARKDOWN_PATHS.ko}): 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜, 직접 띄우는 Cloudflare 릴레이 배포 안내`,
+    `- [Partyline](${SITE_URL}${PARTYLINE_MARKDOWN_PATHS.ko}): 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜과 Cloudflare 릴레이 배포 안내`,
     '',
     '## Posts',
     '',
