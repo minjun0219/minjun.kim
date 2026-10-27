@@ -18,6 +18,8 @@
   Cache-Control: public, max-age=60, stale-while-revalidate=86400
 /resume
   Cache-Control: public, max-age=60, stale-while-revalidate=86400
+/partyline
+  Cache-Control: public, max-age=60, stale-while-revalidate=86400
 /en
   Cache-Control: public, max-age=60, stale-while-revalidate=86400
 /en/*
@@ -42,6 +44,10 @@
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex
 /about.md
+  Cache-Control: public, max-age=60, stale-while-revalidate=86400
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex
+/partyline.md
   Cache-Control: public, max-age=60, stale-while-revalidate=86400
   Content-Type: text/markdown; charset=utf-8
   X-Robots-Tag: noindex

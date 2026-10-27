@@ -19,11 +19,13 @@ import { getAllNotes, getNote, notePath } from '@/lib/notes';
 import { renderFeed } from '@/lib/seo/feed';
 import {
   ABOUT_MARKDOWN_PATHS,
+  PARTYLINE_MARKDOWN_PATH,
   postMarkdownPath,
   RESUME_MARKDOWN_PATH,
   renderAboutMarkdown,
   renderLlmsFullTxt,
   renderLlmsTxt,
+  renderPartylineMarkdown,
   renderPostMarkdown,
   renderResumeMarkdown,
 } from '@/lib/seo/llms';
@@ -34,6 +36,7 @@ import {
   homeJsonLd,
   noteJsonLd,
   notesJsonLd,
+  partylineJsonLd,
   postJsonLd,
   postsJsonLd,
   resumeJsonLd,
@@ -213,6 +216,30 @@ export function createApp(build: BuildAssets) {
   });
 
   app.get(RESUME_MARKDOWN_PATH, (c) => c.body(renderResumeMarkdown(), 200, TEXT_MARKDOWN));
+
+  // 직접 만든 프로토콜의 소개와 릴레이 배포 안내. 앱이 아니라 문서 한 장이라 APP_PATHS 에 두지 않는다.
+  app.get('/partyline', async (c) => {
+    const { content, updatedAt } = getDoc('partyline');
+    const { html } = await renderPostHtml(content, build);
+
+    return c.html(
+      page(
+        {
+          title: 'Partyline',
+          description:
+            '서로 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜 Partyline 소개와 Cloudflare 릴레이 배포 안내입니다.',
+          path: '/partyline',
+          markdownPath: PARTYLINE_MARKDOWN_PATH,
+          jsonLd: partylineJsonLd({ updatedAt }),
+        },
+        <Layout>
+          <MarkdownPage html={html} updatedAt={updatedAt} />
+        </Layout>,
+      ),
+    );
+  });
+
+  app.get(PARTYLINE_MARKDOWN_PATH, (c) => c.body(renderPartylineMarkdown(), 200, TEXT_MARKDOWN));
 
   // `/posts/:slug` 보다 먼저 등록해야 피드가 slug 로 잡히지 않는다.
   app.get('/posts/feed.xml', async (c) => {

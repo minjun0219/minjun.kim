@@ -49,6 +49,8 @@ export function postMarkdownPath(slug: string): string {
 
 export const RESUME_MARKDOWN_PATH = '/resume.md';
 
+export const PARTYLINE_MARKDOWN_PATH = '/partyline.md';
+
 /** about 은 영어판이 있어 사본도 언어마다 둔다 */
 export const ABOUT_MARKDOWN_PATHS: Translations = {
   ko: `${ABOUT_PATHS.ko}.md`,
@@ -93,6 +95,10 @@ export function renderResumeMarkdown(): string {
   return renderDocMarkdown('resume', '/resume');
 }
 
+export function renderPartylineMarkdown(): string {
+  return renderDocMarkdown('partyline', '/partyline');
+}
+
 export function renderAboutMarkdown(lang: Lang): string {
   return renderDocMarkdown('about', ABOUT_PATHS[lang], lang);
 }
@@ -126,6 +132,7 @@ export async function renderLlmsTxt(): Promise<string> {
     '## 프로젝트',
     '',
     ...APP_LLMS.map(({ name, path, summary }) => `- [${name}](${SITE_URL}${path}): ${summary}`),
+    `- [Partyline](${SITE_URL}${PARTYLINE_MARKDOWN_PATH}): 다른 머신의 AI 코딩 세션끼리 메시지를 주고받는 프로토콜, 직접 띄우는 Cloudflare 릴레이 배포 안내`,
     '',
     '## Posts',
     '',
