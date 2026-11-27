@@ -315,6 +315,8 @@ repo 는 경로·라우팅·같은 origin 에 관한 판단을 이 repo 에 묻�
 - 이 사이트는 Custom Domain(= origin)이라 같은 호스트의 route 가 항상 먼저 실행된다
   ([문서](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/#interaction-with-routes)).
   앱을 붙이거나 뗄 때 이 사이트의 `wrangler.jsonc` 는 손댈 것이 없다. 앱이 붙기 전 그 경로는 이 사이트의 404 다.
+- route `minjun.kim/<이름>` 은 쿼리가 붙은 요청(`/<이름>?x=1`)을 받지 않아 그 요청은 이 사이트로 떨어진다. 그래서
+  `public/_redirects` 에 `/<이름> /<이름>/ 301` 을 앱마다 둔다(쿼리는 보존된다). 앱이 늘면 `APP_PATHS` 와 함께 더한다.
 - 이 사이트에서 앱으로 가는 링크는 **hx-boost 하지 않는다** — boost 되면 다른 앱의 HTML 이 이 사이트 body 에
   스왑된다. 마크다운 링크는 `rehypeAppLinks` 가 `hx-boost="false"` 를 달고, 뷰포트 선요청도 그 링크를 건너뛴다.
 - 옛 호스트는 이전 직후 병행 서빙하고, 언제 합칠지는 사용자가 PostHog `$host` 트래픽을 보고 정한다. 지금 상태:

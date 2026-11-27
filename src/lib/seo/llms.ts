@@ -123,7 +123,7 @@ export async function renderLlmsTxt(): Promise<string> {
     `${AUTHOR_NAME_KO}은 ${AUTHOR_JOB_TITLE}로 일하고 있다. 만들고 있는 것은 About에,`,
     '경력과 사이드 프로젝트는 이력서에, 글은 Posts에 있다. 이 사이트의 페이지는 Markdown 사본으로 링크한다.',
     '프로젝트는 같은 도메인 아래의 다른 사이트라서 각 사이트의 llms.txt로 링크한다. 전체를 한 번에 읽으려면',
-    `${SITE_URL}/llms-full.txt를 쓴다. 사이트 본문은 한국어다.`,
+    `[llms-full.txt](${SITE_URL}/llms-full.txt)를 쓴다. 사이트 본문은 한국어다.`,
     '',
     '## 소개',
     '',
