@@ -2,6 +2,12 @@
 /projects /about 301
 /projects/ /about 301
 
+# 앱(siteConfig.ts 의 APP_PATHS)은 다른 Worker 가 route `minjun.kim/<이름>` · `minjun.kim/<이름>/*` 로 받는데,
+# 슬래시 없는 앱 루트에 쿼리가 붙으면(/ogpeek?x=1) 그 route 에 걸리지 않고 이 사이트로 떨어져 404 가 난다.
+# 끝 슬래시 주소로 보내면 앱 route 가 받는다. 쿼리 없는 요청은 앱 route 가 먼저 받으므로 여기까지 오지 않는다.
+/mdwire /mdwire/ 301
+/ogpeek /ogpeek/ 301
+
 # 옛 partyline 릴레이 호스트(partyline.minjun.dev)의 Redirect Rule 이 경로를 붙여
 # /partyline/<경로> 로 보낸다. 릴레이의 /llms.txt 는 Markdown 사본으로, 나머지(/join 등)는 소개 페이지로 모은다.
 /partyline/llms.txt /partyline.md 301
